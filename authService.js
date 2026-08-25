@@ -74,8 +74,6 @@
                         email: currentUser.email,
                         lastLogin: new Date().toISOString()
                     }));
-                    
-                    // سحب البيانات من السحابة بعد تسجيل الدخول
                     await this.onAuthSuccess(currentUser);
                     return currentUser;
                 }
@@ -126,12 +124,12 @@
             return data;
         },
 
-        // === تسجيل الدخول عبر Facebook ===
-        async signInWithFacebook() {
+        // ===== تسجيل الدخول عبر Google =====
+        async signInWithGoogle() {
             const client = getClient();
             if (!client) throw new Error(getMessage('connectionError'));
             const { data, error } = await client.auth.signInWithOAuth({
-                provider: 'facebook',
+                provider: 'google',
                 options: {
                     redirectTo: window.location.origin
                 }
@@ -140,7 +138,7 @@
             return data;
         },
 
-        // === تسجيل الدخول عبر رقم الهاتف (OTP) ===
+        // ===== تسجيل الدخول عبر الهاتف (OTP) =====
         async signInWithPhone(phoneNumber) {
             const client = getClient();
             if (!client) throw new Error(getMessage('connectionError'));
@@ -151,7 +149,6 @@
             return data;
         },
 
-        // === التحقق من رمز OTP للهاتف ===
         async verifyPhoneOtp(phoneNumber, token) {
             const client = getClient();
             if (!client) throw new Error(getMessage('connectionError'));
@@ -172,8 +169,8 @@
             const client = getClient();
             if (client) await client.auth.signOut();
             currentUser = null;
-            
-            // === مسح جميع بيانات التطبيق من localStorage ===
+
+            // مسح جميع بيانات التطبيق من localStorage
             const keys = [
                 'pointageWorkData',
                 'pointageSettings',
@@ -181,30 +178,22 @@
                 'pointageTasksData',
                 'pointageRemindersData',
                 'supabase_user_session',
-                'pointage_device_id',
-                // أي مفاتيح أخرى تستخدمها
+                'pointage_device_id'
             ];
             keys.forEach(key => localStorage.removeItem(key));
-            
+
             // إعادة تعيين المتغيرات العامة
             window.workData = {};
             window.notesData = {};
             window.tasksData = {};
             window.remindersData = {};
-            // إعادة تعيين الإعدادات إلى القيم الافتراضية (مع الفرنسية)
-            window.settings = {
-                language: 'fr',
-                numberFormat: 'western',
-                // ... نسخ القيم الافتراضية من data.js
-                // يمكن استدعاء loadData() لتعيينها، لكننا سنقوم بإعادة تحميل الصفحة
-            };
+            window.settings = { language: 'fr' };
 
             if (typeof window.showToast === 'function') {
                 window.showToast(getMessage('signedOut'), 2000);
             }
             if (typeof window.updatePremiumStatus === 'function') window.updatePremiumStatus();
 
-            // إعادة تحميل الصفحة لتصبح كأنها جديدة
             setTimeout(() => {
                 location.reload();
             }, 500);
@@ -247,14 +236,12 @@
                 }
             } catch (e) { /* ignore */ }
 
-            // === سحب جميع البيانات من السحابة ===
+            // سحب جميع البيانات من السحابة
             if (window.SupabaseSyncEngine && typeof window.SupabaseSyncEngine.pullAll === 'function') {
                 await window.SupabaseSyncEngine.pullAll();
             }
 
             if (typeof window.updatePremiumStatus === 'function') window.updatePremiumStatus();
-            
-            // إعادة تحميل الصفحة لتحديث الواجهة بالبيانات المسحوبة
             location.reload();
         },
 
@@ -320,7 +307,7 @@
         return messages[key] || key;
     }
 
-    // تصدير الدوال العامة
+    // ===== تصدير الدوال العامة =====
     window.signUpWithEmail = async function(email, password) {
         try { const result = await AuthService.signUp(email, password); return { user: result.user, error: null }; }
         catch (error) { return { user: null, error: error }; }
@@ -329,8 +316,8 @@
         try { const result = await AuthService.signIn(email, password); return { user: result.user, error: null }; }
         catch (error) { return { user: null, error: error }; }
     };
-    window.signInWithFacebook = async function() {
-        try { const data = await AuthService.signInWithFacebook(); return { data, error: null }; }
+    window.signInWithGoogle = async function() {
+        try { const data = await AuthService.signInWithGoogle(); return { data, error: null }; }
         catch (error) { return { data: null, error: error }; }
     };
     window.signInWithPhone = async function(phone) {
@@ -361,7 +348,6 @@
 
     window.AuthService = AuthService;
 
-    // عند تحميل الصفحة، التحقق من وجود جلسة نشطة
     document.addEventListener('DOMContentLoaded', async function() {
         try {
             const session = localStorage.getItem('supabase_user_session');
@@ -371,7 +357,6 @@
                     console.log('✅ Active user:', user.email);
                     currentUser = user;
                     if (typeof window.updatePremiumStatus === 'function') window.updatePremiumStatus();
-                    // سحب البيانات من السحابة إذا كانت هناك جلسة
                     if (window.SupabaseSyncEngine && typeof window.SupabaseSyncEngine.pullAll === 'function') {
                         await window.SupabaseSyncEngine.pullAll();
                     }
