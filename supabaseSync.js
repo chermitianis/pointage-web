@@ -3,7 +3,17 @@
 let supabaseClient = null;
 
 function initSupabaseClient() {
+    // استخدام كائن Supabase الموحد من authService إن وجد
+    if (window.AuthService && typeof window.AuthService.getClient === 'function') {
+        const client = window.AuthService.getClient();
+        if (client) {
+            supabaseClient = client;
+            return supabaseClient;
+        }
+    }
+    
     if (supabaseClient) return supabaseClient;
+    
     if (window.supabase && window.APP_CONFIG && window.APP_CONFIG.supabaseUrl) {
         supabaseClient = window.supabase.createClient(
             window.APP_CONFIG.supabaseUrl,
