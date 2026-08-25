@@ -9,45 +9,39 @@ window.onload = async () => {
 
     // ===== معالجة العودة من OAuth (Google) =====
     try {
-        // التحقق من وجود معلمات إعادة التوجيه في الـ hash
         const hashParams = new URLSearchParams(window.location.hash.substring(1));
         const accessToken = hashParams.get('access_token');
         const refreshToken = hashParams.get('refresh_token');
-        const expiresAt = hashParams.get('expires_at');
 
         if (accessToken) {
             console.log('🔄 Détection du token OAuth, tentative de connexion...');
+            
+            // 1. طريقة AuthService
             if (window.AuthService && typeof window.AuthService.setSessionToken === 'function') {
-                // استخدم setSessionToken لتسجيل الدخول بالتوكن
                 const user = await window.AuthService.setSessionToken(accessToken);
                 if (user) {
                     console.log('✅ Authentification Google réussie pour:', user.email);
-                    // نزيل الـ hash من الرابط لتنظيفه
                     window.history.replaceState({}, document.title, window.location.pathname);
-                    
-                    // نعرض رسالة نجاح
                     if (typeof showToast === 'function') {
                         showToast('✅ Connexion avec Google réussie', 2000);
                     }
                 } else {
-                    console.warn('⚠️ Échec de l\'authentification avec le token');
-                }
-            } else {
-                // Fallback: utiliser directement le client Supabase
-                if (window.supabaseInstance) {
-                    const { data, error } = await window.supabaseInstance.auth.setSession({
-                        access_token: accessToken,
-                        refresh_token: refreshToken || ''
-                    });
-                    if (!error && data?.user) {
-                        console.log('✅ Authentification Google réussie (fallback):', data.user.email);
-                        window.history.replaceState({}, document.title, window.location.pathname);
-                        // تحديث حالة المستخدم
-                        if (window.AuthService && typeof window.AuthService.onAuthSuccess === 'function') {
-                            await window.AuthService.onAuthSuccess(data.user);
-                        }
-                        if (typeof showToast === 'function') {
-                            showToast('✅ Connexion avec Google réussie', 2000);
+                    console.warn('⚠️ Échec via AuthService, tentative fallback...');
+                    // Fallback: utilisation directe du client
+                    if (window.supabaseInstance) {
+                        const { data, error } = await window.supabaseInstance.auth.setSession({
+                            access_token: accessToken,
+                            refresh_token: refreshToken || ''
+                        });
+                        if (!error && data?.user) {
+                            console.log('✅ Authentification Google réussie (fallback):', data.user.email);
+                            window.history.replaceState({}, document.title, window.location.pathname);
+                            if (window.AuthService && typeof window.AuthService.onAuthSuccess === 'function') {
+                                await window.AuthService.onAuthSuccess(data.user);
+                            }
+                            if (typeof showToast === 'function') {
+                                showToast('✅ Connexion avec Google réussie', 2000);
+                            }
                         }
                     }
                 }
@@ -66,10 +60,8 @@ window.onload = async () => {
             const user = await window.AuthService.getCurrentUser();
             if (user) {
                 console.log('👤 Utilisateur connecté:', user.email || user.phone || user.id);
-                // سحب البيانات من السحابة إذا كان المستخدم مسجلاً
                 if (window.SupabaseSyncEngine && typeof window.SupabaseSyncEngine.pullAll === 'function') {
                     await window.SupabaseSyncEngine.pullAll();
-                    // إعادة تحميل البيانات المحلية بعد السحب من السحابة
                     loadData();
                 }
             } else {
