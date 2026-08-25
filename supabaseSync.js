@@ -3,7 +3,7 @@
 let supabaseClient = null;
 
 function initSupabaseClient() {
-    // 1. إعادة استخدام عميل authService لمنع إنشاء كائنات متعددة
+    // 1. استخدام العميل المعرف بالفعل في AuthService لتجنب التكرار
     if (window.AuthService && typeof window.AuthService.getClient === 'function') {
         const existingClient = window.AuthService.getClient();
         if (existingClient) {
@@ -11,19 +11,13 @@ function initSupabaseClient() {
             return supabaseClient;
         }
     }
-
+    
+    // 2. إرجاع العميل المحلي إذا كان معرّفاً سابقاً
     if (supabaseClient) return supabaseClient;
-
-    if (window.supabase && window.APP_CONFIG && window.APP_CONFIG.supabaseUrl) {
-        supabaseClient = window.supabase.createClient(
-            window.APP_CONFIG.supabaseUrl,
-            window.APP_CONFIG.supabaseAnonKey
-        );
-        console.log('✅ Client Supabase initialisé avec succès.');
-    } else {
-        console.warn('⚠️ SDK Supabase ou APP_CONFIG introuvable.');
-    }
-    return supabaseClient;
+    
+    // 3. في حالة استدعائه قبل جاهزية AuthService، نحاول جلب العميل مباشرة
+    console.warn('⚠️ AuthService client not ready yet for SupabaseSyncEngine.');
+    return null;
 }
 
 async function getCurrentUser() {
@@ -38,11 +32,13 @@ async function getCurrentUser() {
 }
 
 async function pushCloudData(tableName, jsonData) {
+    const client = initSupabaseClient();
+    if (!client) return;
+
     const user = await getCurrentUser();
     if (!user) return;
 
     try {
-        const client = initSupabaseClient();
         const columnMap = {
             'user_work_data': 'work_data',
             'user_settings': 'settings',
@@ -67,12 +63,13 @@ async function pushCloudData(tableName, jsonData) {
 }
 
 async function pullAllCloudData() {
+    const client = initSupabaseClient();
+    if (!client) return false;
+
     const user = await getCurrentUser();
     if (!user) return false;
 
     try {
-        const client = initSupabaseClient();
-
         const [workRes, settRes, notesRes, tasksRes] = await Promise.all([
             client.from('user_work_data').select('work_data').eq('user_id', user.id).maybeSingle(),
             client.from('user_settings').select('settings').eq('user_id', user.id).maybeSingle(),
