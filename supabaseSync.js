@@ -2,9 +2,6 @@
 
 let supabaseClient = null;
 
-/**
- * Initialise le client Supabase
- */
 function initSupabaseClient() {
     if (supabaseClient) return supabaseClient;
     if (window.supabase && window.APP_CONFIG && window.APP_CONFIG.supabaseUrl) {
@@ -19,19 +16,17 @@ function initSupabaseClient() {
     return supabaseClient;
 }
 
-/**
- * Récupère l'utilisateur actuellement connecté
- */
 async function getCurrentUser() {
     const client = initSupabaseClient();
     if (!client) return null;
-    const { data: { user } } = await client.auth.getUser();
-    return user;
+    try {
+        const { data: { user } } = await client.auth.getUser();
+        return user;
+    } catch (e) {
+        return null;
+    }
 }
 
-/**
- * Envoie les données locales vers le Cloud (Push)
- */
 async function pushCloudData(tableName, jsonData) {
     const user = await getCurrentUser();
     if (!user) return;
@@ -61,9 +56,6 @@ async function pushCloudData(tableName, jsonData) {
     }
 }
 
-/**
- * Télécharge toutes les données du Cloud vers le stockage local (Pull)
- */
 async function pullAllCloudData() {
     const user = await getCurrentUser();
     if (!user) return false;
@@ -71,7 +63,6 @@ async function pullAllCloudData() {
     try {
         const client = initSupabaseClient();
 
-        // Récupération parallèle de toutes les tables
         const [workRes, settRes, notesRes, tasksRes] = await Promise.all([
             client.from('user_work_data').select('work_data').eq('user_id', user.id).maybeSingle(),
             client.from('user_settings').select('settings').eq('user_id', user.id).maybeSingle(),
@@ -79,28 +70,29 @@ async function pullAllCloudData() {
             client.from('user_tasks').select('tasks').eq('user_id', user.id).maybeSingle()
         ]);
 
-        if (workRes.data && workRes.data.work_data) {
-            window.workData = workRes.data.work_data;
-            localStorage.setItem('pointageWorkData', JSON.stringify(window.workData));
-        }
+        // Mise à jour de workData
+        window.workData = (workRes.data && workRes.data.work_data) ? workRes.data.work_data : {};
+        localStorage.setItem('pointageWorkData', JSON.stringify(window.workData));
 
+        // Mise à jour de settings
         if (settRes.data && settRes.data.settings) {
-            // Langue française par défaut si non spécifiée
             window.settings = { language: 'fr', ...settRes.data.settings };
             localStorage.setItem('pointageSettings', JSON.stringify(window.settings));
         }
 
+        // Mise à jour de notesData
         if (notesRes.data && notesRes.data.notes) {
             window.notesData = notesRes.data.notes;
             localStorage.setItem('pointageNotesData', JSON.stringify(window.notesData));
         }
 
+        // Mise à jour de tasksData
         if (tasksRes.data && tasksRes.data.tasks) {
             window.tasksData = tasksRes.data.tasks;
             localStorage.setItem('pointageTasksData', JSON.stringify(window.tasksData));
         }
 
-        console.log('✅ Synchronisation Cloud réussie.');
+        console.log('✅ Synchronisation Cloud réussie pour l\'utilisateur:', user.id);
         return true;
     } catch (e) {
         console.error('❌ Erreur de téléchargement des données Cloud:', e);
@@ -108,7 +100,6 @@ async function pullAllCloudData() {
     }
 }
 
-// Exportation globale
 window.SupabaseSyncEngine = {
     init: initSupabaseClient,
     getUser: getCurrentUser,
