@@ -33,8 +33,9 @@
     <script>
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js?v=' + Date.now(), { scope: './' })
-      .then(reg => console.log('✅ Service Worker registered:', reg.scope))
+    // تحديد المسار والـ Scope بدقة ليتوافق مع Subfolder الخاص بـ GitHub Pages
+    navigator.serviceWorker.register('./sw.js', { scope: './' })
+      .then(reg => console.log('✅ Service Worker registered scope:', reg.scope))
       .catch(err => console.warn('⚠️ Service Worker registration failed:', err));
   });
 }
