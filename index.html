@@ -4,56 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#1976D2">
-    
-    <!-- إعدادات PWA الأساسية -->
-    <link rel="manifest" href="./manifest.json">
-    <link rel="icon" type="image/png" sizes="192x192" href="assets/icon.png">
-    
-    <!-- دعم أجهزة iOS (iPhone / iPad) -->
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Pointage">
-    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-
     <title>Pointage</title>
     <link rel="stylesheet" href="styles.css">
-
-    <!-- تسجيل الـ Service Worker لتمكين التثبيت والعمل بدون إنترنت -->
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('./sw.js')
-            .then(reg => console.log('Service Worker registrado con éxito:', reg.scope))
-            .catch(err => console.error('Error al registrar Service Worker:', err));
-        });
-      }
-    </script>
-
-    <!-- حماية الواجهة وتعطيل أدوات الفحص -->
-<script>
-    // منع القائمة المنسدلة عند النقر الأيمن
-    document.addEventListener('contextmenu', event => event.preventDefault());
-  
-    // تعطيل اختصارات أدوات التطوير (F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U)
-    document.onkeydown = function (e) {
-      if (e.keyCode === 123 || 
-         (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) || 
-         (e.ctrlKey && e.keyCode === 85)) {
-        return false;
-      }
-    };
-  
-    // حماية من فتح أدوات التطوير مع إعادة التحميل تلقائياً
-    setInterval(() => {
-      const start = performance.now();
-      (function() { debugger; })();
-      const end = performance.now();
-      if (end - start > 100) {
-        window.location.reload();
-      }
-    }, 1000);
-  </script>
-  
 </head>
 <body>
 <div class="app-container">
@@ -366,6 +319,24 @@
         <!-- Settings -->
         <div id="settings-section" class="section">
             <div class="section-title" data-i18n="settingsTitle">⚙️ الإعدادات</div>
+
+            <!-- زر تسجيل الدخول - أضفه داخل settings-section -->
+            <details class="settings-group" open>
+                <summary class="settings-group-header">
+                    <span class="settings-icon">🔐</span>
+                    <h3>Compte utilisateur</h3>
+                    <span class="settings-toggle-icon">▾</span>
+                </summary>
+                <div class="settings-group-body">
+                    <button class="add-btn" onclick="openAuthModal()" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; margin-bottom: 8px;">
+                        🔑 Connexion / Créer un compte
+                    </button>
+                    <button class="add-btn" onclick="window.signOutUser()" style="background: linear-gradient(135deg, #dc2626, #b91c1c); color: #fff;">
+                        🚪 Se déconnecter
+                    </button>
+                    <div id="authStatus" style="margin-top:10px; font-size:13px; color:var(--gray);"></div>
+                </div>
+            </details>
 
             <!-- ===== 1. Général ===== -->
             <details class="settings-group" open>
@@ -1049,9 +1020,73 @@
 <div id="toast"></div>
 
 
-<!-- Scripts -->
+<!-- ===== نافذة تسجيل الدخول / إنشاء حساب ===== -->
+<div id="auth-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; align-items:center; justify-content:center; backdrop-filter:blur(4px);">
+    <div style="background:var(--card-bg, #ffffff); padding:30px 25px 20px; border-radius:16px; width:92%; max-width:380px; text-align:center; box-shadow:0 20px 50px rgba(0,0,0,0.3); position:relative; transition:all 0.3s ease;">
+
+        <!-- أيقونة -->
+        <div style="font-size:48px; margin-bottom:8px;">🔐</div>
+
+        <h3 id="authTitle" style="margin-bottom:12px; color:var(--text-color, #333); font-size:20px; font-weight:700;">تسجيل الدخول</h3>
+        <p id="authSubtitle" style="margin-bottom:20px; color:var(--gray, #888); font-size:13px;">أدخل بياناتك للوصول إلى حسابك</p>
+
+        <!-- حقل البريد الإلكتروني -->
+        <div style="position:relative; margin-bottom:12px;">
+            <input type="email" id="authEmail" placeholder="البريد الإلكتروني"
+                   style="width:100%; padding:12px 14px; border:2px solid var(--border-color, #e0e0e0); border-radius:10px; box-sizing:border-box; font-size:15px; background:var(--input-bg, #f8f9fa); color:var(--text-color, #333); transition:border-color 0.2s;"
+                   onfocus="this.style.borderColor='#2563eb'" onblur="this.style.borderColor='var(--border-color, #e0e0e0)'">
+        </div>
+
+        <!-- حقل كلمة المرور -->
+        <div style="position:relative; margin-bottom:12px;">
+            <input type="password" id="authPassword" placeholder="كلمة المرور (6 أحرف على الأقل)"
+                   style="width:100%; padding:12px 14px; border:2px solid var(--border-color, #e0e0e0); border-radius:10px; box-sizing:border-box; font-size:15px; background:var(--input-bg, #f8f9fa); color:var(--text-color, #333); transition:border-color 0.2s;"
+                   onfocus="this.style.borderColor='#2563eb'" onblur="this.style.borderColor='var(--border-color, #e0e0e0)'">
+        </div>
+
+        <!-- زر الإجراء الرئيسي -->
+        <button id="authPrimaryBtn" onclick="handleAuthSubmit()"
+                style="width:100%; padding:12px; background:linear-gradient(135deg, #2563eb, #1d4ed8); color:#fff; border:none; border-radius:10px; font-weight:700; font-size:16px; cursor:pointer; transition:transform 0.15s, box-shadow 0.2s; box-shadow:0 4px 14px rgba(37,99,235,0.35);"
+                onmousedown="this.style.transform='scale(0.97)'" onmouseup="this.style.transform='scale(1)'" onmouseleave="this.style.transform='scale(1)'">
+            دخول
+        </button>
+
+        <!-- حالة التحميل -->
+        <div id="authLoading" style="display:none; margin-top:10px; font-size:14px; color:#2563eb;">
+            ⏳ جاري المعالجة...
+        </div>
+
+        <!-- رسالة الخطأ -->
+        <div id="authError" style="display:none; margin-top:8px; font-size:13px; color:#dc2626; background:#fee2e2; padding:8px 12px; border-radius:8px;"></div>
+
+        <!-- التبديل بين تسجيل الدخول وإنشاء الحساب -->
+        <div style="margin-top:18px; font-size:14px; color:var(--gray, #666);">
+            <span id="authToggleText">ليس لديك حساب؟</span>
+            <a href="#" onclick="toggleAuthMode(); return false;" id="authToggleLink" style="color:#2563eb; text-decoration:none; font-weight:600; margin-left:4px;">إنشاء حساب جديد</a>
+        </div>
+
+        <!-- خيار الدخول كزائر -->
+        <div style="margin-top:10px; font-size:13px;">
+            <a href="#" onclick="closeAuthModal(); return false;" style="color:var(--gray, #999); text-decoration:none;">☕ متابعة كزائر</a>
+        </div>
+
+        <!-- زر الإغلاق -->
+        <button onclick="closeAuthModal()"
+                style="margin-top:14px; background:transparent; border:none; color:var(--gray, #aaa); cursor:pointer; font-size:14px; padding:6px 16px; border-radius:20px; transition:background 0.2s;"
+                onmouseenter="this.style.background='var(--hover-bg, #f0f0f0)'" onmouseleave="this.style.background='transparent'">
+            ✕ إلغاء
+        </button>
+    </div>
+</div>
+
+
+
+
+<!-- المكتبات الخارجية -->
 <script src="jspdf.umd.min.js"></script>
 <script src="html2canvas.min.js"></script>
+<!-- 1. إضافة مكتبة Supabase JS SDK الرسمية -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script src="appConfig.js"></script>
 <script src="translations.js"></script>
@@ -1059,6 +1094,9 @@
 <script src="developerInfo.js"></script>
 
 <script src="supabaseSync.js"></script>
+<!-- 2. إضافة ملف إدارة الحسابات التسجيل/الدخول هنا -->
+<script src="authService.js"></script>
+<script src="authUI.js"></script>
 <script src="otaUpdate.js"></script>
 <script src="analytics.js"></script>
 <script src="privacy.js"></script>
@@ -1076,7 +1114,7 @@
 <script src="rating.js"></script>
 <script src="contact.js"></script>
 
-<!-- منطق التطبيق الأساسي (مقسّم لعدة ملفات لسهولة الصيانة والتطوير) -->
+<!-- منطق التطبيق الأساسي -->
 <script src="app-core.js"></script>
 <script src="dashboard.js"></script>
 <script src="calendar-module.js"></script>
@@ -1084,7 +1122,7 @@
 <script src="settings-module.js"></script>
 <script src="holidays-module.js"></script>
 
-<!-- واجهة API للأتمتة مع تطبيقات أخرى (WebView) — تُحمَّل أخيراً لأنها تعتمد على كل ما سبق -->
+<!-- واجهة API للأتمتة -->
 <script src="api.js"></script>
 </body>
 </html>

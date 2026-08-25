@@ -1,1 +1,54 @@
-function a12_0x3b43(_0x45080c,_0x3c1d9b){_0x45080c=_0x45080c-0x145;const _0x3ac50d=a12_0x3ac5();let _0x3b430d=_0x3ac50d[_0x45080c];if(a12_0x3b43['HrjYgX']===undefined){var _0x45c705=function(_0x230b3e){const _0x3a9ff5='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';let _0x20539d='',_0x57f89c='';for(let _0x40445c=0x0,_0x2b43ae,_0xa2b8ff,_0x38737b=0x0;_0xa2b8ff=_0x230b3e['charAt'](_0x38737b++);~_0xa2b8ff&&(_0x2b43ae=_0x40445c%0x4?_0x2b43ae*0x40+_0xa2b8ff:_0xa2b8ff,_0x40445c++%0x4)?_0x20539d+=String['fromCharCode'](0xff&_0x2b43ae>>(-0x2*_0x40445c&0x6)):0x0){_0xa2b8ff=_0x3a9ff5['indexOf'](_0xa2b8ff);}for(let _0x1719b8=0x0,_0x3505b9=_0x20539d['length'];_0x1719b8<_0x3505b9;_0x1719b8++){_0x57f89c+='%'+('00'+_0x20539d['charCodeAt'](_0x1719b8)['toString'](0x10))['slice'](-0x2);}return decodeURIComponent(_0x57f89c);};const _0x39e3e4=function(_0x565709,_0x1aabdb){let _0x1f544b=[],_0x2d603f=0x0,_0x3d732f,_0x2f5849='';_0x565709=_0x45c705(_0x565709);let _0x224204;for(_0x224204=0x0;_0x224204<0x100;_0x224204++){_0x1f544b[_0x224204]=_0x224204;}for(_0x224204=0x0;_0x224204<0x100;_0x224204++){_0x2d603f=(_0x2d603f+_0x1f544b[_0x224204]+_0x1aabdb['charCodeAt'](_0x224204%_0x1aabdb['length']))%0x100,_0x3d732f=_0x1f544b[_0x224204],_0x1f544b[_0x224204]=_0x1f544b[_0x2d603f],_0x1f544b[_0x2d603f]=_0x3d732f;}_0x224204=0x0,_0x2d603f=0x0;for(let _0x268afc=0x0;_0x268afc<_0x565709['length'];_0x268afc++){_0x224204=(_0x224204+0x1)%0x100,_0x2d603f=(_0x2d603f+_0x1f544b[_0x224204])%0x100,_0x3d732f=_0x1f544b[_0x224204],_0x1f544b[_0x224204]=_0x1f544b[_0x2d603f],_0x1f544b[_0x2d603f]=_0x3d732f,_0x2f5849+=String['fromCharCode'](_0x565709['charCodeAt'](_0x268afc)^_0x1f544b[(_0x1f544b[_0x224204]+_0x1f544b[_0x2d603f])%0x100]);}return _0x2f5849;};a12_0x3b43['cdzYaD']=_0x39e3e4,a12_0x3b43['fiDJCl']={},a12_0x3b43['HrjYgX']=!![];}const _0x456715=_0x3ac50d[0x0],_0x3334b2=_0x45080c+_0x456715,_0x1272f8=a12_0x3b43['fiDJCl'][_0x3334b2];return!_0x1272f8?(a12_0x3b43['YCtVqk']===undefined&&(a12_0x3b43['YCtVqk']=!![]),_0x3b430d=a12_0x3b43['cdzYaD'](_0x3b430d,_0x3c1d9b),a12_0x3b43['fiDJCl'][_0x3334b2]=_0x3b430d):_0x3b430d=_0x1272f8,_0x3b430d;}const a12_0x17c8c0=a12_0x3b43;(function(_0x45a8f1,_0x192b5a){const _0x284b18=a12_0x3b43,_0x57b0a6=_0x45a8f1();while(!![]){try{const _0x4dd12c=-parseInt(_0x284b18(0x145,'%JR3'))/0x1*(parseInt(_0x284b18(0x14f,'QDlp'))/0x2)+-parseInt(_0x284b18(0x167,'ewnt'))/0x3+-parseInt(_0x284b18(0x15a,'D7Jo'))/0x4*(parseInt(_0x284b18(0x179,'XrfN'))/0x5)+parseInt(_0x284b18(0x165,'u65]'))/0x6*(-parseInt(_0x284b18(0x170,'INX9'))/0x7)+parseInt(_0x284b18(0x17c,'imKJ'))/0x8*(-parseInt(_0x284b18(0x172,'t0ZY'))/0x9)+parseInt(_0x284b18(0x14d,'kfB@'))/0xa*(-parseInt(_0x284b18(0x176,'gK6J'))/0xb)+-parseInt(_0x284b18(0x149,'jjAM'))/0xc*(-parseInt(_0x284b18(0x163,'wuLr'))/0xd);if(_0x4dd12c===_0x192b5a)break;else _0x57b0a6['push'](_0x57b0a6['shift']());}catch(_0x35fe2f){_0x57b0a6['push'](_0x57b0a6['shift']());}}}(a12_0x3ac5,0x494d6));let currentNotesHub=a12_0x17c8c0(0x175,'aYlO');function switchNotesHub(_0x19e674){const _0x3ec1a8=a12_0x17c8c0,_0x3b4614={'LiMyC':function(_0x2f284a,_0x38d94c){return _0x2f284a+_0x38d94c;},'aGBsG':_0x3ec1a8(0x15c,'XrfN'),'QekZI':_0x3ec1a8(0x17e,'ewnt'),'fdnBp':_0x3ec1a8(0x164,'kga@'),'lABlA':_0x3ec1a8(0x154,'%JR3'),'Hquvd':function(_0x225de8,_0x3460c){return _0x225de8===_0x3460c;},'qrvLX':'tasks','rGDxz':function(_0x375677){return _0x375677();},'tAuQB':function(_0x39ff76,_0x21587c){return _0x39ff76===_0x21587c;},'CprnX':'reminders'};currentNotesHub=_0x19e674,document[_0x3ec1a8(0x14a,'aa9*')](_0x3ec1a8(0x169,'kga@'))['forEach'](_0x19074f=>_0x19074f[_0x3ec1a8(0x14c,'jjAM')]['remove'](_0x3ec1a8(0x178,'INX9')));const _0x7d4f8c=document[_0x3ec1a8(0x17d,'XrfN')](_0x3b4614[_0x3ec1a8(0x16d,'$Hlp')](_0x3b4614[_0x3ec1a8(0x15d,'8Xg(')],_0x19e674));if(_0x7d4f8c)_0x7d4f8c['classList'][_0x3ec1a8(0x17f,']feA')](_0x3b4614[_0x3ec1a8(0x14e,'t0ZY')]);document[_0x3ec1a8(0x152,'J)QS')](_0x3b4614[_0x3ec1a8(0x182,'%JR3')])['forEach'](_0x14d41e=>_0x14d41e[_0x3ec1a8(0x160,'25[y')][_0x3ec1a8(0x148,'xZJ#')](_0x3ec1a8(0x150,'u&wv')));const _0x2678c8=document[_0x3ec1a8(0x168,'3r3M')](_0x3b4614[_0x3ec1a8(0x159,'!pUy')](_0x3b4614[_0x3ec1a8(0x16f,'25[y')],_0x19e674));if(_0x2678c8)_0x2678c8[_0x3ec1a8(0x177,'5eD7')][_0x3ec1a8(0x147,'XrfN')](_0x3ec1a8(0x16e,'kga@'));if(_0x3b4614['Hquvd'](_0x19e674,_0x3b4614[_0x3ec1a8(0x174,']feA')]))_0x3b4614[_0x3ec1a8(0x153,'ewnt')](initializeTasks);else{if(_0x3b4614[_0x3ec1a8(0x16c,'sZga')](_0x19e674,'notes'))initializeNotes();else{if(_0x3b4614['tAuQB'](_0x19e674,_0x3b4614[_0x3ec1a8(0x162,'nKRs')]))_0x3b4614[_0x3ec1a8(0x17b,'jjAM')](initializeReminders);}}}function initializeNotesHub(){const _0x2ae20a=a12_0x17c8c0,_0x665af5={'RBcel':function(_0x5cd784,_0x4671be){return _0x5cd784(_0x4671be);},'qRoND':_0x2ae20a(0x14b,'RHs2'),'wPFRH':function(_0x208334,_0x57f531){return _0x208334===_0x57f531;},'BQnMZ':_0x2ae20a(0x180,'WL&*'),'LxqVk':function(_0x45b996,_0x5e54eb){return _0x45b996===_0x5e54eb;},'PCfXg':function(_0x4ab656,_0xb53cbc){return _0x4ab656!==_0xb53cbc;},'fjIFj':_0x2ae20a(0x151,'imKJ'),'DlIqO':function(_0x3ce76b){return _0x3ce76b();},'NYcNr':function(_0x5e461a){return _0x5e461a();}};_0x665af5['RBcel'](switchNotesHub,currentNotesHub||_0x665af5[_0x2ae20a(0x166,'kfB@')]);if(_0x665af5['wPFRH'](typeof updateRemindersBadge,_0x665af5[_0x2ae20a(0x158,'kga@')])){if(_0x665af5[_0x2ae20a(0x171,'Bhuf')](typeof loadRemindersData,_0x665af5['BQnMZ'])&&_0x665af5[_0x2ae20a(0x15f,'$Hlp')](currentNotesHub,_0x665af5[_0x2ae20a(0x155,'t0ZY')]))_0x665af5['DlIqO'](loadRemindersData);_0x665af5[_0x2ae20a(0x156,'ewnt')](updateRemindersBadge);}}function a12_0x3ac5(){const _0xeba9a0=['BhyRW5nF','y8kaumk3WRXGW7xcQW','W57dP19zza','W5CAWPtcUvJcQvZdOmkF','AvH+cwPPW6FdQCoQ','fCk1wwNdSW','WOjEWOj6W70','wGOfxSkNmNjvhG','W6ZcVCknWOBcVfhcQmkyxa','m8oxq8k8WR5c','z8oQgSkcCSkqov0eWOC','W4CpW4iHWRBcUthdM8oUWRJdKSkn','W67dQ0RcJfm','W40+WRLFW6fYWQ7cImksCxPp','mCk9wCoYD8ksnu8/WRFcOJFcImka','W4VcJh3cKCoQWQ8','bCkJsW','WORcP2tcVmksW4aieG','W7mRCq93pqBdSteC','axFdTCoIsa','xIpcQmolyvNcUvpcIW','mqfqWOyNx8oIAKn8W4lcHHe','n8k8sq','lIS7W5q/WRC','WQ3cNdBcNM8thSkzW7u','tCodWR0/W7/dGmkPWQDDaSkckr8eWPSX','lWa9kfS','W7/dGg/cH1OrjCk6W6y','gqz5hbfgFmkdhCkdaa','WRvoW4RcQwC','WOqEfWtcOcJcGSoWW5G','o8oTbCkIFSkV','WO5RW6CgWRCUWRNcLCks','imktW4nUWRBdM8kvWRyEuSkCBapcSSowia','W5JcQe3cGmoM','d2BdUCoWwutcQeRdPW','WOjbW6JcTuq','W6tcTMRcTSoU','bGhdJmo7CYdcTSobW6ldKeddKqS','ySozW7FdK2i','iCkGWOHGsq','o8o+qCkHWOnqxCoHWPhdPG','cHhcOYpdHmkDWQZcK8oLW4S','pSkTt8oJESkvgL4/W64','xMtdKwtdOq','w1NcJmkPmZNdR8o/W4BcLutdQMu0nqKsks8svJdcHColWRu2EW/dJduWhG','W5RdGurIrG','y1SiW4XTiCk9uLO','zCoPgmo9BCkEn3mv','W4WMWQSaWPu','bSk3W59jC8kRFSotWP3dImo0cf8','dSoMW7BdQL1cdYOtWP/cKdbXWPL+nW','W41EWRLLmWOWcH5xWOmokW','x2mLA2u','WPVdNdVdJSkRW78ieLf7WONcGHm','WRL8sYz6ef3cRmozmgFdKSkMW7G','dSoMW7BdQL1cdYOtWP/cKdrXWPu','WQVcMZ3dJrKUoSkCW5FcM8kR','bCkgW6SMW5/dOmk4WR55','qqhdK0pdQq','W4BdQ29dyG','qCoRW63dT05u'];a12_0x3ac5=function(){return _0xeba9a0;};return a12_0x3ac5();}console['log'](a12_0x17c8c0(0x15e,'Wrsi'));
+// ===================================================================
+// notes-hub.js — Coordonnateur du commutateur des trois fonctionnalités
+// du panneau "Notes & Tâches" : Agenda (tasks) / Carnet (notes) / Rappels (reminders)
+// Intégré avec le moteur de synchronisation Supabase Engine.
+// ===================================================================
+
+let currentNotesHub = 'tasks';
+
+function switchNotesHub(hub) {
+    if (!['tasks', 'notes', 'reminders'].includes(hub)) return;
+
+    currentNotesHub = hub;
+
+    // تحديث حالة الأزرار والتبويبات
+    document.querySelectorAll('.notes-hub-tab').forEach(btn => btn.classList.remove('active'));
+    const activeBtn = document.getElementById('hubTabBtn-' + hub);
+    if (activeBtn) activeBtn.classList.add('active');
+
+    // تحديث حالة الألواح والواجهات
+    document.querySelectorAll('.notes-hub-panel').forEach(p => p.classList.remove('active'));
+    const activePanel = document.getElementById('hubPanel-' + hub);
+    if (activePanel) activePanel.classList.add('active');
+
+    // المزامنة التلقائية مع السحابة عند التبديل إن وجد المحرك
+    if (window.SupabaseSyncEngine && typeof window.SupabaseSyncEngine.pull === 'function') {
+        window.SupabaseSyncEngine.pull().catch(err => {
+            console.warn('Erreur lors de la synchronisation Supabase Hub:', err);
+        });
+    }
+
+    // تهيئة الوظيفة المطلوبة حسب التبويب المحدد
+    if (hub === 'tasks' && typeof initializeTasks === 'function') {
+        initializeTasks();
+    } else if (hub === 'notes' && typeof initializeNotes === 'function') {
+        initializeNotes();
+    } else if (hub === 'reminders' && typeof initializeReminders === 'function') {
+        initializeReminders();
+    }
+}
+
+// نقطة الدخول عند فتح تبويب "المذكرات" من شريط التنقل السفلي
+function initializeNotesHub() {
+    switchNotesHub(currentNotesHub || 'tasks');
+
+    // تحديث شارة عدد التذكيرات المستحقة حتى لو كانت اللوحة النشطة غير "تذكير"
+    if (typeof updateRemindersBadge === 'function') {
+        if (typeof loadRemindersData === 'function' && currentNotesHub !== 'reminders') {
+            loadRemindersData();
+        }
+        updateRemindersBadge();
+    }
+}
+
+console.log('notes-hub.js loaded successfully with Supabase Sync Integration');

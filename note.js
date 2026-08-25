@@ -1,1 +1,348 @@
-const a11_0x222d44=a11_0x3407;(function(_0x242ea6,_0x41ce2c){const _0x251f0a=a11_0x3407,_0xa732b0=_0x242ea6();while(!![]){try{const _0x4e1023=-parseInt(_0x251f0a(0x2d8,'yHC&'))/0x1*(parseInt(_0x251f0a(0x162,'J3MM'))/0x2)+parseInt(_0x251f0a(0x1c0,'JY^c'))/0x3+-parseInt(_0x251f0a(0x2cd,'JY^c'))/0x4+-parseInt(_0x251f0a(0x1a9,'A]vB'))/0x5+parseInt(_0x251f0a(0x268,'uYLs'))/0x6*(parseInt(_0x251f0a(0x1bd,'ws*Z'))/0x7)+parseInt(_0x251f0a(0x155,'&2Oz'))/0x8*(parseInt(_0x251f0a(0x253,'X]Ys'))/0x9)+parseInt(_0x251f0a(0x22f,'l!L('))/0xa;if(_0x4e1023===_0x41ce2c)break;else _0xa732b0['push'](_0xa732b0['shift']());}catch(_0x2fcbc9){_0xa732b0['push'](_0xa732b0['shift']());}}}(a11_0x2730,0x8a29e));let notesData={},notesViewMode=a11_0x222d44(0x2ce,'$9AN'),notesCurrentDate=new Date(),notesSelectedDateStr=null;function loadNotesData(){const _0xf50475=a11_0x222d44,_0x745aba={'xPGtq':'notesViewMonthBtn','FbUKA':'notesViewWeekBtn','GLiSS':function(_0x39dd23,_0x593d88){return _0x39dd23||_0x593d88;},'keyye':_0xf50475(0x1b5,'&@D)'),'xqKoI':function(_0x2b5f9d,_0x42d249){return _0x2b5f9d===_0x42d249;},'lFlDD':'month','TmrHV':function(_0x5c7a9f,_0x5a0313){return _0x5c7a9f===_0x5a0313;},'FCnMz':_0xf50475(0x22a,'J3MM'),'eQZFU':function(_0x1acc12,_0x5c92f3){return _0x1acc12(_0x5c92f3);},'Mlyvg':function(_0x3413bc,_0xa6df4){return _0x3413bc(_0xa6df4);},'ROTBm':function(_0x4d7438,_0xaa0775){return _0x4d7438(_0xaa0775);},'duIyU':function(_0x31d71f,_0x531f26){return _0x31d71f(_0x531f26);},'fGdwZ':_0xf50475(0x1e5,'JY^c'),'NJwiN':function(_0x12bc9a,_0x4f293f){return _0x12bc9a===_0x4f293f;},'uyLfN':_0xf50475(0x293,'rBAu'),'sUXXk':_0xf50475(0x1de,'O3E8'),'zjYDS':_0xf50475(0x2e4,'4tg6'),'SocpU':function(_0x519982,_0x223c79){return _0x519982(_0x223c79);},'EZgaJ':_0xf50475(0x1f3,'A]vB'),'vSYEC':function(_0x25a725,_0x318954){return _0x25a725>_0x318954;},'myCud':_0xf50475(0x19c,'b6qg'),'jVxiG':'notes-week-arrow','mZTNz':function(_0x36ea9d,_0x5bf435){return _0x36ea9d!==_0x5bf435;},'kzjqB':_0xf50475(0x2b5,'A]vB'),'CYxeC':_0xf50475(0x1c1,'TNwm'),'YfyNl':function(_0x3cd6a2,_0x341ad8){return _0x3cd6a2===_0x341ad8;},'mzVVd':_0xf50475(0x25e,'A]vB'),'YCJBu':_0xf50475(0x27d,'e)kQ'),'RqAgO':_0xf50475(0x15a,'(4@D'),'ZbBUE':function(_0x55678a,_0x51c623){return _0x55678a===_0x51c623;},'glgMl':_0xf50475(0x2a8,'Ti$W')};try{if(_0x745aba[_0xf50475(0x208,'1LCl')](_0x745aba[_0xf50475(0x250,'&@D)')],_0x745aba[_0xf50475(0x23e,'Cwe*')])){const _0x5df115=_0x351b11['getElementById'](_0x745aba[_0xf50475(0x264,'BEwe')]),_0x3cf195=_0x14a2ec[_0xf50475(0x29c,'o*Jv')](_0x745aba['FbUKA']);if(_0x745aba[_0xf50475(0x274,'e)kQ')](!_0x5df115,!_0x3cf195))return;_0x5df115[_0xf50475(0x1fc,'4tg6')][_0xf50475(0x1b3,'BEwe')](_0x745aba['keyye'],_0x745aba[_0xf50475(0x226,'l!L(')](_0x2afd59,_0x745aba[_0xf50475(0x23f,'owge')])),_0x3cf195[_0xf50475(0x1db,'Cwe*')][_0xf50475(0x220,'H&h7')](_0x745aba[_0xf50475(0x1e9,'kL6A')],_0x745aba[_0xf50475(0x279,'M(]g')](_0x5c19ef,_0x745aba[_0xf50475(0x2df,'owge')]));}else{const _0x1b5984=localStorage[_0xf50475(0x1e2,'yHC&')](_0x745aba[_0xf50475(0x2c1,'kL6A')]);notesData=_0x1b5984?JSON['parse'](_0x1b5984):{};}}catch(_0x82673b){if(_0x745aba[_0xf50475(0x19b,'kOsF')](_0xf50475(0x230,'&@D)'),_0x745aba[_0xf50475(0x2c6,'&2Oz')])){const _0x43f559=_0x745aba[_0xf50475(0x1dc,'cmqr')](_0x2c2bd3,_0x2860a2[_0xf50475(0x20b,')Ymz')]())+'\x20'+_0x745aba[_0xf50475(0x186,'4tg6')](_0x570506,_0x2364fe[_0xf50475(0x1ba,'(L6S')]()),_0xb44618=_0x5bab56(_0x192923[_0xf50475(0x193,'O3E8')]())+'\x20'+_0x745aba[_0xf50475(0x169,'BEwe')](_0x29640a,_0xdc226c[_0xf50475(0x2b2,'mGBA')]())+'\x20'+_0x745aba[_0xf50475(0x24e,'X]Ys')](_0x49c9c7,_0x4a2e83['getFullYear']());_0x1e8f57[_0xf50475(0x2a3,'A2fU')]=_0x43f559+_0xf50475(0x15b,'b6qg')+_0xb44618;}else console[_0xf50475(0x28f,'owge')](_0x745aba[_0xf50475(0x1f8,'zLN^')],_0x82673b),notesData={};}try{const _0x1f059f=localStorage[_0xf50475(0x29a,'e)kQ')](_0x745aba[_0xf50475(0x2e0,'1LCl')]);if(_0x745aba[_0xf50475(0x1f6,'rBAu')](_0x1f059f,_0x745aba[_0xf50475(0x251,'zLN^')])||_0x745aba[_0xf50475(0x213,'uYLs')](_0x1f059f,_0x745aba[_0xf50475(0x21e,'W@6]')])){if(_0x745aba[_0xf50475(0x151,'X]Ys')](_0x745aba['glgMl'],_0x745aba[_0xf50475(0x2b0,'A2fU')]))notesViewMode=_0x1f059f;else{const _0x2a635f=_0x745aba['eQZFU'](_0x5a4e6d,_0x319a29),_0x6a4673=_0x18fc71[_0x2a635f],_0x1c92cb=_0x745aba[_0xf50475(0x2dc,'ws*Z')](_0x23bf76,_0x2a635f),_0x341b7e=_0x4c9d4f['createElement'](_0x745aba[_0xf50475(0x26b,'yHC&')]);_0x341b7e['className']='notes-week-row';if(_0x745aba[_0xf50475(0x2c5,'M(]g')](_0x2a635f,_0x2bf755))_0x341b7e[_0xf50475(0x266,'ws*Z')][_0xf50475(0x2e3,'rBAu')](_0x745aba[_0xf50475(0x150,'cmqr')]);if(_0x1c92cb)_0x341b7e[_0xf50475(0x25f,'rBAu')][_0xf50475(0x15d,'l!L(')](_0xf50475(0x28e,'Cwe*'));const _0x396a71=_0x2e8d07[_0xf50475(0x14f,'W@6]')](_0x745aba['fGdwZ']);_0x396a71[_0xf50475(0x24c,'VKel')]=_0x745aba[_0xf50475(0x26d,'3tGw')];const _0x58ddff=_0x14d40d[_0xf50475(0x2aa,'Ti$W')]('div');_0x58ddff[_0xf50475(0x1b7,'H&h7')]=_0x745aba[_0xf50475(0x173,'cBLb')],_0x58ddff['textContent']=_0x745aba[_0xf50475(0x1ed,'cBLb')](_0x4bfdc3,_0x507ea8[_0xf50475(0x1d0,'ws*Z')]());const _0x379a59=_0x51dfc5[_0xf50475(0x172,'&@D)')](_0xf50475(0x286,')Ymz'));_0x379a59['className']=_0x745aba[_0xf50475(0x2b6,'M(]g')],_0x379a59[_0xf50475(0x237,'(d%^')]=_0x228539(_0x47252b[_0xf50475(0x2bd,'TNwm')]()),_0x396a71[_0xf50475(0x16f,'zLN^')](_0x58ddff),_0x396a71['appendChild'](_0x379a59);const _0x2ae0b5=_0x45560d['createElement'](_0x745aba[_0xf50475(0x192,'4tg6')]);_0x2ae0b5['className']=_0xf50475(0x26c,'&@D)');if(_0x1c92cb)_0x2ae0b5[_0xf50475(0x224,'cmqr')]=_0x745aba[_0xf50475(0x171,'Ti$W')](_0x6a4673[_0xf50475(0x28c,'VKel')][_0xf50475(0x267,'owge')],0x5a)?_0x6a4673[_0xf50475(0x168,'J3MM')][_0xf50475(0x227,'ws*Z')](0x0,0x5a)+'…':_0x6a4673['text'];else{const _0x3e3a0e=_0x3229f1['createElement'](_0x745aba[_0xf50475(0x2bb,'ABGR')]);_0x3e3a0e[_0xf50475(0x2b1,'rBAu')]=_0xf50475(0x28b,'l!L('),_0x3e3a0e[_0xf50475(0x2cf,'rBAu')]=_0x472648(_0xf50475(0x1d5,'1LCl')),_0x2ae0b5['appendChild'](_0x3e3a0e);}const _0x17c1e0=_0x68b518['createElement'](_0x745aba[_0xf50475(0x2ae,'fRk6')]);_0x17c1e0['className']=_0x745aba[_0xf50475(0x1dd,'3tGw')],_0x17c1e0['textContent']=_0x1fdd7b[_0xf50475(0x1c3,'cBLb')]==='ar'?'‹':'›',_0x341b7e[_0xf50475(0x2e2,'W@6]')](_0x396a71),_0x341b7e[_0xf50475(0x2eb,'cBLb')](_0x2ae0b5),_0x341b7e[_0xf50475(0x2db,'sq@P')](_0x17c1e0),_0x341b7e['onclick']=()=>_0x453b86(_0x229aa6),_0x58f727['appendChild'](_0x341b7e);}}}catch(_0x2b3ca5){}}function saveNotesData(){const _0x140b7e=a11_0x222d44,_0x43da89={'OAotb':_0x140b7e(0x164,'cmqr'),'deRWZ':_0x140b7e(0x2d5,'cmqr')};try{localStorage[_0x140b7e(0x1f2,'(L6S')](_0x43da89[_0x140b7e(0x276,'rBAu')],JSON['stringify'](notesData));}catch(_0x2f5603){console[_0x140b7e(0x2c2,'4tg6')](_0x43da89[_0x140b7e(0x2b3,'cBLb')],_0x2f5603);}}function hasNoteOn(_0x4b2a61){const _0x232e70=a11_0x222d44,_0x1372be={'xfquS':function(_0x238554,_0x55a7b5){return _0x238554>_0x55a7b5;}},_0x372a78=notesData[_0x4b2a61];return!!(_0x372a78&&_0x372a78['text']&&_0x1372be[_0x232e70(0x2dd,'O3E8')](_0x372a78[_0x232e70(0x1b8,'3tGw')][_0x232e70(0x218,'kL6A')]()[_0x232e70(0x154,'fRk6')],0x0));}function initializeNotes(){const _0x1aed0f=a11_0x222d44,_0x76b34={'XtPmN':function(_0x11eb62){return _0x11eb62();}};_0x76b34[_0x1aed0f(0x1af,'e)kQ')](loadNotesData),notesCurrentDate=new Date(),_0x76b34['XtPmN'](updateNotesViewToggleUI),_0x76b34['XtPmN'](renderNotes);}function updateNotesViewToggleUI(){const _0x256670=a11_0x222d44,_0x3c0fe2={'gXsyP':_0x256670(0x1f4,'l!L('),'OZESK':_0x256670(0x1c9,'cmqr'),'wlslq':function(_0x1f27c6,_0x606dca){return _0x1f27c6||_0x606dca;},'ctQtI':_0x256670(0x24a,'VKel'),'aoaoQ':function(_0x15b477,_0x4e3c94){return _0x15b477===_0x4e3c94;},'wsUNf':_0x256670(0x1a4,'mGBA'),'xtfbz':function(_0x27198f,_0x3dfa83){return _0x27198f===_0x3dfa83;}},_0x5c80a0=document[_0x256670(0x165,'&2Oz')](_0x3c0fe2[_0x256670(0x159,'1LCl')]),_0x19d889=document[_0x256670(0x1f1,'cmqr')](_0x3c0fe2[_0x256670(0x156,'A2fU')]);if(_0x3c0fe2[_0x256670(0x219,'M(]g')](!_0x5c80a0,!_0x19d889))return;_0x5c80a0[_0x256670(0x174,'kL6A')][_0x256670(0x22e,'kL6A')](_0x3c0fe2[_0x256670(0x27c,'&2Oz')],_0x3c0fe2[_0x256670(0x1bf,'yHC&')](notesViewMode,_0x3c0fe2['wsUNf'])),_0x19d889['classList']['toggle'](_0x3c0fe2[_0x256670(0x278,')Ymz')],_0x3c0fe2[_0x256670(0x245,'A]vB')](notesViewMode,_0x256670(0x22c,'s3mk')));}function switchNotesView(_0x283097){const _0x54c1ca=a11_0x222d44,_0xe2b02b={'xRwmz':_0x54c1ca(0x1e0,'(d%^'),'wgsoF':function(_0x10a8dc){return _0x10a8dc();},'ALKNI':function(_0x21c99a,_0x386ff7){return _0x21c99a!==_0x386ff7;},'Lsmqx':_0x54c1ca(0x203,'yHC&'),'OSWYB':function(_0x55acee,_0xd4d306){return _0x55acee!==_0xd4d306;},'Vknne':_0x54c1ca(0x163,'iy3A'),'hjHYI':_0x54c1ca(0x24f,'4tg6')},_0x57d50e=_0xe2b02b[_0x54c1ca(0x1fb,'ws*Z')][_0x54c1ca(0x262,'Ti$W')]('|');let _0x128831=0x0;while(!![]){switch(_0x57d50e[_0x128831++]){case'0':notesViewMode=_0x283097;continue;case'1':_0xe2b02b[_0x54c1ca(0x1e1,'l!L(')](renderNotes);continue;case'2':if(_0xe2b02b[_0x54c1ca(0x294,'0mzb')](_0x283097,_0xe2b02b[_0x54c1ca(0x29b,'&@D)')])&&_0xe2b02b['OSWYB'](_0x283097,_0xe2b02b['Vknne']))return;continue;case'3':try{localStorage[_0x54c1ca(0x1d1,'W@6]')](_0xe2b02b[_0x54c1ca(0x1e8,')c(A')],_0x283097);}catch(_0x48bfb5){}continue;case'4':_0xe2b02b[_0x54c1ca(0x252,'3tGw')](updateNotesViewToggleUI);continue;}break;}}function changeNotesPeriod(_0x58ed50){const _0x73ef72=a11_0x222d44,_0x4b3135={'GlCnM':'noteModal','xhWzG':'show','zfFke':function(_0x23d035,_0x37196e){return _0x23d035===_0x37196e;},'RfdfU':_0x73ef72(0x17c,'TNwm'),'jjFbh':_0x73ef72(0x1ab,'J3MM'),'jxCjS':_0x73ef72(0x2b7,'anic'),'yirIO':function(_0x33ea72,_0x27abb4){return _0x33ea72+_0x27abb4;},'GhVpC':function(_0x9714b,_0x28cb9f){return _0x9714b*_0x28cb9f;},'QjKst':function(_0x5f0b86,_0x5b3c92){return _0x5f0b86+_0x5b3c92;},'EXlZY':function(_0x4914e7){return _0x4914e7();}};_0x4b3135[_0x73ef72(0x1fd,'TNwm')](notesViewMode,_0x4b3135[_0x73ef72(0x18d,'TNwm')])?_0x4b3135[_0x73ef72(0x1ce,'ws*Z')](_0x4b3135['jjFbh'],_0x4b3135[_0x73ef72(0x16d,'ws*Z')])?(_0x400df6[_0x73ef72(0x1a8,'(L6S')](_0x4b3135['GlCnM'])[_0x73ef72(0x2e8,'s3mk')][_0x73ef72(0x1aa,'X]Ys')](_0x4b3135['xhWzG']),_0x319c82=null):notesCurrentDate[_0x73ef72(0x216,'BEwe')](_0x4b3135[_0x73ef72(0x182,'o*Jv')](notesCurrentDate[_0x73ef72(0x16b,'iy3A')](),_0x4b3135[_0x73ef72(0x2cc,'X]Ys')](_0x58ed50,0x7))):notesCurrentDate[_0x73ef72(0x270,'uYLs')](_0x4b3135['QjKst'](notesCurrentDate['getMonth'](),_0x58ed50)),_0x4b3135['EXlZY'](renderNotes);}function a11_0x2730(){const _0x16311b=['kserWRJdLsVcSX/cLa','xmopWPXAqcVcNw8wzfFcSaS','W4lcLM4arG','B0lcTKem','vvxcQuCk','WPnlWR4TvCo6WQhdR8oAW6hcJCoNAW','WQlcKKiAAW','C2fQW55t','p3FdUHvwW7tdOspcVa','ohNdV8oazG','dCoafcyAwmkwrwi','gmo2W6r+sSkJWRNcVa','W4mtWOzyW4GidCoIW61DC8kXW4tcTG','WOj1BXtdVG','WPdcOL5LWQ86W5zTWQv6W5yZzSof','Affkkcm','W6ddKbiZnG','WQVdLSk+zcS6wcBcIW','jIGEWQZdKG8','fGm5emoqnSo5W7vYWOSAW4TK','WQ8hkmopW5RcRSkuWQ1PW7BcOb0YW73cRSkag8oh','W4BcVLGhiG','WRLDpmkrW7K','WOvqWPS0h8o8xZldSbibWRWnWOddRSk5WRRcLW','W60YW7O6WOK','pCoeW7Hfza','W7ZdTmkrWPtdKCopjcJcSJhdTW','vLv9zCkgA8k5W7S','amoopdWV','W7pdPCo3d30','tLTkDSoLx8onWPi','WR1mW7ZdGmoD','eCo8W6rwvSkDWQJcPGSjBXOHW7rrqG','iCoTgIel','WRD7k8olW40WkCo0','WPnnWOO4Aa','i8oFl2PG','z8oTuSo1W6q','W5K/W4tdSSko','W7a+W5BdHCkH','25tyT9Q2WRpBJ9UQWPlzMnI42BpyUDIdh9QW24dAJnQy2z7yGTIC2kxcLG','W70LW7pdLmkBWRuWW67cMmkpW7eCW60OW6BcOCkM','W5eCW7xdPmkk','cSkBW4iaqNtdRmo5mSkrWP3cLmk8W5u','W7BdSSksWO0','W6SjW4yhWOqsdSoBW6a','D8o8DCojW4q','WQ8hkmopW6tdRmkhWQLGW4NdPa0/W6e','WROVWOr/EG','WPrqWQ0','W6xdVSkb','WP0QWQ5fsG','WO8/gmoZW5a','W5hcJ2mrrrKChCo1rSk1DSoX','uJNcI8olqCoBW7BcRNvLW4/dVHxdRSoWW7iY','qSo1EYG','lmo8lY0r','W7/dHNZdJ1NdICk5WQK','lZ8cWQtdLa','W73dOCknWOhdPSoflH3cOW','dCo2W71Cu8kO','fSocluDyW7bJWROQW7fX','gSodetqq','hvFdKcHS','WQvidSkXW7K','W6C4W67dNa','hmo/W7favSkbWQtcPXy','jSkDFNhcUx0','WRu/cmomW68','WP1LW6hdMSo6W4xdNW','WQDmWOiGfa','W5xcMhi1xrK0fmo+x8ksyComea','paxdV2yx','mtpdILOL','WRZdN8kNyXSzxYhcMI8x','kv/dI8ouv3uBbCkE','W6uhWPxdQ1K','W6BdSSkdWQpcK8kYW6yKWOutzuVcMmkh','W4OWeCoqAb7cMtnKdsG','WOGyhComW44','DXNcK8o/xG','WOHTwCoQsrdcMGfx','mrFdPfmVWPnyWP4','WQfCrbFdHq','vw9pWOeFW5ddHxVdJCkIW5pcVhS','WPj3zHZdVI3dHCo5WPDiW6VdICkF','WRRcK1L0WQi','W67dVSkkWPxdOq','W7XQWQhdPmoh','W5ldQvmgW6y','W4/cIfqfpSoBWRntWO/cS1DGeq','W5K5dSoPrW','dCoafcyAwSkEw3m','WPSRW6FcVtj/DWe','W6yhWRFdIfC','WRXowY3dIW','hMhdJ8oVtG','mSoOoKn8','W6DAWP3dSCoZ','WQmycmoqW48','qSo1EYG6dvjnvSkfWRe','dmoQptqN','WQWrh8oFW40','W4BcMh4e','WOhcShCWEmkt','W4j6WPpdRCoW','FWtcTCoNxa','pt0OWQBdKG','W6CVWOP4W6C','jmkkEfRcQG','WPpcRLW','ae7cOSk4WPSkW5zuymoRDvLR','oCo4kKT4','W74WW5hdP8km','W4BdHmkMWPtdNG','WPxcShC9BCkpW70','uCoQy8oP','W6zNWQ7dRSow','WPfCvqxdH8oaEJRcKCk7nCkTEKe','W4/dUCk/WPddKq','WRlcQmk7usKJWRbanIVdJcdcOq','amkrW5GXrG','gSojdseQE8krqNpdP0e','jLtdRmo9sa','W4i4WQHuW5m','W6BdKSkmWQVdNW','kX9wlSktqwVcMGFdKSoi','WQBdLCkXCG','2jxyT9IyW4tyNDUYWOtyPnUp27xcHTU12yVBGnIa2RBBKTQj2AddSG','ELlcMgSE','Fwj2WRWv','W6T/k8kfW4e0fq','WRTykmkTW5S','WPiHW6FcLs48DaWmW73dSspdH8o1sYy','xSonWOLEwIRcM2SAzvy','WQZdJ8kwBG0','WRe9WOXMta','Ew9HntZdUq','da4EWOBdNa','v1faW4P1','lLRdMCoxsfOd','WPuEW40kW6O0qxRdLmoTWOW','d8oieq','l8kxFLdcQYLhWOldJSo2WPe7W67cLhBcJSk9','iSkuA0BcQ0PrWORdJG','uCosWO1Eyt7cVgihBfBcLXhcV8k7','W47dIr8Kga','W4/cLLaxoCoYWP9mWP4','W4i2m0xcS3VcTmoZWR50W5BdLSkr','WQC0WOL2s8oOjhvchmkjW7G','W6msWPxdUMmfW4OJpCkdpq','25JyJTIcynUQ26832BlAVTU3v9UZ2BFzOnMa2ytzNDID2zz1','m8ofW5v5AW','W7ddUMawW6q','WP5wWQ8PuSkYWPpdPSoAW6FdHCoTFSoqW7i','W65UWQJdRComW4brW7yYaH0','ixhdH8owAG','wgXAWPCVW7tdJxRdUG','WPCCW5GoW7a1r37dMmoSWO0CzG','tNL3WOis','W5ldS8kRWRxdLW','WRLRWP0Pna','uupcVW','W5JdI1KwW4JdQW','WQvYWRFdV8kkW7KQW43cQW','W7eplmo3ya','FM55oshdI1FcO1y/e8kXW7i','W5O8hW','yNHYW5rQ','W7hdUmkEWOJcI8k2W6WKWQuiu1FcOSk1hCo4mW','W5FdQGO','wmo/DZKkjLLvvSkFWQbAWR1WW6ldUSofWPq','xtlcMW','WPiHW6FcLr55yGCoW7pcUa','W5xcMhyezq','rgfprmkX','cSkBW4iiqx/dTCo0','W59IWOJdO3FcJbhcGG/dRfhcMW','wfPlqG','s29sWOOOW5NdG2ZdGmkIW5lcT3ZdGvhcGCkc','W7qVW7pdTmkeW70QW67cK8kqWP4bW4u1','W78RW6NdLSkDW7KGW64','W6BcJ3iNla','WP8WW4dcPW','xw10kJu','WO/cQLbJWOe','sfPABCoQrmoC','WP5wWQ8PuSosWOVdRColW6tcR8o7DSoa','WQldGSkCFqS','nSkCA2hcVq','uvFcQ00wWO3dU8kNW5GzW5W','bfNcS8kuWOabW6Dq','WODwwJJdIq','WOHnWOOWgmk0BtVdSbrjWQil','W7GiWRZdM14','W4CAWPnUW5CHcCo0W7C','wWhcMCojza','WPOHW7WeW4u','C0fTW5HF','WP88W7BcKsL0rGumW7VcUsZdGq','d2viWOC+W5pdRa','W6OcW5OwWQeudSokW6hdTJe','WPDjusxdHCobvdFcLSkJeW','WPhcSgyF','q8o+zZKFc1jCvW','m8oqW4jEyq','WRfSBI3dIG','WOhcShCXDCkpW712esWIhCkHaW','WQC0WOL2Bmojow1ggSkjW70','W4VcLhq5FG','W6RcIfuTbW','W4vFWOXAWRXHm2JdRCoxWP0gAa','WOjXCrtdPc/dQCoZWOS','dmkuC0pcVW','WRVdJSkMEZ0','imk1q1/cNW','W7NdIghcHW','u0BcT00wWO3dMCk9WPWrW5Kl','WQiepCozW5RdJCkcWQvP','W4lcLuuboCktWOfAWO/cTr98cJW','WRtcS2Csta','WRPXkSkNW5e','WP8SW5aEW4O','qCoOz8oMW6NcJmkjW4q6W4SxiW8','e8oBlLjAW7vz','j8k/BKlcGG','WQ4+WOLxFSo5oq','WQ8hkmopW5RdK8kgWRPLW7ldQs06W7dcRmke','W5xdSx3cT1u','W7inWOZdSxKaW64UgSkalxnNW518tSkt','qCo2y8o0W67cP8kTW4u6','W6ldPCksWOFcI8kYW44TWO4kqLZcPq','W4yYWQrCW5u','W74vWRH5W4i','oLRcVSkxWOm','WOtcT0To','WOtdM8kDzty','W77cSN0xiW','W67dL17cM2q','WOSwWPjjwa','WQW9W5lcLY8','W7aMW6BdGSkBW5qUW7JcIq','udpcKCojrSkE','WPeHW73cHdu','WPSpW4NcTdG','W4FdI0m1W53dT8kX','W6fXWQZdRCorW6HZW60VkX3cLY1jWPm','WOFdIqWUWQFdQ1hcGCkaiq5UWRTw','FWFcMSkufq9koCkQx8odo8oO','W7RdTmkeWO/dPmof','WOedW5BcGda','t2rGnsy','kYKu','kHvqlCkhtM8','WQj0W4xdVSoa','W7ddVmktWQpdKa','W6NdOCkzWOxdVmoecttcVJpdPW','D2r5gdpdQfC','zg5QoZ7dUq','W6ZdUmkAWPddVSobmW','WOPCWPS4gSk0','fvBdH8ooua','WPvvqdpdMmoRDJlcMG','W6OcW5Ow','W7aRW6VdLmkgW7WMW7NdKmkaWR0bWQeYW6FcUSk/o8kKWQjSlq','WOFdIqWMWQtdOeJcJa','WOPpWP80aSk1AZ/dVbvi','s1zDwCoNuCoa','W7/dGmkzza8vxq','W5hdNeuEW44','WR51oCkjW7i','WRhcOmk/vIaQWRv+ktJdGthcQW','WPBcUMOABCklW7D2mtCuaCkBi2RdT8ob','WR8kW6W9W5u','W64dWOVdUhGaW64U','C0NcV3G+','W6ddKmkVWPddIa','s199tCkAkmkPW7Xk','l8o6n1vJ','W5/dLIaAha','vw9pWOeVW67dJwZdUCkAW4pcT2tdH0tcMW','WQ7dLSk6BW','pCoufhn9','WRS/dmoIW4u','pLBdKSotz1quhmkEFSo7','WRldNmkzFd0','qfFcVuKG','WQ/dN8kRuZKcva','WOClW4KMW7a1BW','2l7yTTIUFnIt25ys26ZyKnI22ldAHSkM2PRATTMk2ypBSDMP2OZyNmkG','W4GFWRrqW4i','wSo8BCoaW48','A091W4HjW6tdQtqTW5xdSKpcLa','y21VlqG','fSo9nLTX','W5BdV0NcSfq','WP9AWPCLl8k+rIpdSbDy','DCoiWRP4uG','W7tdI27cKutdQSkKWR8u','xLfHWQij','W7qXW5OlWQu','WQC0WOL2BmkGk2rgbCobW73dVCkwW64','emoxkwzxW60','za7cOgjZWOeyWORcVa','sZhcJmobDa','WRH/lmkVW5C6ma','WOvGEWNdIsFdRSoHWPDlW7O','W5atWOPPW6CcdSoZW6zhrq','W6tdUmo4','WOFcPxmrD8koW5n7fJqe','W6a4WPnqW6G','sSoWsSoEW5q','W48tWOTKW4e','dmoDad0g','nSoXW6Llxa','pwVdQWnlW57dGYBcSmosiq','W5enWOBdR1G','WOWNW5hcTW','D2zxwmot','qvL/','xgvpWQeWW53dIwZdOmk5W6tcQ0BdOq','WPpdIqWIWR/dQ1e','jfZdNSocvXyndCkEE8kIpSoRCuxdRCoFWQW','uJNcI8olqCkGW7RcPNjCW5NcVq3dP8oqW6mW','jSkDFNhcUxbv','n8okdbSf','W5VcK2GvqZqnpmoC','AwtcKwOn','W4xcIxqkk8oCWPPAWO4','uJNcI8olzSktW6VcT2rJW5pcSG','WRddQmkOEIi','iSkuA0BcQ0HzWPtdNW','WPZcS0uFFa','W4L6WQpdG2WLmZG4W5NcKcpdLW','WPObW4KkW4K/zNpdKq','WOvXnmk3W6y','WRZdN8kNyW','s8oyWOfpDYhcTNCwz0y','WRj1nSksW4S','W4pdI1iA','dmkoW4yGqhxdGSo0nCkjWRS','FNDRWPyL','WOnrWRq7','AhPvW6na','WPhcQfHLWQi8W5m','WPTuWOCHgW','WPDCWQ8iqmoRWOe','W6tcIw8ArW','WQddM8kSoJyzrta','xgvpWQa9W4ZdGq','WOpdJJOpWQC','W6xdVSkeWPBcK8k2W7i','W7G5lCofFq','WORcPLm4wG','F1jlFCkS','vw9pWOeVW6/dGwZdPCkbW4/cOxS','WOVdVaGYWOC','y2r5gdpdQfC','WPVdLmksyHy','W5aeWPTW','amoElK5h','WOtdHq4','W5pdI0CfW6G','WPb+EqldVG','W6BdScyHkq','WRiTW5mIW74','zKXGW55jW6/dPsK8','WOjwrIFdH8oa','rLXOw8kAs8kSW75B','E2JcT3Ku','WPzGDZNdQZe','t2vdWPaFW5FdIN3dQ8kJW5i','W53dKKZcOve','rcFcTmobEW','WRVdLSk2Dd0','WQ/cJ0bxWPy','W4mtWOzBW5ebdmoEW6ziqW','WPWWW53cUa','C8oAzcq+','W5VcN1qp','WPDPya7dNq','W5azWPv6W4Gi','dwxdImkDcSooWQpdS0DAW6xcTI7dRa','WRfTWQ0sdq','W6BdSmkFWO/dGq','bmogje5t','W5FdNfiqW4JdPSkrdSo8WOnfCIy','p8ozbZya','WP99uHddRa','WPnvWRO/uSotWO3dSmol','iHFdQgOdWPjcWOldQmk0zq','yu1LASoZ','W6ZdGdWTpSk4W5xcTa','WO8PWPLAuG','q8oQCSoIW7pcJCkpW4a2W4Ow','WO7dGWWoWP/dQ0tcKmkpjYL2','W7VdTmkDWQ3dVCoopJq','W7ZdNwxcK3u','jGSCWO/dOG','WOLKqrldHq','zeVcPsXXW4uyWRldGSkFACkFcW','WPLYW7ddSSo6W4xdTX5WwXyPsW','WO7cPv9kWRa','emoxkwDAW7fnWRCTW6Lxp8kXlW','mKFdJmofxG','W7uIW4CBWQe','W5RdGvKu','WQC0WOL2Bmoam29xbSkRW6VdTCkg','W7qVW7pdTCkjW6WI','v8oZDZupbW','mrFdPfSSWPHbWPpdO8kUu8kdmGG','vCo8yI8klf1uvG','D8omtmo0W7G','W5RdNSk9WQldVW','mCkxy1VcRgvxWOldPCoYW4G6W7ZcU3hcNSkN','WObfWOuGlG','xghcT2W8','W6KaW5enWQq','WRNcOCorW5FcPCkuiXFcOXldSr4','br0P'];a11_0x2730=function(){return _0x16311b;};return a11_0x2730();}function goToNotesToday(){const _0x1ffcc3=a11_0x222d44,_0x58d8ba={'ybujs':function(_0x19d52c){return _0x19d52c();}};notesCurrentDate=new Date(),_0x58d8ba[_0x1ffcc3(0x243,'b6qg')](renderNotes);}function renderNotes(){const _0x3c5605=a11_0x222d44,_0x41a771={'PNiXZ':_0x3c5605(0x1d2,'BEwe'),'xaBoO':function(_0x962f1d,_0x4d7c8e){return _0x962f1d===_0x4d7c8e;},'IpAfg':_0x3c5605(0x204,'fRk6'),'kuZSg':function(_0x4513b3,_0xc1b0f4){return _0x4513b3!==_0xc1b0f4;},'CndPF':_0x3c5605(0x1c7,'M(]g'),'gAZDe':_0x3c5605(0x189,'Cwe*'),'BKXNv':_0x3c5605(0x1ca,'ws*Z'),'zjzqV':function(_0x2ff89c,_0x7d70e0){return _0x2ff89c!==_0x7d70e0;},'liFMf':'bquho','iyvft':_0x3c5605(0x1ee,'J3MM'),'DATjg':function(_0x39c708){return _0x39c708();}},_0x56cd5b=document['getElementById'](_0x3c5605(0x16c,')Ymz')),_0x512b94=document[_0x3c5605(0x2a2,'(4@D')](_0x3c5605(0x157,'BEwe'));if(!_0x56cd5b||!_0x512b94)return;_0x41a771[_0x3c5605(0x240,'Ti$W')](notesViewMode,_0x41a771[_0x3c5605(0x2a4,'ABGR')])?_0x41a771[_0x3c5605(0x265,'rPW2')](_0x41a771[_0x3c5605(0x1c4,'zLN^')],_0x3c5605(0x228,'b6qg'))?_0x4a0acf[_0x3c5605(0x23d,'X]Ys')](_0x58b99d['getMonth']()+_0x9fa72):(_0x56cd5b[_0x3c5605(0x187,'ws*Z')][_0x3c5605(0x1bc,'iy3A')]=_0x41a771[_0x3c5605(0x29e,'(d%^')],_0x512b94[_0x3c5605(0x272,'JY^c')][_0x3c5605(0x191,'M(]g')]=_0x41a771['BKXNv'],renderNotesWeek()):_0x41a771['zjzqV'](_0x41a771[_0x3c5605(0x1d3,'kL6A')],_0x3c5605(0x1ea,'rBAu'))?(_0x99fcbe[_0x3c5605(0x1be,'fRk6')](iiuQiM['PNiXZ'],_0x356e60),_0x3b3d33={}):(_0x512b94[_0x3c5605(0x285,'O3E8')][_0x3c5605(0x1b4,'X]Ys')]=_0x41a771[_0x3c5605(0x1a5,'mGBA')],_0x56cd5b['style']['display']=_0x41a771[_0x3c5605(0x2ca,'anic')],_0x41a771['DATjg'](renderNotesMonth));}function renderNotesMonth(){const _0x59480b=a11_0x222d44,_0x253b4d={'EwPry':_0x59480b(0x287,'(4@D'),'GUOma':'calendar-day\x20calendar-header','pkhpw':function(_0x537e5e,_0x12245a){return _0x537e5e(_0x12245a);},'YKHdY':function(_0x2d8b0c,_0xa56721){return _0x2d8b0c*_0xa56721;},'bpTzf':_0x59480b(0x2d4,'ws*Z'),'bFHaN':_0x59480b(0x248,'O3E8'),'ypQyS':function(_0x8f2092,_0x23eb19){return _0x8f2092-_0x23eb19;},'ZklQE':function(_0x2fdf96,_0x1d395e){return _0x2fdf96===_0x1d395e;},'aPANv':function(_0x14fc8e,_0x4e7a46){return _0x14fc8e<_0x4e7a46;},'Dtumu':_0x59480b(0x289,'ABGR'),'xfoGR':_0x59480b(0x18a,'zLN^'),'lgFZl':function(_0x52f459,_0x3bc85c){return _0x52f459+_0x3bc85c;},'JfIQK':function(_0x24dc84,_0x1ac140){return _0x24dc84<=_0x1ac140;},'SnMuN':function(_0x21b3c7,_0x205006){return _0x21b3c7(_0x205006);},'ekrAr':_0x59480b(0x1b9,'&2Oz'),'ZcJdf':'calendar-day\x20notes-day','dBpKx':_0x59480b(0x277,'yHC&'),'RHLsi':function(_0x37d8f7,_0x325e6c){return _0x37d8f7===_0x325e6c;},'TshzM':'today','RbVLu':function(_0x16601e,_0x4663c8){return _0x16601e!==_0x4663c8;},'FrdIM':_0x59480b(0x2d1,'kL6A')},_0x27ba62=notesCurrentDate[_0x59480b(0x170,'kOsF')](),_0x160a02=notesCurrentDate['getFullYear'](),_0x4c8f02=document[_0x59480b(0x261,'kL6A')](_0x59480b(0x194,'ABGR'));if(_0x4c8f02)_0x4c8f02[_0x59480b(0x2b9,'VKel')]=_0x253b4d[_0x59480b(0x257,'o*Jv')](getMonthName,_0x27ba62)+'\x20'+_0x253b4d[_0x59480b(0x20a,'&@D)')](formatNumber,_0x160a02);const _0x3be9ab=document[_0x59480b(0x263,'b6qg')](_0x253b4d[_0x59480b(0x2ba,'rBAu')]);_0x3be9ab['innerHTML']='';const _0x5d268d=[0x1,0x2,0x3,0x4,0x5,0x6,0x0];_0x5d268d[_0x59480b(0x1ae,'zSx7')](_0x3fb490=>{const _0x3fddc6=_0x59480b,_0x50ef53=document[_0x3fddc6(0x25a,')Ymz')](_0x253b4d['EwPry']);_0x50ef53[_0x3fddc6(0x1b7,'H&h7')]=_0x253b4d[_0x3fddc6(0x17f,'H&h7')],_0x50ef53[_0x3fddc6(0x29f,'ws*Z')]=_0x253b4d['pkhpw'](getDayNameShort,_0x3fb490),_0x3be9ab[_0x3fddc6(0x205,'$9AN')](_0x50ef53);});const _0x4b57c5=new Date(_0x160a02,_0x27ba62,0x1),_0x39770c=_0x4b57c5[_0x59480b(0x298,'4tg6')]();let _0x4c7c88=_0x253b4d[_0x59480b(0x19f,'Cwe*')](_0x39770c,0x1);if(_0x253b4d['ZklQE'](_0x39770c,0x0))_0x4c7c88=0x6;for(let _0x91b853=0x0;_0x253b4d[_0x59480b(0x22d,'H&h7')](_0x91b853,_0x4c7c88);_0x91b853++){if(_0x253b4d[_0x59480b(0x200,'yHC&')](_0x253b4d['Dtumu'],_0x59480b(0x235,'H&h7')))_0x1aa6e5[_0x59480b(0x1a6,'fRk6')](_0x1eac44[_0x59480b(0x249,'&2Oz')]()+aJdobz['YKHdY'](_0x3c95a5,0x7));else{const _0x2304f7=document[_0x59480b(0x256,'sq@P')](_0x59480b(0x1f0,'uYLs'));_0x2304f7[_0x59480b(0x197,')c(A')]=_0x253b4d[_0x59480b(0x1d4,')c(A')],_0x3be9ab[_0x59480b(0x1bb,'&@D)')](_0x2304f7);}}const _0x36d5cc=new Date(_0x160a02,_0x253b4d[_0x59480b(0x2d0,'A]vB')](_0x27ba62,0x1),0x0)['getDate'](),_0x56c34b=new Date(),_0x504784=formatDate(_0x56c34b);for(let _0x57841a=0x1;_0x253b4d[_0x59480b(0x1cb,'M(]g')](_0x57841a,_0x36d5cc);_0x57841a++){const _0x4527c0=new Date(_0x160a02,_0x27ba62,_0x57841a),_0x55443e=_0x253b4d[_0x59480b(0x217,'ws*Z')](formatDate,_0x4527c0),_0x49e614=_0x253b4d['SnMuN'](hasNoteOn,_0x55443e),_0x51395c=document[_0x59480b(0x190,')c(A')](_0x253b4d[_0x59480b(0x27a,')c(A')]);_0x51395c['className']=_0x253b4d[_0x59480b(0x18e,'yHC&')];const _0x1abbeb=document[_0x59480b(0x242,'e)kQ')](_0x253b4d['EwPry']);_0x1abbeb[_0x59480b(0x2e5,'4tg6')]=_0x253b4d[_0x59480b(0x19a,'kL6A')];if(_0x49e614)_0x1abbeb[_0x59480b(0x297,'uKeB')][_0x59480b(0x153,'zLN^')](_0x253b4d[_0x59480b(0x2d9,'yHC&')]);if(_0x253b4d[_0x59480b(0x19e,'s3mk')](_0x55443e,_0x504784))_0x1abbeb[_0x59480b(0x255,'owge')][_0x59480b(0x1ad,'owge')](_0x253b4d[_0x59480b(0x1c8,'rPW2')]);_0x1abbeb[_0x59480b(0x1cd,'A]vB')]=formatNumber(_0x57841a),_0x51395c['appendChild'](_0x1abbeb);if(_0x49e614){if(_0x253b4d['RbVLu'](_0x253b4d[_0x59480b(0x183,'s3mk')],_0x253b4d[_0x59480b(0x23a,'O3E8')]))_0x14e1bd['style']['display']=_0x253b4d[_0x59480b(0x2b8,'ABGR')];else{const _0x2fd9e8=document[_0x59480b(0x2c4,'kOsF')](_0x253b4d[_0x59480b(0x206,'cmqr')]);_0x2fd9e8[_0x59480b(0x2b1,'rBAu')]=_0x59480b(0x1c6,'uYLs'),_0x51395c[_0x59480b(0x1ec,'0mzb')](_0x2fd9e8);}}_0x51395c['onclick']=()=>openNoteModal(_0x4527c0),_0x3be9ab[_0x59480b(0x14c,'anic')](_0x51395c);}}function renderNotesWeek(){const _0x3d8654=a11_0x222d44,_0x4d8144={'geptT':_0x3d8654(0x21a,'(L6S'),'MdKeR':'calendar-day','KOlQl':function(_0x3a0798){return _0x3a0798();},'JuCCf':function(_0x10ba3e,_0xa032eb){return _0x10ba3e(_0xa032eb);},'FbMXI':function(_0x407279,_0x604d00){return _0x407279===_0x604d00;},'aOkyG':'today','qDKwS':_0x3d8654(0x20d,'ws*Z'),'ElWDI':'notes-week-preview','aMIjG':_0x3d8654(0x28d,'rBAu'),'LCRmD':_0x3d8654(0x22b,'VKel'),'slbqZ':function(_0x2fddba,_0x12a11c){return _0x2fddba>_0x12a11c;},'xmzCB':function(_0x4c4e0e,_0xa337af){return _0x4c4e0e===_0xa337af;},'KZtmO':_0x3d8654(0x238,'iy3A'),'kPpYL':_0x3d8654(0x2c9,')c(A'),'UVNse':'notes-empty-label','BVrUb':function(_0x14d028,_0x5dd9fa){return _0x14d028(_0x5dd9fa);},'navoS':'notesEmptyDay','nbIiF':_0x3d8654(0x2da,'mGBA'),'LaBrn':_0x3d8654(0x275,'uKeB')},_0x226ad5=_0x4d8144['JuCCf'](getWeekStart,notesCurrentDate),_0x5a4d5b=_0x4d8144['BVrUb'](getWeekDays,_0x226ad5),_0x148e66=_0x5a4d5b[0x6],_0x13ffec=document[_0x3d8654(0x244,'M(]g')](_0x4d8144[_0x3d8654(0x19d,'ws*Z')]);if(_0x13ffec){const _0x5b178b=_0x4d8144[_0x3d8654(0x27f,'&2Oz')](formatNumber,_0x226ad5[_0x3d8654(0x20b,')Ymz')]())+'\x20'+_0x4d8144[_0x3d8654(0x195,'Cwe*')](getMonthName,_0x226ad5[_0x3d8654(0x161,'$9AN')]()),_0x111673=_0x4d8144['JuCCf'](formatNumber,_0x148e66[_0x3d8654(0x20e,'cmqr')]())+'\x20'+_0x4d8144[_0x3d8654(0x167,'s3mk')](getMonthName,_0x148e66[_0x3d8654(0x2a7,'(d%^')]())+'\x20'+formatNumber(_0x148e66[_0x3d8654(0x229,'kL6A')]());_0x13ffec[_0x3d8654(0x17a,'3tGw')]=_0x5b178b+_0x3d8654(0x254,'uYLs')+_0x111673;}const _0x12d3b0=document['getElementById'](_0x3d8654(0x214,'cmqr'));_0x12d3b0[_0x3d8654(0x1f7,'o*Jv')]='';const _0x5631b8=new Date(),_0x297c57=_0x4d8144[_0x3d8654(0x27b,'&2Oz')](formatDate,_0x5631b8);_0x5a4d5b[_0x3d8654(0x209,'b6qg')](_0x5ecec6=>{const _0x1ba6bd=_0x3d8654,_0x1ece30=formatDate(_0x5ecec6),_0x3d7496=notesData[_0x1ece30],_0x555eff=_0x4d8144[_0x1ba6bd(0x2d6,'zLN^')](hasNoteOn,_0x1ece30),_0x2fff85=document[_0x1ba6bd(0x28a,'o*Jv')](_0x4d8144[_0x1ba6bd(0x15f,'o*Jv')]);_0x2fff85[_0x1ba6bd(0x25d,'0mzb')]=_0x1ba6bd(0x18c,'s3mk');if(_0x4d8144[_0x1ba6bd(0x2d7,'cmqr')](_0x1ece30,_0x297c57))_0x2fff85[_0x1ba6bd(0x14e,'cmqr')]['add'](_0x4d8144[_0x1ba6bd(0x1d7,'M(]g')]);if(_0x555eff)_0x2fff85[_0x1ba6bd(0x236,')Ymz')]['add'](_0x4d8144['qDKwS']);const _0x4f51b8=document[_0x1ba6bd(0x2af,'s3mk')](_0x4d8144[_0x1ba6bd(0x2a1,'cBLb')]);_0x4f51b8[_0x1ba6bd(0x221,'uYLs')]=_0x1ba6bd(0x14b,')Ymz');const _0x21fa16=document[_0x1ba6bd(0x178,'mGBA')](_0x4d8144[_0x1ba6bd(0x21b,'fRk6')]);_0x21fa16[_0x1ba6bd(0x18b,'ABGR')]=_0x1ba6bd(0x27e,'&2Oz'),_0x21fa16[_0x1ba6bd(0x202,'sq@P')]=_0x4d8144[_0x1ba6bd(0x1da,'sq@P')](formatNumber,_0x5ecec6[_0x1ba6bd(0x1b2,'BEwe')]());const _0x5c6dde=document[_0x1ba6bd(0x233,'fRk6')](_0x1ba6bd(0x2c3,'b6qg'));_0x5c6dde[_0x1ba6bd(0x2a0,'A]vB')]=_0x1ba6bd(0x269,'ABGR'),_0x5c6dde['textContent']=_0x4d8144[_0x1ba6bd(0x225,'Cwe*')](getDayNameShort,_0x5ecec6[_0x1ba6bd(0x223,'Ti$W')]()),_0x4f51b8[_0x1ba6bd(0x16f,'zLN^')](_0x21fa16),_0x4f51b8[_0x1ba6bd(0x1e6,'TNwm')](_0x5c6dde);const _0x464011=document['createElement'](_0x4d8144['geptT']);_0x464011['className']=_0x4d8144[_0x1ba6bd(0x2e7,'rPW2')];if(_0x555eff){if(_0x4d8144[_0x1ba6bd(0x188,'4tg6')]!==_0x4d8144[_0x1ba6bd(0x17e,'uKeB')])_0x464011[_0x1ba6bd(0x224,'cmqr')]=_0x4d8144[_0x1ba6bd(0x1d6,'BEwe')](_0x3d7496['text'][_0x1ba6bd(0x1a3,'l!L(')],0x5a)?_0x3d7496[_0x1ba6bd(0x201,'ws*Z')]['slice'](0x0,0x5a)+'…':_0x3d7496[_0x1ba6bd(0x2bc,'o*Jv')];else{const _0x50a7b6=_0x18892e[_0x1ba6bd(0x2aa,'Ti$W')](LinESh['geptT']);_0x50a7b6['className']=LinESh[_0x1ba6bd(0x2be,'anic')],_0x54eb0d['appendChild'](_0x50a7b6);}}else{if(_0x4d8144[_0x1ba6bd(0x16a,'b6qg')](_0x4d8144['KZtmO'],_0x4d8144['KZtmO'])){const _0x4a2821=document[_0x1ba6bd(0x198,'(4@D')](_0x4d8144[_0x1ba6bd(0x215,'(L6S')]);_0x4a2821['className']=_0x4d8144[_0x1ba6bd(0x24d,')c(A')],_0x4a2821[_0x1ba6bd(0x1d9,'&@D)')]=_0x4d8144['BVrUb'](t,_0x4d8144[_0x1ba6bd(0x231,'X]Ys')]),_0x464011[_0x1ba6bd(0x292,'M(]g')](_0x4a2821);}else _0x4d46a2(),_0xc947f9=new _0x2405f8(),LinESh[_0x1ba6bd(0x222,'zLN^')](_0x574c62),LinESh[_0x1ba6bd(0x2a5,'l!L(')](_0x272b2d);}const _0xd7ed97=document['createElement'](_0x1ba6bd(0x158,'A2fU'));_0xd7ed97[_0x1ba6bd(0x21f,'1LCl')]=_0x4d8144[_0x1ba6bd(0x271,'rBAu')],_0xd7ed97['textContent']=_0x4d8144[_0x1ba6bd(0x1b0,'X]Ys')](settings[_0x1ba6bd(0x166,'&2Oz')],'ar')?'‹':'›',_0x2fff85[_0x1ba6bd(0x17b,'H&h7')](_0x4f51b8),_0x2fff85['appendChild'](_0x464011),_0x2fff85[_0x1ba6bd(0x23b,')c(A')](_0xd7ed97),_0x2fff85['onclick']=()=>openNoteModal(_0x5ecec6),_0x12d3b0[_0x1ba6bd(0x1b1,'X]Ys')](_0x2fff85);});}function a11_0x3407(_0x513f22,_0x15b309){_0x513f22=_0x513f22-0x148;const _0x273075=a11_0x2730();let _0x3407d7=_0x273075[_0x513f22];if(a11_0x3407['QjZshQ']===undefined){var _0x32191d=function(_0x4a6ebf){const _0x400953='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';let _0x3eaf41='',_0x27971b='';for(let _0x8a30ac=0x0,_0x310e35,_0x2dbd38,_0x2dc809=0x0;_0x2dbd38=_0x4a6ebf['charAt'](_0x2dc809++);~_0x2dbd38&&(_0x310e35=_0x8a30ac%0x4?_0x310e35*0x40+_0x2dbd38:_0x2dbd38,_0x8a30ac++%0x4)?_0x3eaf41+=String['fromCharCode'](0xff&_0x310e35>>(-0x2*_0x8a30ac&0x6)):0x0){_0x2dbd38=_0x400953['indexOf'](_0x2dbd38);}for(let _0x57c84a=0x0,_0x40207e=_0x3eaf41['length'];_0x57c84a<_0x40207e;_0x57c84a++){_0x27971b+='%'+('00'+_0x3eaf41['charCodeAt'](_0x57c84a)['toString'](0x10))['slice'](-0x2);}return decodeURIComponent(_0x27971b);};const _0x45f6c2=function(_0x2149d0,_0x99fcbe){let _0x356e60=[],_0x3b3d33=0x0,_0x4917df,_0x36d4de='';_0x2149d0=_0x32191d(_0x2149d0);let _0x1c81f0;for(_0x1c81f0=0x0;_0x1c81f0<0x100;_0x1c81f0++){_0x356e60[_0x1c81f0]=_0x1c81f0;}for(_0x1c81f0=0x0;_0x1c81f0<0x100;_0x1c81f0++){_0x3b3d33=(_0x3b3d33+_0x356e60[_0x1c81f0]+_0x99fcbe['charCodeAt'](_0x1c81f0%_0x99fcbe['length']))%0x100,_0x4917df=_0x356e60[_0x1c81f0],_0x356e60[_0x1c81f0]=_0x356e60[_0x3b3d33],_0x356e60[_0x3b3d33]=_0x4917df;}_0x1c81f0=0x0,_0x3b3d33=0x0;for(let _0x2a159b=0x0;_0x2a159b<_0x2149d0['length'];_0x2a159b++){_0x1c81f0=(_0x1c81f0+0x1)%0x100,_0x3b3d33=(_0x3b3d33+_0x356e60[_0x1c81f0])%0x100,_0x4917df=_0x356e60[_0x1c81f0],_0x356e60[_0x1c81f0]=_0x356e60[_0x3b3d33],_0x356e60[_0x3b3d33]=_0x4917df,_0x36d4de+=String['fromCharCode'](_0x2149d0['charCodeAt'](_0x2a159b)^_0x356e60[(_0x356e60[_0x1c81f0]+_0x356e60[_0x3b3d33])%0x100]);}return _0x36d4de;};a11_0x3407['alTTYJ']=_0x45f6c2,a11_0x3407['AOANiW']={},a11_0x3407['QjZshQ']=!![];}const _0x5cdc1c=_0x273075[0x0],_0x4acd5a=_0x513f22+_0x5cdc1c,_0xac4c22=a11_0x3407['AOANiW'][_0x4acd5a];return!_0xac4c22?(a11_0x3407['qCAJNt']===undefined&&(a11_0x3407['qCAJNt']=!![]),_0x3407d7=a11_0x3407['alTTYJ'](_0x3407d7,_0x15b309),a11_0x3407['AOANiW'][_0x4acd5a]=_0x3407d7):_0x3407d7=_0xac4c22,_0x3407d7;}function openNoteModal(_0x887875){const _0x5f410e=a11_0x222d44,_0x3d85ee={'zRVWZ':function(_0x3e2d2b,_0x538f2f){return _0x3e2d2b===_0x538f2f;},'MZzxK':_0x5f410e(0x281,'(4@D'),'MKXPA':function(_0x5b9211,_0x353abf){return _0x5b9211*_0x353abf;},'fvQvD':function(_0x1037fb){return _0x1037fb();},'kBmqN':function(_0x5c0825,_0x2eed2a){return _0x5c0825(_0x2eed2a);},'MTsTa':_0x5f410e(0x284,'ABGR'),'aQFlX':function(_0x2f9b0d,_0x3cebde){return _0x2f9b0d(_0x3cebde);},'XzgEV':_0x5f410e(0x2ea,'O3E8'),'bDVAq':'noteDeleteBtn','Ibyxy':'none','DNaML':_0x5f410e(0x2e6,'sq@P'),'ndcxY':function(_0x1fd82f,_0x482048){return _0x1fd82f===_0x482048;},'kEeyC':_0x5f410e(0x212,'TNwm'),'xPRJa':_0x5f410e(0x1a7,'anic'),'FlDaV':_0x5f410e(0x2de,'BEwe'),'DGAnr':_0x5f410e(0x1ff,'W@6]'),'LVEJN':'show','ygeCt':function(_0x6cc109,_0x2ba431,_0x3ccb7c){return _0x6cc109(_0x2ba431,_0x3ccb7c);}};notesSelectedDateStr=_0x3d85ee['kBmqN'](formatDate,_0x887875);const _0x3c7b12=notesData[notesSelectedDateStr],_0x1ab784=document[_0x5f410e(0x2cb,'H&h7')](_0x3d85ee[_0x5f410e(0x2ab,'b6qg')]);if(_0x1ab784){const _0x356409=_0x3d85ee[_0x5f410e(0x18f,'W@6]')](getDayName,_0x887875[_0x5f410e(0x1df,'M(]g')]()),_0x22898c=_0x3d85ee['kBmqN'](getMonthName,_0x887875[_0x5f410e(0x239,'rPW2')]());_0x1ab784[_0x5f410e(0x1e3,'Ti$W')]=_0x356409+'\x20'+formatNumber(_0x887875[_0x5f410e(0x1f5,'4tg6')]())+'\x20'+_0x22898c+'\x20'+_0x3d85ee[_0x5f410e(0x160,'uYLs')](formatNumber,_0x887875[_0x5f410e(0x2d3,'zSx7')]());}const _0x25867e=document[_0x5f410e(0x180,'TNwm')](_0x3d85ee['XzgEV']);_0x25867e['value']=_0x3c7b12&&_0x3c7b12['text']?_0x3c7b12['text']:'',updateNoteCharCount();const _0x38baab=document['getElementById'](_0x3d85ee[_0x5f410e(0x199,'kL6A')]);if(_0x38baab)_0x38baab[_0x5f410e(0x2ad,'anic')][_0x5f410e(0x210,'(4@D')]=_0x3c7b12&&_0x3c7b12[_0x5f410e(0x168,'J3MM')]?'block':_0x3d85ee[_0x5f410e(0x1eb,'uKeB')];const _0x166949=document[_0x5f410e(0x24b,'(d%^')](_0x3d85ee[_0x5f410e(0x1e7,'kL6A')]);if(_0x166949){if(_0x3c7b12&&_0x3c7b12['updatedAt']){if(_0x3d85ee['ndcxY'](_0x5f410e(0x21d,'rPW2'),_0x3d85ee[_0x5f410e(0x246,'3tGw')]))bWHYHJ[_0x5f410e(0x295,'yHC&')](_0xdef825,bWHYHJ['MZzxK'])?_0x64becb['setDate'](_0x50d8b6[_0x5f410e(0x20b,')Ymz')]()+bWHYHJ[_0x5f410e(0x2b4,'Ti$W')](_0x3f2484,0x7)):_0x5035a4['setMonth'](_0x4aeac1[_0x5f410e(0x260,'uKeB')]()+_0x535010),bWHYHJ['fvQvD'](_0x177bd2);else{const _0x47099f=new Date(_0x3c7b12[_0x5f410e(0x290,'X]Ys')]),_0x310c4f=_0x3d85ee['aQFlX'](formatLocalizedDateTime,_0x47099f);_0x166949[_0x5f410e(0x26f,'X]Ys')]=_0x3d85ee[_0x5f410e(0x14d,'A]vB')](t,_0x3d85ee['xPRJa'])+'\x20'+_0x310c4f,_0x166949[_0x5f410e(0x232,'M(]g')][_0x5f410e(0x2e1,'A]vB')]=_0x3d85ee[_0x5f410e(0x211,'A2fU')];}}else _0x166949[_0x5f410e(0x272,'JY^c')]['display']=_0x5f410e(0x247,'fRk6');}document['getElementById'](_0x3d85ee[_0x5f410e(0x25b,'TNwm')])[_0x5f410e(0x1a2,'&2Oz')][_0x5f410e(0x2e3,'rBAu')](_0x3d85ee[_0x5f410e(0x149,'uKeB')]),_0x3d85ee['ygeCt'](setTimeout,()=>_0x25867e[_0x5f410e(0x2ac,'X]Ys')](),0xc8);}function closeNoteModal(){const _0x3eacc7=a11_0x222d44,_0x4eb03b={'CnvKC':_0x3eacc7(0x207,')Ymz')};document['getElementById']('noteModal')['classList'][_0x3eacc7(0x291,'uKeB')](_0x4eb03b['CnvKC']),notesSelectedDateStr=null;}function updateNoteCharCount(){const _0x5a672a=a11_0x222d44,_0x5aad25={'wdaTe':'noteChanged','PxPUj':function(_0x26df43,_0x379bad){return _0x26df43||_0x379bad;},'ttNor':_0x5a672a(0x23c,'(L6S'),'zWPHl':_0x5a672a(0x2a9,'cmqr'),'gYukj':function(_0x167eb1,_0x14f64b){return _0x167eb1&&_0x14f64b;},'nOAkA':function(_0x310096,_0x5bd454){return _0x310096===_0x5bd454;},'PsAgr':_0x5a672a(0x175,'l!L('),'VSGHJ':function(_0x378560,_0x626bec){return _0x378560(_0x626bec);}},_0x23781c=document[_0x5a672a(0x2cb,'H&h7')](_0x5aad25['ttNor']),_0x592eab=document['getElementById'](_0x5aad25[_0x5a672a(0x1cc,'ABGR')]);_0x5aad25['gYukj'](_0x23781c,_0x592eab)&&(_0x5aad25[_0x5a672a(0x176,'W@6]')]('gWfgV',_0x5aad25[_0x5a672a(0x1a1,'mGBA')])?_0x592eab[_0x5a672a(0x1e4,'kL6A')]=_0x5aad25['VSGHJ'](formatNumber,_0x23781c['value'][_0x5a672a(0x1a3,'l!L(')]):_0x2bcf4b[_0x5a672a(0x258,'zLN^')](_0x5aad25[_0x5a672a(0x16e,'4tg6')],{'date':_0x25988c,'text':_0x5aad25['PxPUj'](_0x6f682e,null)}));}function saveNote(){const _0xee7bb2=a11_0x222d44,_0x56ad84={'TqSVU':_0xee7bb2(0x196,'cBLb'),'jwoxW':_0xee7bb2(0x1fa,'l!L('),'tWTfF':function(_0x26e60c,_0x473482){return _0x26e60c===_0x473482;},'fGXBU':_0xee7bb2(0x2c0,'owge'),'BWhvA':_0xee7bb2(0x25c,'1LCl'),'ppfaX':function(_0x3e2d24,_0x3c5711){return _0x3e2d24===_0x3c5711;},'BMoZG':'function','AXFRc':_0xee7bb2(0x2d2,'X]Ys'),'iIAtR':_0xee7bb2(0x1ef,'iy3A'),'RLhuz':function(_0x3e7cce,_0x44a8a5,_0x4cd27c){return _0x3e7cce(_0x44a8a5,_0x4cd27c);},'DTWgX':_0xee7bb2(0x273,'iy3A'),'KdQRQ':function(_0x3a494f){return _0x3a494f();},'aWcUa':function(_0x1199bd,_0x49a16e){return _0x1199bd!==_0x49a16e;},'Qurci':_0xee7bb2(0x282,'3tGw'),'UfwNY':'noteChanged','AcLAl':function(_0x50e3ee,_0x5a20ae){return _0x50e3ee||_0x5a20ae;},'RTrxX':'notesSaved'};if(!notesSelectedDateStr)return;const _0x19dcc0=document[_0xee7bb2(0x280,'$9AN')](_0x56ad84[_0xee7bb2(0x29d,'(d%^')]),_0x473efd=_0x19dcc0[_0xee7bb2(0x177,'1LCl')][_0xee7bb2(0x296,'&2Oz')]();_0x473efd?_0x56ad84[_0xee7bb2(0x299,'ABGR')](_0x56ad84[_0xee7bb2(0x21c,'H&h7')],_0x56ad84[_0xee7bb2(0x26e,'uKeB')])?_0xef860f[_0xee7bb2(0x2c8,'TNwm')](gGEgkU[_0xee7bb2(0x288,'O3E8')],_0x454098[_0xee7bb2(0x185,'Ti$W')](_0x2f7134)):(notesData[notesSelectedDateStr]={'text':_0x473efd,'updatedAt':new Date()['toISOString']()},_0x56ad84[_0xee7bb2(0x1cf,'zLN^')](typeof trackFeatureUsed,_0x56ad84[_0xee7bb2(0x1a0,'O3E8')])&&(_0x56ad84[_0xee7bb2(0x1d8,'Cwe*')]!==_0x56ad84['iIAtR']?_0x56ad84['RLhuz'](trackFeatureUsed,_0x56ad84[_0xee7bb2(0x14a,'fRk6')],{'date':notesSelectedDateStr}):_0x2ce9a0[_0xee7bb2(0x259,'zLN^')](_0xee7bb2(0x148,'H&h7'),_0xbfbcb7))):delete notesData[notesSelectedDateStr],saveNotesData(),closeNoteModal(),_0x56ad84[_0xee7bb2(0x1c2,'W@6]')](renderNotes),_0x56ad84['aWcUa'](typeof PointageAPI,_0x56ad84[_0xee7bb2(0x234,'rBAu')])&&PointageAPI['isEnabled']()&&PointageAPI[_0xee7bb2(0x1b6,'A]vB')](_0x56ad84[_0xee7bb2(0x283,')c(A')],{'date':notesSelectedDateStr,'text':_0x56ad84['AcLAl'](_0x473efd,null)}),_0x56ad84['RLhuz'](showToast,t(_0x56ad84[_0xee7bb2(0x152,'&@D)')]),0x5dc);}function deleteNote(){const _0x59df28=a11_0x222d44,_0xeeda6d={'CRJIn':function(_0x19b3a3,_0x1e77f6){return _0x19b3a3(_0x1e77f6);},'NUOtL':function(_0x4f9ada,_0x46b9e4){return _0x4f9ada(_0x46b9e4);},'Vtijv':_0x59df28(0x15c,'VKel'),'hAFpZ':function(_0x2232cc){return _0x2232cc();},'FsNXj':function(_0x4ade36){return _0x4ade36();},'UIxMT':_0x59df28(0x17d,'VKel'),'jDich':_0x59df28(0x15e,'mGBA'),'oohet':function(_0x4c70a9,_0x260118,_0x179176){return _0x4c70a9(_0x260118,_0x179176);},'cbBdl':function(_0x25b8be,_0xcf8673){return _0x25b8be(_0xcf8673);}};if(!notesSelectedDateStr)return;if(!_0xeeda6d[_0x59df28(0x2bf,'l!L(')](confirm,_0xeeda6d[_0x59df28(0x2c7,'X]Ys')](t,_0xeeda6d[_0x59df28(0x20c,'o*Jv')])))return;delete notesData[notesSelectedDateStr],_0xeeda6d[_0x59df28(0x1c5,'X]Ys')](saveNotesData),_0xeeda6d['hAFpZ'](closeNoteModal),_0xeeda6d['FsNXj'](renderNotes),typeof PointageAPI!==_0xeeda6d['UIxMT']&&PointageAPI[_0x59df28(0x1f9,'s3mk')]()&&PointageAPI[_0x59df28(0x1ac,'BEwe')](_0xeeda6d[_0x59df28(0x26a,'s3mk')],{'date':notesSelectedDateStr,'text':null}),_0xeeda6d['oohet'](showToast,_0xeeda6d[_0x59df28(0x20f,'(L6S')](t,_0x59df28(0x181,'O3E8')),0x5dc);}
+﻿// ===== قسم المذكرات (Notes) — Module de Notes Personnelles =====
+// مساحة شخصية للمستخدم لتدوين مذكراته اليومية.
+// يدعم عرضاً شهرياً (تقويم) وعرضاً أسبوعياً (قائمة أيام)،
+// مع المزامنة التلقائية المباشرة مع سحابة Supabase.
+
+let notesData = {};
+let notesViewMode = 'month';       // 'month' | 'week'
+let notesCurrentDate = new Date(); // تاريخ مرجعي للتصفح ضمن القسم
+let notesSelectedDateStr = null;   // مفتاح اليوم المفتوح حالياً في نافذة التحرير
+
+// ===== تخزين البيانات =====
+function loadNotesData() {
+    try {
+        const raw = localStorage.getItem('pointageNotesData');
+        notesData = raw ? JSON.parse(raw) : {};
+    } catch (e) {
+        console.error('خطأ في تحميل المذكرات:', e);
+        notesData = {};
+    }
+
+    try {
+        const savedView = localStorage.getItem('pointageNotesView');
+        if (savedView === 'month' || savedView === 'week') {
+            notesViewMode = savedView;
+        }
+    } catch (e) {
+        // القيمة الافتراضية 'month' تبقى سارية
+    }
+}
+
+function saveNotesData() {
+    try {
+        localStorage.setItem('pointageNotesData', JSON.stringify(notesData));
+
+        // مزامنة المذكرات سحابياً عبر محرك Supabase Sync Engine
+        if (window.SupabaseSyncEngine && typeof window.SupabaseSyncEngine.push === 'function') {
+            window.SupabaseSyncEngine.push('user_notes_data', notesData);
+        }
+    } catch (e) {
+        console.error('خطأ في حفظ المذكرات:', e);
+    }
+}
+
+function hasNoteOn(dateStr) {
+    const entry = notesData[dateStr];
+    return !!(entry && entry.text && entry.text.trim().length > 0);
+}
+
+// ===== تهيئة القسم عند فتحه =====
+function initializeNotes() {
+    loadNotesData();
+    notesCurrentDate = new Date(); // يعرض تلقائياً الشهر/الأسبوع الحالي عند كل دخول للقسم
+    updateNotesViewToggleUI();
+    renderNotes();
+}
+
+function updateNotesViewToggleUI() {
+    const monthBtn = document.getElementById('notesViewMonthBtn');
+    const weekBtn = document.getElementById('notesViewWeekBtn');
+    if (!monthBtn || !weekBtn) return;
+    monthBtn.classList.toggle('active', notesViewMode === 'month');
+    weekBtn.classList.toggle('active', notesViewMode === 'week');
+}
+
+function switchNotesView(mode) {
+    if (mode !== 'month' && mode !== 'week') return;
+    notesViewMode = mode;
+    try { localStorage.setItem('pointageNotesView', mode); } catch (e) {}
+    updateNotesViewToggleUI();
+    renderNotes();
+}
+
+function changeNotesPeriod(delta) {
+    if (notesViewMode === 'week') {
+        notesCurrentDate.setDate(notesCurrentDate.getDate() + (delta * 7));
+    } else {
+        notesCurrentDate.setMonth(notesCurrentDate.getMonth() + delta);
+    }
+    renderNotes();
+}
+
+function goToNotesToday() {
+    notesCurrentDate = new Date();
+    renderNotes();
+}
+
+function renderNotes() {
+    const monthGrid = document.getElementById('notesMonthGrid');
+    const weekList = document.getElementById('notesWeekList');
+    if (!monthGrid || !weekList) return;
+
+    if (notesViewMode === 'week') {
+        monthGrid.style.display = 'none';
+        weekList.style.display = 'flex';
+        renderNotesWeek();
+    } else {
+        weekList.style.display = 'none';
+        monthGrid.style.display = 'grid';
+        renderNotesMonth();
+    }
+}
+
+// ===== العرض الشهري =====
+function renderNotesMonth() {
+    const month = notesCurrentDate.getMonth();
+    const year = notesCurrentDate.getFullYear();
+
+    const titleEl = document.getElementById('notesPeriodTitle');
+    if (titleEl && typeof getMonthName === 'function') {
+        titleEl.textContent = `${getMonthName(month)} ${typeof formatNumber === 'function' ? formatNumber(year) : year}`;
+    }
+
+    const grid = document.getElementById('notesMonthGrid');
+    grid.innerHTML = '';
+
+    const dayOrder = [1, 2, 3, 4, 5, 6, 0]; // يبدأ الأسبوع بالإثنين
+    dayOrder.forEach(i => {
+        const h = document.createElement('div');
+        h.className = 'calendar-day calendar-header';
+        h.textContent = typeof getDayNameShort === 'function' ? getDayNameShort(i) : i;
+        grid.appendChild(h);
+    });
+
+    const first = new Date(year, month, 1);
+    const startDay = first.getDay();
+    let emptyDays = startDay - 1;
+    if (startDay === 0) emptyDays = 6;
+
+    for (let i = 0; i < emptyDays; i++) {
+        const e = document.createElement('div');
+        e.className = 'calendar-day';
+        grid.appendChild(e);
+    }
+
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const today = new Date();
+    const todayStr = typeof formatDate === 'function' ? formatDate(today) : today.toISOString().split('T')[0];
+
+    for (let d = 1; d <= daysInMonth; d++) {
+        const date = new Date(year, month, d);
+        const dateStr = typeof formatDate === 'function' ? formatDate(date) : date.toISOString().split('T')[0];
+        const hasNote = hasNoteOn(dateStr);
+
+        const container = document.createElement('div');
+        container.className = 'calendar-day-container';
+
+        const cell = document.createElement('div');
+        cell.className = 'calendar-day notes-day';
+        if (hasNote) cell.classList.add('has-note');
+        if (dateStr === todayStr) cell.classList.add('today');
+        cell.textContent = typeof formatNumber === 'function' ? formatNumber(d) : d;
+        container.appendChild(cell);
+
+        if (hasNote) {
+            const dot = document.createElement('div');
+            dot.className = 'notes-dot';
+            container.appendChild(dot);
+        }
+
+        container.onclick = () => openNoteModal(date);
+        grid.appendChild(container);
+    }
+}
+
+// ===== العرض الأسبوعي =====
+function renderNotesWeek() {
+    if (typeof getWeekStart !== 'function' || typeof getWeekDays !== 'function') return;
+
+    const weekStart = getWeekStart(notesCurrentDate);
+    const days = getWeekDays(weekStart);
+    const weekEnd = days[6];
+
+    const titleEl = document.getElementById('notesPeriodTitle');
+    if (titleEl && typeof getMonthName === 'function') {
+        const startLabel = `${typeof formatNumber === 'function' ? formatNumber(weekStart.getDate()) : weekStart.getDate()} ${getMonthName(weekStart.getMonth())}`;
+        const endLabel = `${typeof formatNumber === 'function' ? formatNumber(weekEnd.getDate()) : weekEnd.getDate()} ${getMonthName(weekEnd.getMonth())} ${typeof formatNumber === 'function' ? formatNumber(weekEnd.getFullYear()) : weekEnd.getFullYear()}`;
+        titleEl.textContent = `${startLabel} - ${endLabel}`;
+    }
+
+    const list = document.getElementById('notesWeekList');
+    list.innerHTML = '';
+
+    const today = new Date();
+    const todayStr = typeof formatDate === 'function' ? formatDate(today) : today.toISOString().split('T')[0];
+
+    days.forEach(date => {
+        const dateStr = typeof formatDate === 'function' ? formatDate(date) : date.toISOString().split('T')[0];
+        const entry = notesData[dateStr];
+        const noteExists = hasNoteOn(dateStr);
+
+        const row = document.createElement('div');
+        row.className = 'notes-week-row';
+        if (dateStr === todayStr) row.classList.add('today');
+        if (noteExists) row.classList.add('has-note');
+
+        const dateBox = document.createElement('div');
+        dateBox.className = 'notes-week-date';
+
+        const dayNum = document.createElement('div');
+        dayNum.className = 'notes-week-daynum';
+        dayNum.textContent = typeof formatNumber === 'function' ? formatNumber(date.getDate()) : date.getDate();
+
+        const dayName = document.createElement('div');
+        dayName.className = 'notes-week-dayname';
+        dayName.textContent = typeof getDayNameShort === 'function' ? getDayNameShort(date.getDay()) : date.getDay();
+
+        dateBox.appendChild(dayNum);
+        dateBox.appendChild(dayName);
+
+        const preview = document.createElement('div');
+        preview.className = 'notes-week-preview';
+        if (noteExists) {
+            preview.textContent = entry.text.length > 90 ? entry.text.slice(0, 90) + '…' : entry.text;
+        } else {
+            const emptyLabel = document.createElement('span');
+            emptyLabel.className = 'notes-empty-label';
+            emptyLabel.textContent = typeof t === 'function' ? t('notesEmptyDay') : (window.settings?.language === 'ar' ? 'لا توجد ملاحظات' : 'Aucune note');
+            preview.appendChild(emptyLabel);
+        }
+
+        const arrow = document.createElement('div');
+        arrow.className = 'notes-week-arrow';
+        arrow.textContent = window.settings?.language === 'ar' ? '‹' : '›';
+
+        row.appendChild(dateBox);
+        row.appendChild(preview);
+        row.appendChild(arrow);
+
+        row.onclick = () => openNoteModal(date);
+        list.appendChild(row);
+    });
+}
+
+// ===== نافذة تحرير المذكرة =====
+function openNoteModal(date) {
+    notesSelectedDateStr = typeof formatDate === 'function' ? formatDate(date) : date.toISOString().split('T')[0];
+    const entry = notesData[notesSelectedDateStr];
+
+    const titleEl = document.getElementById('noteModalTitle');
+    if (titleEl && typeof getDayName === 'function' && typeof getMonthName === 'function') {
+        const dayName = getDayName(date.getDay());
+        const monthName = getMonthName(date.getMonth());
+        const dayNum = typeof formatNumber === 'function' ? formatNumber(date.getDate()) : date.getDate();
+        const yearNum = typeof formatNumber === 'function' ? formatNumber(date.getFullYear()) : date.getFullYear();
+        titleEl.textContent = `${dayName} ${dayNum} ${monthName} ${yearNum}`;
+    }
+
+    const textarea = document.getElementById('noteTextarea');
+    if (textarea) {
+        textarea.value = (entry && entry.text) ? entry.text : '';
+    }
+    updateNoteCharCount();
+
+    const deleteBtn = document.getElementById('noteDeleteBtn');
+    if (deleteBtn) deleteBtn.style.display = (entry && entry.text) ? 'block' : 'none';
+
+    const updatedInfo = document.getElementById('noteUpdatedInfo');
+    if (updatedInfo) {
+        if (entry && entry.updatedAt) {
+            const d = new Date(entry.updatedAt);
+            const timeStr = typeof formatLocalizedDateTime === 'function' ? formatLocalizedDateTime(d) : d.toLocaleString();
+            const labelStr = typeof t === 'function' ? t('notesLastEdited') : (window.settings?.language === 'ar' ? 'آخر تعديل:' : 'Dernière modification :');
+            updatedInfo.textContent = `${labelStr} ${timeStr}`;
+            updatedInfo.style.display = 'inline';
+        } else {
+            updatedInfo.style.display = 'none';
+        }
+    }
+
+    const modal = document.getElementById('noteModal');
+    if (modal) {
+        modal.classList.add('show');
+        if (textarea) setTimeout(() => textarea.focus(), 200);
+    }
+}
+
+function closeNoteModal() {
+    const modal = document.getElementById('noteModal');
+    if (modal) modal.classList.remove('show');
+    notesSelectedDateStr = null;
+}
+
+function updateNoteCharCount() {
+    const textarea = document.getElementById('noteTextarea');
+    const counter = document.getElementById('noteCharCount');
+    if (textarea && counter) {
+        counter.textContent = typeof formatNumber === 'function' ? formatNumber(textarea.value.length) : textarea.value.length;
+    }
+}
+
+function saveNote() {
+    if (!notesSelectedDateStr) return;
+    const textarea = document.getElementById('noteTextarea');
+    if (!textarea) return;
+
+    const text = textarea.value.trim();
+
+    if (text) {
+        notesData[notesSelectedDateStr] = {
+            text: text,
+            updatedAt: new Date().toISOString()
+        };
+
+        if (typeof trackFeatureUsed === 'function') {
+            trackFeatureUsed('add_note', { date: notesSelectedDateStr });
+        }
+    } else {
+        delete notesData[notesSelectedDateStr];
+    }
+
+    saveNotesData();
+    closeNoteModal();
+    renderNotes();
+
+    if (typeof PointageAPI !== 'undefined' && PointageAPI.isEnabled()) {
+        PointageAPI._emit('noteChanged', { date: notesSelectedDateStr, text: text || null });
+    }
+
+    const msg = typeof t === 'function' ? t('notesSaved') : (window.settings?.language === 'ar' ? 'تم حفظ الملاحظة' : 'Note enregistrée');
+    if (typeof showToast === 'function') showToast(msg, 1500);
+}
+
+async function deleteNote() {
+    if (!notesSelectedDateStr) return;
+
+    const confirmMsg = typeof t === 'function' ? t('notesDeleteConfirm') : (window.settings?.language === 'ar' ? 'هل أنت تأكد من حذف الملاحظة؟' : 'Voulez-vous supprimer cette note ?');
+
+    let confirmed = false;
+    if (typeof showConfirmDialog === 'function') {
+        confirmed = await showConfirmDialog(confirmMsg);
+    } else {
+        confirmed = confirm(confirmMsg);
+    }
+
+    if (!confirmed) return;
+
+    delete notesData[notesSelectedDateStr];
+    saveNotesData();
+    closeNoteModal();
+    renderNotes();
+
+    if (typeof PointageAPI !== 'undefined' && PointageAPI.isEnabled()) {
+        PointageAPI._emit('noteChanged', { date: notesSelectedDateStr, text: null });
+    }
+
+    const msg = typeof t === 'function' ? t('notesDeleted') : (window.settings?.language === 'ar' ? 'تم حذف الملاحظة' : 'Note supprimée');
+    if (typeof showToast === 'function') showToast(msg, 1500);
+}

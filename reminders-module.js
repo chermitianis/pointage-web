@@ -1,1 +1,372 @@
-function a19_0x2a4d(_0x1b8ae2,_0x5018bf){_0x1b8ae2=_0x1b8ae2-0x90;const _0x1ed65a=a19_0x1ed6();let _0x2a4d6b=_0x1ed65a[_0x1b8ae2];if(a19_0x2a4d['WGCztM']===undefined){var _0x35646b=function(_0xa38686){const _0x415ab3='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';let _0x3df4c3='',_0x4fbfaa='';for(let _0x1e388e=0x0,_0x3d46d8,_0x123914,_0x4531a4=0x0;_0x123914=_0xa38686['charAt'](_0x4531a4++);~_0x123914&&(_0x3d46d8=_0x1e388e%0x4?_0x3d46d8*0x40+_0x123914:_0x123914,_0x1e388e++%0x4)?_0x3df4c3+=String['fromCharCode'](0xff&_0x3d46d8>>(-0x2*_0x1e388e&0x6)):0x0){_0x123914=_0x415ab3['indexOf'](_0x123914);}for(let _0x244e41=0x0,_0x28c585=_0x3df4c3['length'];_0x244e41<_0x28c585;_0x244e41++){_0x4fbfaa+='%'+('00'+_0x3df4c3['charCodeAt'](_0x244e41)['toString'](0x10))['slice'](-0x2);}return decodeURIComponent(_0x4fbfaa);};const _0x621762=function(_0x2ab4ef,_0x441803){let _0x298364=[],_0x3107d7=0x0,_0x1f7d31,_0x4f7977='';_0x2ab4ef=_0x35646b(_0x2ab4ef);let _0x3cb30a;for(_0x3cb30a=0x0;_0x3cb30a<0x100;_0x3cb30a++){_0x298364[_0x3cb30a]=_0x3cb30a;}for(_0x3cb30a=0x0;_0x3cb30a<0x100;_0x3cb30a++){_0x3107d7=(_0x3107d7+_0x298364[_0x3cb30a]+_0x441803['charCodeAt'](_0x3cb30a%_0x441803['length']))%0x100,_0x1f7d31=_0x298364[_0x3cb30a],_0x298364[_0x3cb30a]=_0x298364[_0x3107d7],_0x298364[_0x3107d7]=_0x1f7d31;}_0x3cb30a=0x0,_0x3107d7=0x0;for(let _0x335e63=0x0;_0x335e63<_0x2ab4ef['length'];_0x335e63++){_0x3cb30a=(_0x3cb30a+0x1)%0x100,_0x3107d7=(_0x3107d7+_0x298364[_0x3cb30a])%0x100,_0x1f7d31=_0x298364[_0x3cb30a],_0x298364[_0x3cb30a]=_0x298364[_0x3107d7],_0x298364[_0x3107d7]=_0x1f7d31,_0x4f7977+=String['fromCharCode'](_0x2ab4ef['charCodeAt'](_0x335e63)^_0x298364[(_0x298364[_0x3cb30a]+_0x298364[_0x3107d7])%0x100]);}return _0x4f7977;};a19_0x2a4d['kCvvWQ']=_0x621762,a19_0x2a4d['indqiJ']={},a19_0x2a4d['WGCztM']=!![];}const _0x59e1fb=_0x1ed65a[0x0],_0x42414a=_0x1b8ae2+_0x59e1fb,_0x5e7f33=a19_0x2a4d['indqiJ'][_0x42414a];return!_0x5e7f33?(a19_0x2a4d['dIPiIS']===undefined&&(a19_0x2a4d['dIPiIS']=!![]),_0x2a4d6b=a19_0x2a4d['kCvvWQ'](_0x2a4d6b,_0x5018bf),a19_0x2a4d['indqiJ'][_0x42414a]=_0x2a4d6b):_0x2a4d6b=_0x5e7f33,_0x2a4d6b;}const a19_0x367f44=a19_0x2a4d;(function(_0x51d31c,_0x27d1fd){const _0x2f2084=a19_0x2a4d,_0x4e11ed=_0x51d31c();while(!![]){try{const _0x4d0fec=parseInt(_0x2f2084(0x1ee,'v8b3'))/0x1+-parseInt(_0x2f2084(0x1b9,'jITE'))/0x2*(-parseInt(_0x2f2084(0x114,'&He['))/0x3)+parseInt(_0x2f2084(0x110,'G#4j'))/0x4+-parseInt(_0x2f2084(0x197,'4lio'))/0x5*(-parseInt(_0x2f2084(0xbc,'c47U'))/0x6)+-parseInt(_0x2f2084(0x15f,'[JZ2'))/0x7*(-parseInt(_0x2f2084(0xb1,'wc#H'))/0x8)+-parseInt(_0x2f2084(0x117,'9PuY'))/0x9+parseInt(_0x2f2084(0x17c,'g45Z'))/0xa*(-parseInt(_0x2f2084(0xda,'IDe5'))/0xb);if(_0x4d0fec===_0x27d1fd)break;else _0x4e11ed['push'](_0x4e11ed['shift']());}catch(_0x37c261){_0x4e11ed['push'](_0x4e11ed['shift']());}}}(a19_0x1ed6,0xa1bb2));let remindersData={},remindersFilter=a19_0x367f44(0x18c,'I2FH'),editingReminderId=null,pendingCustomSoundData=null,pendingDeviceRingtoneName=null;function loadRemindersData(){const _0x4db1d1=a19_0x367f44,_0x174910={'Txcbz':_0x4db1d1(0xa9,'tw9L'),'LHbvr':_0x4db1d1(0x191,'3W!z')};try{const _0x12d632=localStorage[_0x4db1d1(0x1ba,'G#4j')](_0x174910[_0x4db1d1(0x152,'4lio')]);remindersData=_0x12d632?JSON['parse'](_0x12d632):{};}catch(_0x42a409){console[_0x4db1d1(0xee,'YGt^')](_0x174910['LHbvr'],_0x42a409),remindersData={};}}function saveRemindersData(){const _0x508ad8=a19_0x367f44,_0x415939={'GToCy':function(_0x408175,_0x2047ea){return _0x408175===_0x2047ea;},'WBIPz':_0x508ad8(0xf4,'P1cW'),'zABMU':_0x508ad8(0xb5,'uYrz')};try{_0x415939[_0x508ad8(0x1de,'c47U')](_0x508ad8(0xf4,'P1cW'),_0x415939[_0x508ad8(0x189,'b)kw')])?localStorage[_0x508ad8(0x91,'b)kw')](_0x415939[_0x508ad8(0xab,'G#4j')],JSON[_0x508ad8(0xfa,'I2FH')](remindersData)):_0x8402d6[_0x508ad8(0x107,'(lZj')](_0x508ad8(0x1f5,'FhM&'),_0x8c7495[_0x508ad8(0x183,'yqtp')](_0x1202da));}catch(_0x17eaec){console[_0x508ad8(0xfb,'[JZ2')](_0x508ad8(0x16c,'%bGT'),_0x17eaec);}}function initializeReminders(){const _0x21f627=a19_0x367f44,_0x13245b={'NaASv':function(_0x3cf891){return _0x3cf891();}};loadRemindersData(),renderRemindersList(),_0x13245b[_0x21f627(0x1e3,'e0cE')](updateRemindersBadge);}function updateRemindersBadge(){const _0x30baa1=a19_0x367f44,_0x18aca6={'aQROC':_0x30baa1(0x1e5,'e0cE'),'xwopS':_0x30baa1(0x18b,'V2vl'),'ktxvU':function(_0x4b9f2a,_0x37d646){return _0x4b9f2a>_0x37d646;},'kaGkE':function(_0x406e33,_0x23bcda){return _0x406e33(_0x23bcda);},'dnKJD':_0x30baa1(0x165,'b)kw'),'eOEvg':_0x30baa1(0x136,'FhM&'),'PtHXC':'none'},_0x46fdc7=document['getElementById'](_0x18aca6['xwopS']);if(!_0x46fdc7)return;const _0x5de7ec=new Date(),_0x40055f=Object[_0x30baa1(0x1e4,'CmEV')](remindersData)[_0x30baa1(0x9a,'KbjF')](_0x4766b2=>!_0x4766b2[_0x30baa1(0x170,'4lio')]&&computeFireTime(_0x4766b2['date'],_0x4766b2[_0x30baa1(0x14d,'anb5')],0x0)&&computeFireTime(_0x4766b2['date'],_0x4766b2[_0x30baa1(0x12f,'v8b3')],0x0)<=_0x5de7ec)[_0x30baa1(0x1c7,'tw9L')];_0x18aca6[_0x30baa1(0xe8,'!&4#')](_0x40055f,0x0)?(_0x46fdc7[_0x30baa1(0xe3,'wc#H')]=_0x18aca6[_0x30baa1(0xe9,'V2vl')](formatNumber,_0x40055f),_0x46fdc7[_0x30baa1(0xa1,'@Cnj')][_0x30baa1(0xb0,'I2FH')]=_0x18aca6[_0x30baa1(0xcb,'UBSh')]):_0x18aca6['eOEvg']!==_0x18aca6['eOEvg']?_0x5eba83[_0x30baa1(0x148,'g45Z')][_0x30baa1(0x1e1,'sv55')](_0x18aca6[_0x30baa1(0x1f2,'YGt^')],_0x2306d2[_0x30baa1(0x157,'g45Z')]['filter']===_0x4be60d):_0x46fdc7['style'][_0x30baa1(0x11c,'jp4O')]=_0x18aca6[_0x30baa1(0x198,'IDe5')];}function setRemindersFilter(_0x1e6d86){const _0x63a40b=a19_0x367f44,_0x4e398a={'fAUbR':_0x63a40b(0x1b1,'jp4O'),'kmINA':_0x63a40b(0x1d9,'REcg'),'cScHX':function(_0x272678){return _0x272678();}};remindersFilter=_0x1e6d86,document[_0x63a40b(0xfe,'ugAt')](_0x4e398a[_0x63a40b(0xc5,'bqJL')])[_0x63a40b(0x11f,'X[2V')](_0x106255=>{const _0x40fdc6=_0x63a40b;_0x106255['classList'][_0x40fdc6(0xe6,'9)Zs')](_0x4e398a[_0x40fdc6(0xc0,'tw9L')],_0x106255['dataset'][_0x40fdc6(0x1e6,'9sEa')]===_0x1e6d86);}),_0x4e398a[_0x63a40b(0x1ea,'nlT!')](renderRemindersList);}function getFilteredReminders(){const _0x5000f0=a19_0x367f44,_0x31e3c5={'vJZOY':_0x5000f0(0xc3,'&He['),'qkiRR':'past'};let _0xcbeca8=Object['values'](remindersData);if(remindersFilter===_0x31e3c5['vJZOY'])_0xcbeca8=_0xcbeca8[_0x5000f0(0x168,'Lr8W')](_0x12e06a=>!_0x12e06a[_0x5000f0(0x10a,'wc#H')]);else{if(remindersFilter===_0x31e3c5[_0x5000f0(0x192,'@Cnj')])_0xcbeca8=_0xcbeca8[_0x5000f0(0x19a,'sv55')](_0x49af0d=>_0x49af0d[_0x5000f0(0x1c5,'%bGT')]);}return _0xcbeca8[_0x5000f0(0x90,'KehE')]((_0x2baffc,_0x2937f0)=>(_0x2baffc[_0x5000f0(0x145,'FhM&')]+(_0x2baffc[_0x5000f0(0x178,'w)q)')]||''))[_0x5000f0(0x12e,'(lZj')](_0x2937f0[_0x5000f0(0x147,'yqtp')]+(_0x2937f0[_0x5000f0(0x1cc,'CXsc')]||''))),_0xcbeca8;}function renderRemindersList(){const _0x42138b=a19_0x367f44,_0x419bcc={'qdjVD':function(_0x4f5e93){return _0x4f5e93();},'ozqxB':function(_0x2f91cc,_0x515cef){return _0x2f91cc(_0x515cef);},'QbBAr':function(_0x3aaa06,_0x504f61){return _0x3aaa06(_0x504f61);},'ZQFtH':function(_0x48cb34,_0x221b5a){return _0x48cb34(_0x221b5a);},'aEepV':_0x42138b(0x1d0,'!&4#'),'uthMY':function(_0x2ee70f,_0x5da5c8){return _0x2ee70f(_0x5da5c8);},'tgDTF':_0x42138b(0x1da,'anb5'),'xEBZa':function(_0x3ff0b0){return _0x3ff0b0();},'DSJyj':function(_0x66441e,_0x5229b3){return _0x66441e===_0x5229b3;},'XruJK':function(_0x412599,_0x539177){return _0x412599!==_0x539177;},'zGNCr':'wOfNg','yLvAz':_0x42138b(0x18d,'e0cE'),'bqINN':_0x42138b(0xd7,'REcg'),'VBitp':'none'},_0x58c5f9=document[_0x42138b(0x139,'KehE')](_0x419bcc[_0x42138b(0x109,'CXsc')]),_0x22fe57=document['getElementById']('remindersEmptyState');if(!_0x58c5f9||!_0x22fe57)return;const _0xff0c64=_0x419bcc[_0x42138b(0x104,'@Cnj')](getFilteredReminders);if(_0x419bcc['DSJyj'](_0xff0c64[_0x42138b(0x1ae,'jITE')],0x0)){if(_0x419bcc[_0x42138b(0x1dd,'sv55')](_0x419bcc[_0x42138b(0x95,'w)q)')],_0x419bcc['yLvAz'])){_0x58c5f9['innerHTML']='',_0x22fe57[_0x42138b(0x11e,'e0cE')]['display']=_0x419bcc[_0x42138b(0x15b,'(lZj')];return;}else _0x11f955(),_0x4337d7(),proXwK[_0x42138b(0x93,'44EV')](_0x91d073);}_0x22fe57[_0x42138b(0x11e,'e0cE')]['display']=_0x419bcc[_0x42138b(0x1b8,'IDe5')],_0x58c5f9[_0x42138b(0x133,'bqJL')]=_0xff0c64[_0x42138b(0xb8,'FhM&')](_0x188274=>{const _0x4b9006=_0x42138b,_0x57760d=_0x419bcc[_0x4b9006(0x1d6,'g45Z')](parseDate,_0x188274[_0x4b9006(0x13e,'V2vl')]),_0x2919fb=_0x419bcc[_0x4b9006(0x185,'CmEV')](formatNumber,_0x57760d[_0x4b9006(0x10d,'X[2V')]())+'\x20'+_0x419bcc[_0x4b9006(0x151,'%bGT')](getMonthName,_0x57760d[_0x4b9006(0x17b,'sv55')]());return'\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22hub-card\x20'+(_0x188274['fired']?_0x419bcc[_0x4b9006(0xad,'4lio')]:'')+'\x22\x20onclick=\x22openReminderModal(\x27'+_0x188274['id']+_0x4b9006(0x105,'[JZ2')+(_0x188274[_0x4b9006(0x14a,'I2FH')]?'🔕':'🔔')+_0x4b9006(0xff,'FhM&')+_0x419bcc[_0x4b9006(0x11d,'uYrz')](escapeHtmlForPdf,_0x188274['text'])+_0x4b9006(0x101,'ugAt')+_0x2919fb+_0x4b9006(0xcd,'xZ#4')+(_0x188274[_0x4b9006(0x176,'tw9L')]?_0x4b9006(0x10b,'lj3h')+_0x188274[_0x4b9006(0xd6,'VMcs')]+'</span>':'')+'\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20</div>';})[_0x42138b(0x1a1,'9PuY')]('');}function openReminderModal(_0x582c7a=null){const _0x9f0aeb=a19_0x367f44,_0x1efe8f={'OUmcp':'La\x20sélection\x20des\x20sonneries\x20du\x20téléphone\x20n\x27est\x20disponible\x20que\x20dans\x20l\x27application\x20Android','BlSvB':'reminderModalTitle','AMaUG':_0x9f0aeb(0x1a5,'UBSh'),'ZxPKh':_0x9f0aeb(0x18f,'I2FH'),'YzOYu':function(_0x2dedf9,_0x1eec9b){return _0x2dedf9===_0x1eec9b;},'upFQK':_0x9f0aeb(0xa6,'V2vl'),'kuQmI':_0x9f0aeb(0x1c1,'anb5'),'iYFxL':_0x9f0aeb(0x188,'VaLr'),'EfKtB':_0x9f0aeb(0x16e,'xZ#4'),'QRJlQ':_0x9f0aeb(0x146,'b)kw'),'qiXbA':_0x9f0aeb(0xdc,'jp4O'),'TPyHQ':_0x9f0aeb(0x172,'7vNv'),'fFYYl':'QzsYW','aOEJO':function(_0x5029c9,_0x591485){return _0x5029c9(_0x591485);},'ItNGx':_0x9f0aeb(0x194,'9)Zs'),'PzqaH':function(_0xb92039,_0x5be587){return _0xb92039(_0x5be587);},'CzMzP':_0x9f0aeb(0x1bd,'v8b3'),'UyOYh':function(_0x386375){return _0x386375();},'ywtjP':'reminderModal','LtPae':_0x9f0aeb(0x17f,'9PuY')};editingReminderId=_0x582c7a,pendingCustomSoundData=null,pendingDeviceRingtoneName=null;const _0x23c0f3=document[_0x9f0aeb(0x199,'YGt^')](_0x1efe8f[_0x9f0aeb(0x127,'P1cW')]),_0x459431=document[_0x9f0aeb(0xe0,'X[2V')](_0x9f0aeb(0x98,'CmEV'));document[_0x9f0aeb(0x140,'bqJL')](_0x1efe8f[_0x9f0aeb(0x1ca,'lj3h')])[_0x9f0aeb(0x1d2,'44EV')][_0x9f0aeb(0x18a,'Lr8W')]=_0x1efe8f[_0x9f0aeb(0x181,'IDe5')];if(_0x582c7a&&remindersData[_0x582c7a]){const _0x9ffe8e=remindersData[_0x582c7a];_0x23c0f3[_0x9f0aeb(0x161,'nlT!')]=_0x1efe8f[_0x9f0aeb(0xf2,'bqJL')](settings[_0x9f0aeb(0xd4,'@Cnj')],'ar')?_0x1efe8f[_0x9f0aeb(0x13f,'lj3h')]:_0x1efe8f[_0x9f0aeb(0x1a6,'X[2V')],document[_0x9f0aeb(0x1bf,'c47U')](_0x1efe8f['iYFxL'])['value']=_0x9ffe8e[_0x9f0aeb(0x19b,'^VOQ')],document[_0x9f0aeb(0x140,'bqJL')](_0x1efe8f[_0x9f0aeb(0x1ed,'xZ#4')])[_0x9f0aeb(0x13a,'(lZj')]=_0x9ffe8e[_0x9f0aeb(0x10e,'UBSh')],document['getElementById']('reminderTimeInput')[_0x9f0aeb(0xac,'KehE')]=_0x9ffe8e['time']||'',document[_0x9f0aeb(0x103,'I2FH')](_0x1efe8f[_0x9f0aeb(0x134,'IDe5')])[_0x9f0aeb(0x122,'X[2V')]=!!_0x9ffe8e[_0x9f0aeb(0x1ac,'VaLr')],document[_0x9f0aeb(0x19c,'V2vl')](_0x9f0aeb(0xae,'nlT!'))[_0x9f0aeb(0x173,'c47U')]=_0x9ffe8e[_0x9f0aeb(0xc2,'wc#H')]||_0x1efe8f['qiXbA'],pendingCustomSoundData=_0x9ffe8e[_0x9f0aeb(0x15e,'yqtp')]||null,pendingDeviceRingtoneName=_0x9ffe8e[_0x9f0aeb(0x179,'lj3h')]||null,_0x459431[_0x9f0aeb(0xdd,'UBSh')][_0x9f0aeb(0x130,'&He[')]=_0x1efe8f[_0x9f0aeb(0x138,'I2FH')];}else{if(_0x1efe8f[_0x9f0aeb(0xa0,'e0cE')]('QzsYW',_0x1efe8f[_0x9f0aeb(0xc9,'Lr8W')])){const _0x1a9afb='2|6|0|1|4|5|3'['split']('|');let _0x1bdb10=0x0;while(!![]){switch(_0x1a9afb[_0x1bdb10++]){case'0':document[_0x9f0aeb(0x140,'bqJL')](_0x1efe8f[_0x9f0aeb(0x9c,'P1cW')])[_0x9f0aeb(0x156,'b)kw')]=_0x1efe8f['aOEJO'](formatDate,new Date());continue;case'1':document['getElementById'](_0x1efe8f[_0x9f0aeb(0x14e,'Lr8W')])['value']=_0x9f0aeb(0x1d5,'Lr8W');continue;case'2':_0x23c0f3[_0x9f0aeb(0xe2,'lj3h')]=_0x1efe8f[_0x9f0aeb(0x1ce,'xZ#4')](t,_0x9f0aeb(0x187,'w)q)'));continue;case'3':_0x459431[_0x9f0aeb(0x15a,'VaLr')]['display']=_0x1efe8f[_0x9f0aeb(0x181,'IDe5')];continue;case'4':document[_0x9f0aeb(0x99,'9)Zs')]('reminderVibrateToggle')[_0x9f0aeb(0x1f3,'anb5')]=!![];continue;case'5':document[_0x9f0aeb(0xf5,'G#4j')](_0x1efe8f[_0x9f0aeb(0xbe,'[JZ2')])[_0x9f0aeb(0xac,'KehE')]=_0x1efe8f['qiXbA'];continue;case'6':document[_0x9f0aeb(0x1d1,'44EV')](_0x9f0aeb(0x1e0,'44EV'))[_0x9f0aeb(0xa2,'VMcs')]='';continue;}break;}}else _0x4da7af(_0x45b11a[_0x9f0aeb(0x162,'9sEa')]==='ar'?_0x9f0aeb(0x113,'uYrz'):_0x1efe8f[_0x9f0aeb(0x9d,'ugAt')],0xbb8);}_0x1efe8f[_0x9f0aeb(0x18e,'VaLr')](onReminderSoundSelectChange),document[_0x9f0aeb(0x106,'UBSh')](_0x1efe8f[_0x9f0aeb(0xd2,'UBSh')])['classList'][_0x9f0aeb(0x16f,'lj3h')](_0x1efe8f['LtPae']),setTimeout(()=>document[_0x9f0aeb(0xed,'w)q)')]('reminderTextarea')[_0x9f0aeb(0x12a,'c47U')](),0xc8);}function onReminderSoundSelectChange(){const _0x1a013a=a19_0x367f44,_0x3f3057={'cGrFM':function(_0x5a5d8e,_0xbc5259,_0x2414ea){return _0x5a5d8e(_0xbc5259,_0x2414ea);},'IQoKP':function(_0x4acb59,_0x3aeb33){return _0x4acb59===_0x3aeb33;},'FewXV':_0x1a013a(0xc8,'nlT!'),'ypqMW':_0x1a013a(0xd3,'9sEa'),'yRUXp':_0x1a013a(0xb3,'!&4#'),'kVKrj':function(_0x4cd855,_0xff3920){return _0x4cd855===_0xff3920;},'xLpyS':_0x1a013a(0x163,'UBSh'),'TkDoF':_0x1a013a(0x1cf,'7vNv'),'znyHn':_0x1a013a(0x18f,'I2FH'),'XVLey':'device','bkYqv':_0x1a013a(0x119,'lj3h'),'PNyIj':_0x1a013a(0x1a0,'KbjF'),'vPiCl':function(_0x345fbf,_0x1bbde5,_0x9545d1){return _0x345fbf(_0x1bbde5,_0x9545d1);},'ZfHPn':_0x1a013a(0xc1,'uYrz')},_0x597e63=document['getElementById'](_0x3f3057[_0x1a013a(0xfc,'g45Z')])['value'];document[_0x1a013a(0xb2,'KbjF')](_0x3f3057['yRUXp'])[_0x1a013a(0x1d7,'wc#H')][_0x1a013a(0x19e,'KehE')]=_0x3f3057[_0x1a013a(0x196,'FhM&')](_0x597e63,_0x3f3057[_0x1a013a(0x115,'G#4j')])?_0x3f3057[_0x1a013a(0x1d4,'g45Z')]:_0x3f3057['znyHn'];if(_0x597e63===_0x3f3057[_0x1a013a(0xde,'IDe5')]){if(_0x3f3057['IQoKP'](_0x3f3057[_0x1a013a(0xec,'(lZj')],_0x1a013a(0x190,'X[2V')))_0x5450ec[_0x1a013a(0x182,'jITE')]&&typeof _0x46b303[_0x1a013a(0x108,'bqJL')][_0x1a013a(0x1f1,'e0cE')]===_0x1a013a(0xf3,'tw9L')?_0x5eda26['AndroidApp']['pickRingtone']():_0x3f3057[_0x1a013a(0x100,'uYrz')](_0x59141a,_0x3f3057['IQoKP'](_0x5e381f[_0x1a013a(0x1e2,'tw9L')],'ar')?_0x3f3057[_0x1a013a(0x195,'P1cW')]:_0x1a013a(0x13b,'CXsc'),0xbb8);else try{window['AndroidApp']&&_0x3f3057[_0x1a013a(0x196,'FhM&')](typeof window[_0x1a013a(0xe1,'%bGT')][_0x1a013a(0x1ad,'xZ#4')],_0x3f3057[_0x1a013a(0x116,'ugAt')])?window[_0x1a013a(0xe5,'KehE')][_0x1a013a(0x1ef,'[JZ2')]():_0x3f3057['vPiCl'](showToast,settings['language']==='ar'?_0x3f3057[_0x1a013a(0x1c3,'c47U')]:_0x3f3057[_0x1a013a(0xc6,'YGt^')],0xbb8);}catch(_0x252d09){console[_0x1a013a(0x174,'9PuY')](_0x252d09);}}}function onDeviceRingtoneSelected(_0x152f8b){const _0x380282=a19_0x367f44,_0x1efc77={'hXEgJ':function(_0x127b9e,_0x3df438,_0x5a92f7){return _0x127b9e(_0x3df438,_0x5a92f7);},'FbUMb':function(_0x211134,_0x2add13){return _0x211134+_0x2add13;},'GrTJE':_0x380282(0x10c,'REcg')};pendingDeviceRingtoneName=_0x152f8b,_0x1efc77['hXEgJ'](showToast,_0x1efc77[_0x380282(0x12d,'ugAt')](settings['language']==='ar'?_0x1efc77[_0x380282(0x14c,'(lZj')]:'Sélectionné\x20:\x20',_0x152f8b),0x9c4);}function onReminderCustomFileChange(_0x342b4f){const _0x58e3ab=a19_0x367f44,_0x410bad={'FyHnz':_0x58e3ab(0xb7,'jp4O'),'oLdMd':function(_0x2a8292,_0x5745fc){return _0x2a8292(_0x5745fc);},'ZCsLy':function(_0x29efe6,_0x1eb0ef){return _0x29efe6===_0x1eb0ef;},'jDVIH':'تعذّرت\x20قراءة\x20الملف','PopCD':_0x58e3ab(0xfd,'g45Z'),'CSGUp':function(_0x32f421,_0x2d70f4){return _0x32f421>_0x2d70f4;},'BbnWM':function(_0x5c2619,_0x595b9a){return _0x5c2619*_0x595b9a;},'CDqHG':function(_0x184a5e,_0x1b7dc9){return _0x184a5e*_0x1b7dc9;},'aaNFv':function(_0xd24565,_0x4c47f0){return _0xd24565!==_0x4c47f0;},'wRhoW':_0x58e3ab(0xbf,'44EV'),'iMIAb':_0x58e3ab(0xa3,'VaLr'),'ihLUE':function(_0x40d6a2,_0x276eb7){return _0x40d6a2(_0x276eb7);},'FtOZW':_0x58e3ab(0x12c,'ugAt'),'INQcR':'Fichier\x20trop\x20volumineux\x20(max\x202\x20Mo)'},_0x464687=_0x342b4f[_0x58e3ab(0x1bc,'7vNv')][_0x58e3ab(0xa7,'wc#H')]&&_0x342b4f[_0x58e3ab(0x11a,'ugAt')][_0x58e3ab(0x1eb,'X[2V')][0x0];if(!_0x464687)return;if(_0x410bad['CSGUp'](_0x464687['size'],_0x410bad[_0x58e3ab(0x171,'bqJL')](_0x410bad['CDqHG'](0x2,0x400),0x400))){if(_0x410bad[_0x58e3ab(0xbd,'44EV')](_0x410bad[_0x58e3ab(0x132,'%bGT')],_0x410bad[_0x58e3ab(0xd8,'jp4O')])){_0x410bad['ihLUE'](alert,_0x410bad[_0x58e3ab(0x1b6,'7vNv')](settings[_0x58e3ab(0x162,'9sEa')],'ar')?_0x410bad[_0x58e3ab(0xca,'P1cW')]:_0x410bad[_0x58e3ab(0xe7,'^VOQ')]),_0x342b4f[_0x58e3ab(0x175,'jITE')][_0x58e3ab(0x1e7,'CmEV')]='';return;}else _0x1fb1af['style'][_0x58e3ab(0x14b,'44EV')]=LYwmmS[_0x58e3ab(0x16a,'jp4O')];}const _0x4b3425=new FileReader();_0x4b3425[_0x58e3ab(0x125,'^VOQ')]=()=>{const _0x1ab324=_0x58e3ab;pendingCustomSoundData=_0x4b3425[_0x1ab324(0xeb,'9PuY')];},_0x4b3425[_0x58e3ab(0xba,'4lio')]=()=>{const _0x245e1a=_0x58e3ab;_0x410bad[_0x245e1a(0xa8,'e0cE')](alert,_0x410bad[_0x245e1a(0x1e9,'c47U')](settings[_0x245e1a(0x1c4,'b)kw')],'ar')?_0x410bad[_0x245e1a(0x1b5,'w)q)')]:_0x410bad[_0x245e1a(0x10f,'KbjF')]);},_0x4b3425[_0x58e3ab(0xf0,'G#4j')](_0x464687);}function testReminderSound(){const _0x234cf1=a19_0x367f44,_0xeb5c23={'RPcGT':'reminderSoundSelect'},_0x24431f=document[_0x234cf1(0x139,'KehE')](_0xeb5c23['RPcGT'])[_0x234cf1(0x1c2,'bqJL')];playReminderSound(_0x24431f,pendingCustomSoundData);}function closeReminderModal(){const _0x591d2f=a19_0x367f44,_0x23185f={'MeFip':_0x591d2f(0x1ab,'VMcs'),'CeVhW':_0x591d2f(0x1a9,'G#4j')};document['getElementById'](_0x23185f[_0x591d2f(0x1b0,'xZ#4')])[_0x591d2f(0x1d3,'G#4j')][_0x591d2f(0xef,'jITE')](_0x23185f['CeVhW']),editingReminderId=null;}function a19_0x1ed6(){const _0x28186e=['vHTPW5j7','kYSVuXK','hCo/ituTzCkpWQi','e2yCWODJWOq','o1Kqahu','EZNcPCkTWP3dR8k7WQSGWORdOhNdO0y','WQ1mW48jWOq','bun5p0bz','W4fLW4tcNmkQWQRcUhJcO3ZcGLZdHG','WQ3cOu7dUa0','WPpcMmk7W65E','uCocqCoGWPNcSK9s','k8oFjciS','W5rLW5hcVCkhWRZcKxZcUwNcLxFdG8ks','WOdcHSkvW7LE','WPJdOCkEnCkCW7n0xN0','mw/cVmon','qSkOwCkZfMe','WQ7cOmoUWPOAWQL8qCoy','W6r6ksNdIa','W4ldRmo6W5hcPa','W7ldSCo7W7pcGh3dLYhcUtBdIX4ZfXvgeg3dUCknW6Hboh10W6ZdV8oFW7y','d8kTgSkPWQSkW6pdRHjYwmoCo8oyW7Xh','FSotwmkwsSo+W5/cKr9TWRSuh0HyycRcTY5IWQldLrlcLmoMWO/dQCkOzHhdGsS7WOxcLsjqFMBdTmkZb1v3WPu5E8o8W5fdWQ/dNmk3WPDVnfu/W7pdV8kthJCwE8k2W7dcNXe3n8oquCoCW68iiSoVt8kznX3dImkVDSkzaabrWQW','W5ZdPmogW7ih','qSo3g8kYWQrNWOZcOLCXdmktACk5WRalWRyhq0ZdLmobr8kjbJr/W71BW4mMWPPHW45aWRpdQKKhq8oJWPNdGbxcICo0FCk2WQ/cKJJcPCkmE2JcTr7dNd0yW7O5FSkQW5dcU8oHW4FdICoFp8oPksBdJ18GW4pcGKpdNvqeWQBdRHJcMSokW4NdSCoiW5ncrCoFW5JcISkfWRdWTjgdmG','2PxBPSku2PNzUTIZWRBALTMJ2lJzM9Q72yFBNa','WRRcSCoOWRyyWQT4qSopW7uzzSoSW58','W7DhW5xdHSo4','WQyHExJcSmofWORcGSkUy8oKWRqzW6xcV8ofW7FdUWjyW5ryWObAWPtcVW3dTZWxWO83W7JdHcOgW5ZcK8k0W5ZdRNnVWRVdUW','W6yutCoYA8oPfSk+WRtdOGFcPM1y','kLC9ohCKW5y','WOVcJmkqW4vewCktWOhcS8kE','WQygWQKFW6C','WO1Zf8ofAa','W53dTSkSW6BdO8o6W6xdImomWQBcP3bfl10Yu8kyC2hdT8kEWP3dT8otW67dQx3WPjwYea','2B3zPmoE2ANyUDM02PJBPTMdASoy','WO3dImkXD8k6gSom','W6uqtCos','WQBcQmouWO3cHG','WOi5WPBdJ8ozW63dIflcS3RcMNFdSG','2B/AH9Ui2ilAOnIACTMs24tzR9Id248t2ktAOnIT26hyR9U42ka','WR7dOmkXW67dUq','2PJAJDQE277zRDMdWRBBT9ID2zFzJnUslDUk2A3zVnIn267zGMhAHDI62l7zMHRAVnQI2l8e24NBHDIs2jiE2kZBJ9U22kBzOupBQnUe2iJyPTMr2lRAL9QM2RS','WRKhWRnMW6hdNSoo','W4TmW5xcGCk4','lSkwbSksWRG','uZvAW4u7W4hdVSkBCCkeC8keWQi','WQtdR8kiW7/dQW','WQZdT8kpW7ldNW','cSk5dCk8WRCT','WQNcR0BdJG8','f8oIWQFdKSk0W6xdPG','W4RdL8oCW7Kt','W6y2Aqzi','WOZdGSk3DSk6dCob','D8o2W7z9WQm','eSoxWRtdUxbDigFcS17dVmkDAmkq','WONdHCkGumkWc8on','WR5qDCkRBW','yGyiWRGe','WRTAASkcwmol','WPldTCkWW67dUq','m8oYhcqA','W4VcS8oknSoq','bSogWRldLxjFjgtcPa','WOX5bmk3W7K','WO3cMeddKYhcLvhdHCoKWQ3cIG','2zNANnI62P/AK3NBHDQQ2l3yOaZAN9MM2R7BMWVcVTIa2kFzGDUBW4hzGnUX2yhyN9I82PqyWP1N2QZzMnUj2yxBS9Q42AhyGaK','omk6kSkwWRa','nv0Qeg8KW7JcLbj3oeJcOa','WQ3dMwn5','W6q5WRP6W6/dL8oo','WRJcH8kzW55fvmksWRlcKmkbE07dNmk4W5NcMxZcJrq','gCoHwmkDzG','WQpcJmkAW5jzEmkJWO3cJW','EMdcMrCk','cmo3W4L0WOpcKfe','fSkjtSkiBW','WQXxW44wWPP8WQ8','WONcHmoLWRSL','AaGSWOKXWPXwtb09WP96W58a','l1mLbgy','WP4aW404sbFdP8okhxmljCoGW7ODWO87WRn7odOro3xdV8kmsmoTW6NdUIbMW6dcPs9XW47dLs5VWQdcVZ7cHCoUWQDgd1ldOtzTzmkNW7XwW65bdraAhtrCWR8Iw8klW7WfW50wyrK0zfazfeVdUmkHWPtdUuxcMqy','qmkVFMbGnSoBWQtdQIhdLdlcTa','iCkuwCkCv8kLWRe','jcSCxq','WPtdTCkAW5BdHG','WQ3cH8kaW7jhvCkAWQxcRCkAtfNdSCkp','WPHZcSkTW7WE','WRbXW5uGWO8','2lByMCoX24xASnQYW7BBQDIk25tAKTMd26dyK8kO4PYB','W4uRAmocxq','jSkDsmkA','b8oxWQ3dLxjCkhdcI0pdNmkwqmkaBuZcGSosW6RdMLW','pmkIWO1l','W5JdSmoQW6/cGeldLZdcOq','W6zTlWpdLSkaW4FdH8oGn8kgW61WWQe','WRVcVCoUWPyq','gSosFSkbWQtdPmo5','hKaDo0y','D8kRW68A','W6HqWRnldG','W7VdM8ohWOazbmodWOVcP8kjq1NdGa','WQHyfSoQFG','nmoIDSkgEq','WQ/dTCkCjmkv','lvJcVmo5rq','W5FdVCoLW7VcHM/dMsy','W5mJn8kWW6mmW54s','a8otWQZdIxK','W5/dVCo/W73cGgVdIG','WQVdLCkWcmko','jZ8aW4ddGCovcc5MrhG+mKJdUh7cJZ4','WPldNKJcLe8','o0map00','cmoUiYSs','W4VdJmoAW5f7','o8k2WOPAW6HwarFcNc4TWQrsD8kf','WRa4Ah7cICouW63dOmoAoCksW5K','wmkacCoccmkplmkHkmkoeCkH','uSkOtCkIiwTyahmjea','kxZcU8ohqCkRW6qX','W6iesSodAmoH','25FzTmkh2PdAKnM+2lvj2QNyGDQYW6RAL9MR25BcGDUy263zIDI92BFzLDId2PG','hmoCWQZdLxjDygtcSu/dHG','wG57W5vl','W71NW7RdTCo3W65eW67dHCkArmkDwZ9NC8opeG','W4DnWPf4e1a','W7ldKSoXW6tcNG','nCoYWPZdJmkI','aCoUWRNdI8k2W6ddUM4fDdlcIWldUmklc1W','2ydAHnItW5lzSnUXq9Uy2iFBVxtBJTMS25VzQDQg243AVTU92zBcOq','W6mJFb9i','W5xcNmoEd8ouWPhdP8olhsJdUxXqd8ods3a','WOddOCk4','WP3dPmkni8kl','WOJcGmkAW6bM','W6yuemk0ja','WPX3c8k3W68','bheDWP19','a0DMn1ni','q8oEqSoM','WOddR1dcJMa','AdxcVmkn','WOxdOmkQW67dRSk/W5tdJCodWRlcOcijiMyXe8kE','jgTno0e','v8o+W451WOpcHejr','WONcQCkYWQZcHMJdJahcSby','pmosqmkcvmoxq8kgm8k1jmkBqCkCWRa','WQVcTCoWWOyr','eMSaWOu','ruRcKaGm','CuRcGZaZ','nKHWiLLvjYaGba','k8k3WOThW6LCoX7cKa','WPFdI13cJu8','WQJcLuVdGrW','WQqaWOe+W4q','BJNcVmkbWP/dRSkZWRWdWPhdHMhdHNBdOxWVWQi','WPpdJ1ZcKutcOCoKomomgKWVvmoaWP3dNa','iSoWWONdRgy','W4vnWO58gKnC','mI8futldIxJcI2TaW4tcK8ksWRb5k8kE','WQJcPmo/WPWzWQD7qa','W7ONAJjC','WRtdK37cOui','WRpcU8oYWPy','WO7dU8k/yCkC','2A3zRDMvWONBO9U6ETMT2kxzPTMg2jv82iRBSTI125lyMnQk2PtyMTQCEa','W75PW77dJSol','W5D6W6xdQCok','W6jvW4RdK8opuh8BW5byWP7cR8kznCkbW5tcIW','n8o7oaOo','kCkQD8knvG','W4lcUmkVnmkgW4HXrG','E0BcMYmy','WQ9BW4KJWPP4WRTMuSkCW4WNaCot','vSoYW5zmWONcMa','WQbrFSkz','jY8CFtddIhdcNhzWW7pcJ8kzWRu','WPJcSMJdTIq','AWqRWRWXWPHc','EuhcNdKs','WPdcSSokWQ3cTJPqmW','c2WgWPW','sJNcPmkbWP3dPSkZWRrUWO3dG2NdMuVdUIGVWQiPsb3dGmkcWPlcImk5j8khWQnZBc/dMwi','AaWYWR04','WR5FW5etWPm','W7muvmoEACoOhSkPWPNdOZBcQ0TrW4ryWOrlpmoHpG','WOhdMmkuxSks','eCoxWRBdLx9D','WO7cJSoiWOBcPa','W4bOW4RcJW','rmkcW7NcII8pn0pcL3ddT8kj','uqJcO8kjW7DGW75TbmkZWR4AAW','WPFdG1pcIKVcSCoK','W5FcKmoqdCoOWPZdRmoElsBdO3W','g0n6n0ju','FqG1WQuZWP1EwZ4MWRLIW7O','W6RcNmo1d8ok','eSoOWQddI8kUW6e','FmkAESkxla','CCkNW68G','vr/cOmkoW54','DHJcH8kHWRK','W547dmkBnG','W7aDb8kJdgbSw8ojW6/dKa','FxdcUG8R','qruTya8iddu+p1BcRG','W5rLW5hcSCkFWRZcKq','WQtcJCkAW5i','W7azdCkWkNS','WQVdLwn1WQNcTCoQdHfkWQizb8ogt8oCWQOwWRm','W403g8kaia','WO1Ze8khW6yEW58CW6ldSmkboWvc','WPZdJmkPrSk+','tSkTW6ywW4rSW5CAWQFdGmoRbvhdVCo/Ea/cHW','WRZcG8kyW4jo','WQXZemkAW5W','gCotWQ7dM2LzkMC','cmoAqSkxvq','W5xdUCoSW7VcV8kMWRddMmkyWQNdPZfw','w8osqCoKWPNcSW','W5KSumkxoez3WPpdI8oqW73dTMO','p8oLWRpdHuS','WQddImk9W5ldIG','f3ZcPCoquCkMWQmXnCo0WOjGqCoGW7FdRSoBW5VINO8','WQyiWOaU','WO7cHSoYWRFcQW','W7FcG8ocb8oY','W6iugSkV','vrPZWOLnoJ/dTr5jlmoSAa','gCoEECk0WQtdOmoTW74WWRCnWQtdVwq','dCopDmkDWQ0','W5bSW4tcI8kyWPxcLwRcOW','W6/dT8opW7pcTq','WPeDW4C8rG','W5tdPSo6W6tcSq','WPHUhmomAq','AWG0WQKPWPW','DeNcIYXhp8k8WQqEFCkkih3dK30FpgDgBgtdJCotwSk5W77cPmkUn1XCWPK','CCkNW68wW4XHW5CAW7tdOmoNvLC','CComcCohcSoYWRpdNNajW7XN','hmowxCkBx8oFbSkhnCoOoCkgtmkenCkGWQNdPCkPxmo3o8kmm8kZlSkfySowW7/cKf7cJtavkmkPW7/cIW','AmoPW49YWQC','WQ1ccmkbW7m','zXJdHh4N','dmoEymkyWQBdOCoLW6KkWQy3WQNdLxldS8ki','rmo0W51FWOdcJW','w8owqCoKWPJcUKDz','W5SJutLB','WO/cLMxdTqVcTq','W7qHzanBra','i3tcUCouuCk4','WO/cLMxdTqS','pLy9c0K','WRbvfmkoW7m','rCkEvSkEoG','WOZdHmkPvSkO','o0dcKcLIp8k1WQq','W6lcN8o4eSo4','W6JcGt8UW7/dO8k8hXfoWQuBeq','W7fHoc3dQmkmW4tdHCo6lmkQW7e','vs7cM8k+WRS','W6uRCWf/sbddISocFmkMW6K','WQLVW68PWRu','ymkQW6CCW4LGW5y','W7ySFrH5','mSktvCkrsmkHWRldLg0OW7zDuqWDmNNdK28QWQC','rCosqSoQWOpcV0votspdOwDUW63cGCk7','FaiQWRG','bSoxWRtdTwHDia','WPBcSSoeWQSt','d8oFz8kNWOW','W54oemk+oq','zHVcN8kRWOm','cmoAyCkeWQ0','emoJWRhdGCkZW6hdUW','WOVcKMtdQqdcOKddHCojWQBcGCoSWQuRWPVcPmou','W7DvW5pdV8onuxCmW6PfWRhcS8kzpW','WPdcRSoiWRRcPYe','W6buW5r7W5qDW7ddQWXF','nmo4bcyA','mCkneSk4WQi','mmkzuCkwuSkKWRddG3SSW69rDGyinx4','W6CNFqndrrVdN8oGESkQW74IxmkVfd7cNmo1W4ddVq','W4W4xZny','W7X2W67dSmo8','vqZcOSkvW7W','WQZdU37cNLK','DqlcU8kmW7X+WRzPjSkPWQLBDcPXiqWyeG3dUxJdPSocBeSrW4NcJSoUWOBdP3q','WOijWOmkW5S','2ARzS9Mh2BlyMmkn2lRAVDIY2ltBSTQ826e','WO1ZcCofFW','W7OoDcDj','r8oyrSoTWPNcUKDzsYpdThPHW7VcGCkOd1W2g3G','FbKHWQa4','W4LbW6FcTCk+','EqW0WRK4','WPRdImkAnSk5','vmkOwmk/dgbtbKuiettdGCknaCkJCmkVuG','nmofx8kBrW','WRNcVCoVWOmyWQ9S','W5n2fSoSyW0I','WPhcOSoqWOVcRJzsoflcN8oPg8ouzG','tWP8W41apYJdO3bymmo2ySkXW4pcRf3dU2tdO8od','W65lgdFdJq','W4/dJmoDW5O+e8oXW5r1DWBcKwpcIuXjwCkayJxcOq','WPP3fCkXW68','hCoKWRRdHW','l8kDta','WRuSW7f2WRFdISkaqCoEW5ibWRalzdP7WQS','WPtdO8kAnmkDW5bV','iG4JAre','W5KMuSo6WRXjW5qwW4pdGmkKeq','h8oAq8k3WR4','W4jYfJZdQG','lCoIwSk4WOS','uCo2ESoHWR8','W7pdGSkuW4FcOX7dS8osu3SeWPyTWOLmsaRcT2WVWQ51AX5FWO7dGgXrW4BcLSovoSoxDSkqWRecrKpcOCkNtHmkk8k7WOxdPWJcT8orWP3dTmo5fCkiW5hdNHNcGmkuwZfFf8kaWPVcUbZcSaVdOSorWRBdVCovWRuJWPdcM8oyWOlcRSkzhCow','WPH1emooAa','W7uGWQPLW67dN8ozwG','zmkNW7y6W45GW58nW6NdMmomxgRdUa','WQhcJ8k9W7LQ','WPjyW7u2WPG','vCoGBSoGWPC','2ihBO9IF2PZzHDI1fTIY2kZyOTMd2BdcHDU52kdAInIY26BzP8o62kpBO9QW2kRcHDI02yBBVLpyOTIY2ABzPM3yMDQr2OtBTTUVdTMy2QtBHDIt24FALDME2yxAHW','W4DIWQrvgG','n8oQaaGp','W6uFCSo9qW','WQZdNMP5WQhcUmoHgsy','WPVdLSoafSoBWPVcVmkZEwNcRtK5qCkthIqaWP/dPWFcStRdQ3NdRrSZ','a8o7iJS2ymknWRxdRs/dNIRcPXSPfG','W5JdHSoaW7eMf8o7W5rjzINcGutcIq','x8kda8okaSkkjmk3eSk/aSkK','WPFdRmkriCkAW556sa','W7GgtCoDvW','n3JcUmojwSkUW6yMcmoPWPjPtmoaW6BdSfFcMmoO','W6nJW7NdU8oSW6TgW7K','jutcKYD5oSk3WRmKoCkAn3hdJNyVnNjsic8','vWtcO8kf','mu3cMZy','gSogWP3dO8k6','vmocxmo3WOlcTNntBcJdVvDUW6VcHq','gGldQK1OWR8vASouWQnxW4G','W61Npa','b8oKWRRdH8oP','W7ifqmoByG','C2tcNX4I','W4zbWOLjgKDiW5lcJCkVomoGW6ldSG','WO3dImkXDSk3c8oedeOQFCkxvaS','l8oDvmkaxSosb8k0nSk1','WPxdOmkKW7pdJSk1W6JdKmoiWRVcOa','WP9/hCoutXGRWOJdL8okW64','WRueWPKoW40EW6/dJaDUjJlcICo6','tGm8WR4YWPbFAam5','W6rFW4ddNConuq','WP16v8koAW'];a19_0x1ed6=function(){return _0x28186e;};return a19_0x1ed6();}function saveReminder(){const _0x34d4ba=a19_0x367f44,_0x4dc0ea={'nxCsW':_0x34d4ba(0x1bb,'bqJL'),'vrnnG':_0x34d4ba(0x9e,'FhM&'),'IOdWo':function(_0x5b8ec0,_0x1b0013){return _0x5b8ec0(_0x1b0013);},'aEavJ':_0x34d4ba(0x131,'bqJL'),'oCCqw':_0x34d4ba(0x15d,'uYrz'),'HslfS':_0x34d4ba(0x167,'@Cnj'),'jdsFV':_0x34d4ba(0x9f,'e0cE'),'EjTxf':_0x34d4ba(0x16b,'jp4O'),'bWAcz':_0x34d4ba(0x1af,'KehE'),'XxruS':'show','OaVWt':_0x34d4ba(0x1f6,'tw9L'),'PXONa':function(_0xc3ecdf,_0x1ad83c){return _0xc3ecdf===_0x1ad83c;},'gajqe':_0x34d4ba(0xa5,'CXsc'),'KfXXg':'الرجاء\x20كتابة\x20نص\x20التذكير','CBsJr':_0x34d4ba(0x1a2,'w)q)'),'lJyPj':function(_0x2757aa,_0x2a22f7){return _0x2757aa!==_0x2a22f7;},'ZWOAN':_0x34d4ba(0xf6,'bqJL'),'bDKQM':_0x34d4ba(0x1cd,'KbjF'),'RsOBI':_0x34d4ba(0x111,'yqtp'),'DZQuZ':'Veuillez\x20choisir\x20une\x20date','Zvoiv':function(_0x32b573){return _0x32b573();},'TVGxc':function(_0x564bc2,_0x28c455){return _0x564bc2+_0x28c455;},'SMYkw':function(_0x2b37dd){return _0x2b37dd();},'hEiYq':function(_0xfb67f9){return _0xfb67f9();},'xIlHf':_0x34d4ba(0xcc,'v8b3'),'xOhFy':'reminderChanged','lisDI':_0x34d4ba(0x143,'w)q)'),'yplyJ':_0x34d4ba(0x1cb,'9sEa')},_0x277206=document[_0x34d4ba(0xc4,'anb5')](_0x4dc0ea['OaVWt'])[_0x34d4ba(0x17e,'I2FH')][_0x34d4ba(0xf8,'9sEa')]();if(!_0x277206){if(_0x4dc0ea[_0x34d4ba(0x158,'4lio')](_0x4dc0ea[_0x34d4ba(0x1a3,'KehE')],_0x4dc0ea[_0x34d4ba(0x166,'!&4#')])){_0x4dc0ea['IOdWo'](alert,_0x4dc0ea[_0x34d4ba(0x11b,'CmEV')](settings[_0x34d4ba(0xea,'P1cW')],'ar')?_0x4dc0ea[_0x34d4ba(0x92,'I2FH')]:_0x4dc0ea[_0x34d4ba(0x150,'wc#H')]);return;}else{const _0x46d350=_0x34d4ba(0x1c6,'lj3h')['split']('|');let _0x31df2a=0x0;while(!![]){switch(_0x46d350[_0x31df2a++]){case'0':_0x3970df['getElementById'](_0x34d4ba(0xce,'P1cW'))[_0x34d4ba(0x1c0,'X[2V')]='';continue;case'1':_0x2286ea[_0x34d4ba(0xaa,'KehE')][_0x34d4ba(0x137,'YGt^')]=iWhBJy[_0x34d4ba(0x180,'IDe5')];continue;case'2':_0x358603[_0x34d4ba(0x106,'UBSh')](iWhBJy['vrnnG'])[_0x34d4ba(0x186,'CXsc')]=iWhBJy['IOdWo'](_0x194de6,new _0x402210());continue;case'3':_0x56cb7c[_0x34d4ba(0x149,'[JZ2')](iWhBJy[_0x34d4ba(0x19d,'CmEV')])[_0x34d4ba(0x184,'VaLr')]=iWhBJy[_0x34d4ba(0xb4,'[JZ2')];continue;case'4':_0x3fb4a4[_0x34d4ba(0x1b7,'7vNv')]=iWhBJy[_0x34d4ba(0x1be,'7vNv')](_0x857598,iWhBJy['HslfS']);continue;case'5':_0x149120[_0x34d4ba(0xcf,'uYrz')](iWhBJy[_0x34d4ba(0x123,'^VOQ')])[_0x34d4ba(0x13d,'FhM&')]=!![];continue;case'6':_0x55aa92[_0x34d4ba(0x1d1,'44EV')](iWhBJy[_0x34d4ba(0x118,'lj3h')])[_0x34d4ba(0x96,'44EV')]=_0x34d4ba(0x1df,'REcg');continue;}break;}}}const _0xf8104f=document[_0x34d4ba(0xe4,'CXsc')](_0x4dc0ea[_0x34d4ba(0x1b4,'VMcs')])[_0x34d4ba(0x156,'b)kw')];if(!_0xf8104f){if(_0x4dc0ea[_0x34d4ba(0x128,'xZ#4')](_0x4dc0ea[_0x34d4ba(0x1b2,'nlT!')],_0x4dc0ea[_0x34d4ba(0xbb,'V2vl')])){alert(settings[_0x34d4ba(0x154,'g45Z')]==='ar'?_0x4dc0ea[_0x34d4ba(0x19f,'IDe5')]:_0x4dc0ea[_0x34d4ba(0x144,'UBSh')]);return;}else _0xb54acb[_0x34d4ba(0xdf,'Lr8W')](iWhBJy[_0x34d4ba(0xc7,'tw9L')])[_0x34d4ba(0xf7,'4lio')][_0x34d4ba(0x141,'c47U')](iWhBJy[_0x34d4ba(0x193,'@Cnj')]),_0x564402=null;}const _0x490bd1=document[_0x34d4ba(0x106,'UBSh')](_0x4dc0ea['EjTxf'])[_0x34d4ba(0x16d,'e0cE')],_0x1843cf=document[_0x34d4ba(0x121,'b)kw')](_0x34d4ba(0xd5,'REcg'))[_0x34d4ba(0x97,'jp4O')],_0x17932b=document[_0x34d4ba(0x199,'YGt^')](_0x4dc0ea[_0x34d4ba(0x177,'VaLr')])[_0x34d4ba(0x1a4,'YGt^')],_0x1798a3=editingReminderId||_0x4dc0ea[_0x34d4ba(0xaf,'%bGT')](generateId),_0x228ff2=remindersData[_0x1798a3],_0x415e4a=computeFireTime(_0xf8104f,_0x490bd1,0x0),_0x5bf635=_0x228ff2&&_0x228ff2['fired']&&_0x415e4a&&_0x415e4a<=new Date();remindersData[_0x1798a3]={'id':_0x1798a3,'text':_0x277206,'date':_0xf8104f,'time':_0x490bd1,'vibrate':_0x1843cf,'sound':_0x17932b,'customSoundData':_0x17932b==='custom'?pendingCustomSoundData:_0x228ff2?_0x228ff2[_0x34d4ba(0xd9,'tw9L')]:null,'deviceRingtoneName':_0x4dc0ea['PXONa'](_0x17932b,_0x34d4ba(0x1a7,'b)kw'))?pendingDeviceRingtoneName:_0x228ff2?_0x228ff2[_0x34d4ba(0x159,'3W!z')]:null,'fired':!!_0x5bf635,'createdAt':_0x228ff2?_0x228ff2['createdAt']:new Date()[_0x34d4ba(0x12b,'CmEV')]()};if(!_0x5bf635)notifiedIds[_0x34d4ba(0xf9,'nlT!')](_0x4dc0ea[_0x34d4ba(0xf1,'CmEV')](_0x34d4ba(0x1b3,'anb5'),_0x1798a3));saveRemindersData(),_0x4dc0ea[_0x34d4ba(0x94,'7vNv')](closeReminderModal),_0x4dc0ea[_0x34d4ba(0x17a,'jITE')](renderRemindersList),_0x4dc0ea[_0x34d4ba(0x153,'9sEa')](updateRemindersBadge),typeof PointageAPI!==_0x4dc0ea[_0x34d4ba(0x1a8,'KbjF')]&&PointageAPI['isEnabled']()&&PointageAPI[_0x34d4ba(0x112,'lj3h')](_0x4dc0ea[_0x34d4ba(0x142,'YGt^')],JSON[_0x34d4ba(0xb6,'c47U')](JSON[_0x34d4ba(0x129,'b)kw')](remindersData[_0x1798a3]))),showToast(settings['language']==='ar'?_0x4dc0ea['lisDI']:_0x4dc0ea[_0x34d4ba(0x15c,'P1cW')],0x708);}function deleteReminder(){const _0x144cd7=a19_0x367f44,_0x41984f={'VJAGg':_0x144cd7(0xb9,'&He['),'GmLEO':function(_0x1278ae){return _0x1278ae();},'JWsyW':function(_0x5e9868,_0x1272c4,_0x319b97){return _0x5e9868(_0x1272c4,_0x319b97);},'mkPtY':_0x144cd7(0x17d,'%bGT'),'lriBx':function(_0x4ee95d,_0x3e5c03){return _0x4ee95d+_0x3e5c03;},'IrJVJ':function(_0x5166d3,_0x4a7b0e){return _0x5166d3(_0x4a7b0e);},'cnmrT':function(_0xe6d4a2,_0x35777f){return _0xe6d4a2===_0x35777f;},'gdtzJ':_0x144cd7(0x164,'9)Zs'),'INzxm':_0x144cd7(0xa4,'VMcs')},_0x7d5df4=_0x41984f['VJAGg'][_0x144cd7(0x126,'lj3h')]('|');let _0x2e77d6=0x0;while(!![]){switch(_0x7d5df4[_0x2e77d6++]){case'0':_0x41984f['GmLEO'](saveRemindersData);continue;case'1':_0x41984f['GmLEO'](renderRemindersList);continue;case'2':_0x41984f[_0x144cd7(0x120,'sv55')](updateRemindersBadge);continue;case'3':_0x41984f[_0x144cd7(0x1c9,'b)kw')](showToast,settings[_0x144cd7(0x1ec,'REcg')]==='ar'?_0x144cd7(0x102,'uYrz'):_0x41984f[_0x144cd7(0x124,'KehE')],0x5dc);continue;case'4':notifiedIds[_0x144cd7(0x1d8,'KehE')](_0x41984f['lriBx']('rem_',editingReminderId));continue;case'5':if(!editingReminderId)return;continue;case'6':_0x41984f['GmLEO'](closeReminderModal);continue;case'7':delete remindersData[editingReminderId];continue;case'8':if(!_0x41984f[_0x144cd7(0x1f0,'w)q)')](confirm,_0x41984f[_0x144cd7(0x1f4,'e0cE')](settings[_0x144cd7(0xd1,'4lio')],'ar')?_0x41984f[_0x144cd7(0x1e8,'(lZj')]:_0x41984f[_0x144cd7(0x169,'g45Z')]))return;continue;}break;}}console[a19_0x367f44(0xdb,'[JZ2')](a19_0x367f44(0x1dc,'%bGT'));
+// ===================================================================
+// reminders-module.js — تذكير (Reminders)
+// الميزة الثالثة داخل تبويب "المذكرات": تذكيرات لحظية بتاريخ ووقت محددين،
+// مع اهتزاز واختيار نغمة (مدمجة، من الهاتف عبر الجسر الأصلي، أو ملف مخصص).
+// يعتمد على: data.js، notify-engine.js (generateId/computeFireTime/playReminderSound)
+// ===================================================================
+
+let remindersData = {};
+let remindersFilter = 'upcoming';
+let editingReminderId = null;
+let pendingCustomSoundUri = null;      // تخزين URI للملف الصوتي المخصص
+let pendingDeviceRingtoneUri = null;   // تخزين URI لنغمة الهاتف
+
+function loadRemindersData() {
+    try {
+        const raw = localStorage.getItem('pointageRemindersData');
+        remindersData = raw ? JSON.parse(raw) : {};
+
+        // تحويل البيانات القديمة (base64) إلى URI إذا كانت موجودة
+        Object.keys(remindersData).forEach(key => {
+            const r = remindersData[key];
+            // إذا كان لدينا customSoundData (base64) وليس customSoundUri
+            if (r.customSoundData && !r.customSoundUri) {
+                // محاولة تحويل base64 إلى URI (يتم تخزينه مؤقتاً)
+                try {
+                    // لا يمكن تحويل base64 إلى URI بسهولة، لذا نتركها كما هي
+                    // لكن نضيف customSoundUri فارغاً للإشارة إلى أن البيانات قديمة
+                    r.customSoundUri = null;
+                    r._legacyData = true;
+                } catch (e) { console.warn('تحويل البيانات القديمة فشل', e); }
+            }
+        });
+        saveRemindersData();
+    } catch (e) {
+        console.error('خطأ في تحميل التذكيرات:', e);
+        remindersData = {};
+    }
+}
+
+function saveRemindersData() {
+    try {
+        // تنظيف البيانات القديمة base64 إذا كانت كبيرة جداً
+        let cleaned = false;
+        Object.keys(remindersData).forEach(key => {
+            const r = remindersData[key];
+            // إذا كان لدينا customSoundData (base64) وحجمه كبير > 1MB، نحذفه
+            if (r.customSoundData && r.customSoundData.length > 1024 * 1024) {
+                delete r.customSoundData;
+                r.customSoundUri = null;
+                cleaned = true;
+            }
+        });
+        if (cleaned) {
+            console.log('تم تنظيف البيانات القديمة كبيرة الحجم');
+        }
+        localStorage.setItem('pointageRemindersData', JSON.stringify(remindersData));
+    } catch (e) {
+        console.error('خطأ في حفظ التذكيرات:', e);
+        // محاولة حفظ بدون البيانات الكبيرة
+        try {
+            const cleanData = {};
+            Object.keys(remindersData).forEach(key => {
+                const r = remindersData[key];
+                const clean = { ...r };
+                if (clean.customSoundData && clean.customSoundData.length > 500 * 1024) {
+                    delete clean.customSoundData;
+                }
+                cleanData[key] = clean;
+            });
+            localStorage.setItem('pointageRemindersData', JSON.stringify(cleanData));
+        } catch (e2) {
+            console.error('فشل حتى بعد التنظيف', e2);
+        }
+    }
+}
+
+function initializeReminders() {
+    loadRemindersData();
+    renderRemindersList();
+    updateRemindersBadge();
+}
+
+function updateRemindersBadge() {
+    const badge = document.getElementById('remindersDueBadge');
+    if (!badge) return;
+    const now = new Date();
+    const dueCount = Object.values(remindersData).filter(r => !r.fired && computeFireTime(r.date, r.time, 0) && computeFireTime(r.date, r.time, 0) <= now).length;
+    if (dueCount > 0) {
+        badge.textContent = formatNumber(dueCount);
+        badge.style.display = 'inline-flex';
+    } else {
+        badge.style.display = 'none';
+    }
+}
+
+function setRemindersFilter(filter) {
+    remindersFilter = filter;
+    document.querySelectorAll('#hubPanel-reminders .filter-pill').forEach(p => {
+        p.classList.toggle('active', p.dataset.filter === filter);
+    });
+    renderRemindersList();
+}
+
+function getFilteredReminders() {
+    let list = Object.values(remindersData);
+    if (remindersFilter === 'upcoming') list = list.filter(r => !r.fired);
+    else if (remindersFilter === 'past') list = list.filter(r => r.fired);
+    // 'all' -> بدون تصفية
+    list.sort((a, b) => (a.date + (a.time || '')).localeCompare(b.date + (b.time || '')));
+    return list;
+}
+
+function renderRemindersList() {
+    const container = document.getElementById('remindersList');
+    const empty = document.getElementById('remindersEmptyState');
+    if (!container || !empty) return;
+
+    const list = getFilteredReminders();
+    if (list.length === 0) {
+        container.innerHTML = '';
+        empty.style.display = 'flex';
+        return;
+    }
+    empty.style.display = 'none';
+
+    container.innerHTML = list.map(r => {
+        const d = parseDate(r.date);
+        const dateLabel = `${formatNumber(d.getDate())} ${getMonthName(d.getMonth())}`;
+        // عرض أيقونة النغمة المستخدمة
+        let soundIcon = '🔔';
+        if (r.sound === 'device') soundIcon = '📱';
+        else if (r.sound === 'custom') soundIcon = '🎵';
+
+        return `
+        <div class="hub-card ${r.fired ? 'hub-card-done' : ''}" onclick="openReminderModal('${r.id}')">
+            <div class="hub-card-check">${r.fired ? '🔕' : soundIcon}</div>
+            <div class="hub-card-body">
+                <div class="hub-card-text">${escapeHtmlForPdf(r.text)}</div>
+                <div class="hub-card-meta">
+                    <span class="hub-card-date">📅 ${dateLabel}</span>
+                    ${r.time ? `<span class="hub-card-time">🕒 ${r.time}</span>` : ''}
+                    ${r.fired ? '<span class="hub-card-badge hub-card-badge-done">✓</span>' : ''}
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function openReminderModal(id = null) {
+    editingReminderId = id;
+    pendingCustomSoundUri = null;
+    pendingDeviceRingtoneUri = null;
+
+    const titleEl = document.getElementById('reminderModalTitle');
+    const deleteBtn = document.getElementById('reminderDeleteBtn');
+    document.getElementById('reminderCustomFileRow').style.display = 'none';
+
+    if (id && remindersData[id]) {
+        const r = remindersData[id];
+        titleEl.textContent = settings.language === 'ar' ? 'تعديل التذكير' : 'Modifier le rappel';
+        document.getElementById('reminderTextarea').value = r.text;
+        document.getElementById('reminderDateInput').value = r.date;
+        document.getElementById('reminderTimeInput').value = r.time || '';
+        document.getElementById('reminderVibrateToggle').checked = !!r.vibrate;
+        document.getElementById('reminderSoundSelect').value = r.sound || 'tone1';
+        pendingCustomSoundUri = r.customSoundUri || null;
+        pendingDeviceRingtoneUri = r.deviceRingtoneUri || null;
+        deleteBtn.style.display = 'block';
+
+        // عرض اسم الملف أو النغمة المختارة إذا كانت موجودة
+        if (r.sound === 'custom' && r.customSoundUri) {
+            const fileName = r.customSoundUri.split('/').pop() || 'Fichier audio';
+            showToast((settings.language === 'ar' ? '🎵 ملف مخصص: ' : '🎵 Fichier : ') + fileName, 2000);
+        } else if (r.sound === 'device' && r.deviceRingtoneUri) {
+            const name = r.deviceRingtoneUri.split('/').pop() || 'Sonnerie';
+            showToast((settings.language === 'ar' ? '📱 نغمة: ' : '📱 Sonnerie : ') + name, 2000);
+        }
+    } else {
+        titleEl.textContent = t('reminderModalTitle');
+        document.getElementById('reminderTextarea').value = '';
+        document.getElementById('reminderDateInput').value = formatDate(new Date());
+        document.getElementById('reminderTimeInput').value = '09:00';
+        document.getElementById('reminderVibrateToggle').checked = true;
+        document.getElementById('reminderSoundSelect').value = 'tone1';
+        deleteBtn.style.display = 'none';
+    }
+
+    onReminderSoundSelectChange();
+    document.getElementById('reminderModal').classList.add('show');
+    setTimeout(() => document.getElementById('reminderTextarea').focus(), 200);
+}
+
+function onReminderSoundSelectChange() {
+    const val = document.getElementById('reminderSoundSelect').value;
+    document.getElementById('reminderCustomFileRow').style.display = (val === 'custom') ? 'flex' : 'none';
+
+    if (val === 'device') {
+        try {
+            if (window.AndroidApp && typeof window.AndroidApp.pickRingtone === 'function') {
+                window.AndroidApp.pickRingtone();
+            } else {
+                showToast(settings.language === 'ar' ?
+                    'اختيار نغمات الهاتف متاح فقط داخل تطبيق الأندرويد' :
+                    "La sélection des sonneries du téléphone n'est disponible que dans l'application Android", 3000);
+            }
+        } catch (e) { console.error(e); }
+    } else if (val === 'custom') {
+        // محاولة استخدام الجسر الأصلي أولاً
+        try {
+            if (window.AndroidApp && typeof window.AndroidApp.pickAudioFile === 'function') {
+                window.AndroidApp.pickAudioFile();
+            } else {
+                // احتياطي: فتح منتقي الملفات عبر input type="file"
+                const fileInput = document.getElementById('reminderCustomFileInput');
+                if (fileInput) {
+                    fileInput.click();
+                }
+            }
+        } catch (e) { console.error(e); }
+    }
+}
+
+// ===== دوال استقبال النتائج من الجسر الأصلي =====
+
+// تُستدعى من الجانب الأصلي (Android) بعد اختيار المستخدم لنغمة من هاتفه
+// يتم تمرير URI كامل وليس اسم فقط
+function onDeviceRingtoneSelected(ringtoneUri) {
+    pendingDeviceRingtoneUri = ringtoneUri;
+    // استخراج اسم النغمة من URI لعرضه للمستخدم
+    let name = ringtoneUri;
+    try {
+        const uri = new URL(ringtoneUri);
+        name = uri.pathname.split('/').pop() || 'Sonnerie';
+    } catch (e) {
+        name = ringtoneUri.split('/').pop() || 'Sonnerie';
+    }
+    showToast((settings.language === 'ar' ? '✅ تم اختيار نغمة: ' : '✅ Sonnerie sélectionnée : ') + name, 2500);
+}
+
+// تُستدعى من الجانب الأصلي (Android) بعد اختيار ملف صوتي
+function onAudioFileSelected(audioUri) {
+    pendingCustomSoundUri = audioUri;
+    const name = audioUri.split('/').pop() || 'Fichier audio';
+    showToast((settings.language === 'ar' ? '✅ تم اختيار ملف صوتي: ' : '✅ Fichier audio sélectionné : ') + name, 2500);
+}
+
+// تُستدعى عند تغيير الملف عبر input type="file" (احتياطي)
+function onReminderCustomFileChange(event) {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+
+    // زيادة الحد الأقصى إلى 5MB لتشغيل الملفات بشكل أفضل
+    if (file.size > 5 * 1024 * 1024) {
+        alert(settings.language === 'ar' ? 'الملف كبير جداً (الحد الأقصى 5 ميغابايت)' : 'Fichier trop volumineux (max 5 Mo)');
+        event.target.value = '';
+        return;
+    }
+
+    // محاولة استخدام الجسر الأصلي لتشغيل الملف بدلاً من تخزينه
+    const reader = new FileReader();
+    reader.onload = function() {
+        // تخزين البيانات كـ Data URL (احتياطي)
+        pendingCustomSoundUri = reader.result;
+        showToast((settings.language === 'ar' ? '✅ تم تحميل الملف: ' : '✅ Fichier chargé : ') + file.name, 2000);
+    };
+    reader.onerror = function() {
+        alert(settings.language === 'ar' ? 'تعذّرت قراءة الملف' : 'Impossible de lire le fichier');
+        event.target.value = '';
+    };
+    reader.readAsDataURL(file);
+}
+
+function testReminderSound() {
+    const soundKey = document.getElementById('reminderSoundSelect').value;
+    // استخدام URI المخزن بدلاً من البيانات المشفرة
+    let soundData = null;
+    if (soundKey === 'custom' && pendingCustomSoundUri) {
+        soundData = pendingCustomSoundUri;
+    } else if (soundKey === 'device' && pendingDeviceRingtoneUri) {
+        soundData = pendingDeviceRingtoneUri;
+    }
+    playReminderSound(soundKey, soundData);
+}
+
+function closeReminderModal() {
+    document.getElementById('reminderModal').classList.remove('show');
+    editingReminderId = null;
+    pendingCustomSoundUri = null;
+    pendingDeviceRingtoneUri = null;
+}
+
+function saveReminder() {
+    const text = document.getElementById('reminderTextarea').value.trim();
+    if (!text) {
+        alert(settings.language === 'ar' ? 'الرجاء كتابة نص التذكير' : 'Veuillez saisir le texte du rappel');
+        return;
+    }
+    const date = document.getElementById('reminderDateInput').value;
+    if (!date) {
+        alert(settings.language === 'ar' ? 'الرجاء تحديد التاريخ' : 'Veuillez choisir une date');
+        return;
+    }
+    const time = document.getElementById('reminderTimeInput').value;
+    const vibrate = document.getElementById('reminderVibrateToggle').checked;
+    const sound = document.getElementById('reminderSoundSelect').value;
+
+    const id = editingReminderId || generateId();
+    const existing = remindersData[id];
+
+    // إن أعاد المستخدم ضبط موعد تذكير سبق إطلاقه إلى المستقبل، يُعاد تفعيله تلقائياً
+    const newFireTime = computeFireTime(date, time, 0);
+    const stillFired = existing && existing.fired && newFireTime && newFireTime <= new Date();
+
+    // بناء كائن التذكير
+    const reminder = {
+        id, text, date, time, vibrate, sound,
+        fired: !!stillFired,
+        createdAt: existing ? existing.createdAt : new Date().toISOString()
+    };
+
+    // تخزين URI بدلاً من البيانات المشفرة
+    if (sound === 'custom') {
+        reminder.customSoundUri = pendingCustomSoundUri || (existing ? existing.customSoundUri : null);
+        // حذف البيانات القديمة إذا كانت موجودة
+        delete reminder.customSoundData;
+    } else if (sound === 'device') {
+        reminder.deviceRingtoneUri = pendingDeviceRingtoneUri || (existing ? existing.deviceRingtoneUri : null);
+        // حذف الاسم القديم
+        delete reminder.deviceRingtoneName;
+    } else {
+        // للنغمات المدمجة، نمسح أي بيانات سابقة
+        delete reminder.customSoundUri;
+        delete reminder.deviceRingtoneUri;
+        delete reminder.customSoundData;
+        delete reminder.deviceRingtoneName;
+    }
+
+    // إذا كان لدينا بيانات قديمة (base64) ولم يتم اختيار custom، نحذفها
+    if (sound !== 'custom' && existing && existing.customSoundData) {
+        delete existing.customSoundData;
+    }
+
+    remindersData[id] = reminder;
+
+    if (!stillFired) notifiedIds.delete('rem_' + id);
+
+    saveRemindersData();
+    closeReminderModal();
+    renderRemindersList();
+    updateRemindersBadge();
+
+    if (typeof PointageAPI !== 'undefined' && PointageAPI.isEnabled()) {
+        PointageAPI._emit('reminderChanged', JSON.parse(JSON.stringify(remindersData[id])));
+    }
+
+    showToast(settings.language === 'ar' ? 'تم حفظ التذكير ✓' : 'Rappel enregistré ✓', 1800);
+}
+
+function deleteReminder() {
+    if (!editingReminderId) return;
+    if (!confirm(settings.language === 'ar' ? 'هل تريد حذف هذا التذكير؟' : 'Voulez-vous supprimer ce rappel ?')) return;
+
+    notifiedIds.delete('rem_' + editingReminderId);
+    delete remindersData[editingReminderId];
+    saveRemindersData();
+    closeReminderModal();
+    renderRemindersList();
+    updateRemindersBadge();
+    showToast(settings.language === 'ar' ? 'تم حذف التذكير' : 'Rappel supprimé', 1500);
+}
+
+console.log('reminders-module.js loaded successfully');

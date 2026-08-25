@@ -1,1 +1,38 @@
-function a2_0x116b(_0x3105d3,_0x535a35){_0x3105d3=_0x3105d3-0x120;var _0x359c83=a2_0x359c();var _0x116b9b=_0x359c83[_0x3105d3];if(a2_0x116b['qhBggh']===undefined){var _0x364a19=function(_0x11818d){var _0x1bd3d7='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';var _0x4d4436='',_0x3a8dd1='';for(var _0x5badd5=0x0,_0x54e7da,_0x36859d,_0x143582=0x0;_0x36859d=_0x11818d['charAt'](_0x143582++);~_0x36859d&&(_0x54e7da=_0x5badd5%0x4?_0x54e7da*0x40+_0x36859d:_0x36859d,_0x5badd5++%0x4)?_0x4d4436+=String['fromCharCode'](0xff&_0x54e7da>>(-0x2*_0x5badd5&0x6)):0x0){_0x36859d=_0x1bd3d7['indexOf'](_0x36859d);}for(var _0x3eb53e=0x0,_0xe0a498=_0x4d4436['length'];_0x3eb53e<_0xe0a498;_0x3eb53e++){_0x3a8dd1+='%'+('00'+_0x4d4436['charCodeAt'](_0x3eb53e)['toString'](0x10))['slice'](-0x2);}return decodeURIComponent(_0x3a8dd1);};var _0x3cbdf5=function(_0x3b621,_0x1a22b4){var _0x1fcc83=[],_0x385efa=0x0,_0x104f46,_0x4dff0e='';_0x3b621=_0x364a19(_0x3b621);var _0x540139;for(_0x540139=0x0;_0x540139<0x100;_0x540139++){_0x1fcc83[_0x540139]=_0x540139;}for(_0x540139=0x0;_0x540139<0x100;_0x540139++){_0x385efa=(_0x385efa+_0x1fcc83[_0x540139]+_0x1a22b4['charCodeAt'](_0x540139%_0x1a22b4['length']))%0x100,_0x104f46=_0x1fcc83[_0x540139],_0x1fcc83[_0x540139]=_0x1fcc83[_0x385efa],_0x1fcc83[_0x385efa]=_0x104f46;}_0x540139=0x0,_0x385efa=0x0;for(var _0x306665=0x0;_0x306665<_0x3b621['length'];_0x306665++){_0x540139=(_0x540139+0x1)%0x100,_0x385efa=(_0x385efa+_0x1fcc83[_0x540139])%0x100,_0x104f46=_0x1fcc83[_0x540139],_0x1fcc83[_0x540139]=_0x1fcc83[_0x385efa],_0x1fcc83[_0x385efa]=_0x104f46,_0x4dff0e+=String['fromCharCode'](_0x3b621['charCodeAt'](_0x306665)^_0x1fcc83[(_0x1fcc83[_0x540139]+_0x1fcc83[_0x385efa])%0x100]);}return _0x4dff0e;};a2_0x116b['HGKdhi']=_0x3cbdf5,a2_0x116b['RPQLQV']={},a2_0x116b['qhBggh']=!![];}var _0x38afa3=_0x359c83[0x0],_0x1d3ae7=_0x3105d3+_0x38afa3,_0x2630a4=a2_0x116b['RPQLQV'][_0x1d3ae7];return!_0x2630a4?(a2_0x116b['zkjIyt']===undefined&&(a2_0x116b['zkjIyt']=!![]),_0x116b9b=a2_0x116b['HGKdhi'](_0x116b9b,_0x535a35),a2_0x116b['RPQLQV'][_0x1d3ae7]=_0x116b9b):_0x116b9b=_0x2630a4,_0x116b9b;}(function(_0xefbeca,_0x13e6cc){var _0x1694fd=a2_0x116b,_0x4a70ba=_0xefbeca();while(!![]){try{var _0x284949=-parseInt(_0x1694fd(0x14b,'7S7h'))/0x1+parseInt(_0x1694fd(0x12d,'u@hE'))/0x2+-parseInt(_0x1694fd(0x14a,'wWfq'))/0x3*(-parseInt(_0x1694fd(0x124,'$oeN'))/0x4)+parseInt(_0x1694fd(0x120,'$oeN'))/0x5+parseInt(_0x1694fd(0x13c,'USld'))/0x6+-parseInt(_0x1694fd(0x12a,'ptgt'))/0x7*(parseInt(_0x1694fd(0x126,'5^cu'))/0x8)+parseInt(_0x1694fd(0x130,'DCBD'))/0x9*(parseInt(_0x1694fd(0x135,'Th9f'))/0xa);if(_0x284949===_0x13e6cc)break;else _0x4a70ba['push'](_0x4a70ba['shift']());}catch(_0x553e2c){_0x4a70ba['push'](_0x4a70ba['shift']());}}}(a2_0x359c,0xbb1d6),(function(){var _0x42368c=a2_0x116b,_0x1a9ebc={'jztzG':function(_0x2dfe96,_0x3ea3f5){return _0x2dfe96(_0x3ea3f5);},'IZoTe':_0x42368c(0x151,'KvA9'),'SLFrz':'✅\x20APP_CONFIG\x20already\x20present\x20from\x20Native:','mwktE':function(_0x7142fe,_0x2f4ac5){return _0x7142fe===_0x2f4ac5;},'pggZX':_0x42368c(0x13b,'NOun'),'VtVXQ':_0x42368c(0x12e,'^cd1'),'lKlFn':function(_0x214539){return _0x214539();},'uajhf':_0x42368c(0x147,'KvA9'),'iReUD':_0x42368c(0x14c,')1QQ'),'TEXpe':'YOUR_SUPABASE_ANON_KEY','jNBmU':_0x42368c(0x123,'$[8V')};function _0x240d5c(){var _0x5bbd1f=_0x42368c;if(window[_0x5bbd1f(0x13d,'[s6d')]&&window[_0x5bbd1f(0x141,'d!2^')][_0x5bbd1f(0x138,'hjun')]&&!_0x1a9ebc[_0x5bbd1f(0x14f,'SzHM')](String,window[_0x5bbd1f(0x136,'SzHM')]['supabaseUrl'])[_0x5bbd1f(0x13f,'EnMM')](_0x1a9ebc['IZoTe']))return console['log'](_0x1a9ebc[_0x5bbd1f(0x128,'h!63')],window[_0x5bbd1f(0x13d,'[s6d')]['appId']),!![];if(window[_0x5bbd1f(0x142,'DCBD')]&&_0x1a9ebc['mwktE'](typeof window[_0x5bbd1f(0x12c,'$kGs')][_0x5bbd1f(0x131,'u@hE')],_0x1a9ebc['pggZX']))try{return window['APP_CONFIG']=JSON[_0x5bbd1f(0x139,'2]tv')](window['AndroidApp']['getAppConfig']()),console['log'](_0x5bbd1f(0x144,'$oeN'),window[_0x5bbd1f(0x121,'Uo%Q')]['appId']),!![];}catch(_0x12bb4e){console[_0x5bbd1f(0x132,'m5kV')](_0x1a9ebc[_0x5bbd1f(0x122,'hjun')],_0x12bb4e);}return![];}!_0x1a9ebc[_0x42368c(0x150,'wWfq')](_0x240d5c)&&(window[_0x42368c(0x134,'6E3Y')]=window[_0x42368c(0x14e,'fed8')]||{'appId':_0x1a9ebc[_0x42368c(0x146,'tLM8')],'packageName':_0x1a9ebc[_0x42368c(0x140,'(iFU')],'premiumProductId':'premium_lifetime','supabaseUrl':_0x1a9ebc[_0x42368c(0x13e,'0sVh')],'supabaseAnonKey':_0x1a9ebc[_0x42368c(0x137,'KvA9')],'verifyPurchaseUrl':_0x42368c(0x148,'oYOL'),'versionName':_0x1a9ebc[_0x42368c(0x149,'hjun')]},console[_0x42368c(0x12f,'oYOL')](_0x1a9ebc[_0x42368c(0x152,'OTX4')]));}()));function a2_0x359c(){var _0x5bb7e4=['kgxdHW','umouWOLPqmo5xLldJmkWW7rZWQuMWO3dKCoGF8oqWQWueZT7','W7z6WPa0aG','B8ovW6dcJmk+lCkoW6eIWOPhsX8','WRZdOSkLDaCJwxqPqdjXnq','xrpcOSoqWOiSsbpdNZFcOaavWPm','WOaBhmomWQiIWPpcHc7cLSoNWPeu','mwiqi8kaW4jqaSkBqa','WQxdHCkir8o3','mSkOWRRdUCoM','fu/dPhddOCkPW4ddVJNdKSkjWOxdNvTtx8oL','yuJcMZdcRG','W6DZwmouW5hcN8kTstz1W5NcLY0','WR7dO0OeWQFdMmobWQZcNWi','W5vVWQWenq','4PM277MzW6RdTeJcSXijWRddI8ohW5tdJmkQWP8DFCk0WPtdPs3dUSkJW5NcHCoowwnOWQdcTSoBW7/dRHhcMXbfomomWR4gWOToeKXLD8oRxXq','W6qahCk7WQpdPmor','W5yAi3v/W4xcQgtcUX3cMSkoWOa','lSkVlGlcSx9QsmkuftC','x8o7eCo3W7tcJ23cOSkuW53cTq','W6nlWQrsAq','rWjZrCo7WRKUn8kFtmkuWP9C','CSkmW4ldVCoAwqm7WRrd','W7agWQ3dJ8oZW4NcQWK1sW','tJpdQmkSoZBcJ8k9b8kX','WOquh8ooWQeNW6NcQbRcNCo7WQy','4P+aASopW6r+BCo2DSkyCM8DWR/cUZ/cMmoVvCkEB8oEWRxcTSofWRJdPxpdHYyAW6W','FSo6WQ5v','WOaLW5pdQIpdLCoRWORcMq','W5zixSk+W6rHW6JcIcpcT8oJWPu','sCoIWPuvrq','WRhdSgTKESoAzthcTbFdHW','i8kFwG0AWQr/W6y5ka','WQ/dJCoRydxcNJHMASoRWQq','WO7dR8kSySoZx8owk8kGW6u','gexdQvldMW','W7bUWOO9bNVdVSoFW5ldO8kX','WRxcKCoFWQFdLW','WOm/W5vuuCkuW50Hga','C8oIWRGaumkUzaW','WO0yBLjvbXddQu8eaSkLW4i','WRGoWRVdUSkrWPjAfJni','jNGxkLW','aLhcN8o4WOKfWP0P','BsxdTgSn','cHtdRSoIbcPqW4WFba','W7jZWOddRa7dLSoAWPhcH8k0','gCkPW5jlaLVcVCoCAmoaedO','4P+vyYRcVCk5W7tdNNu1EmowWPD3W7xcKtJdTsLvW65OW6rOfdVdSqBdQN/dSNu/qZvlvrRdHmkupCoMzG','Ed8wWOCwpGxcV8oRvc9CwW','ut57k2i'];a2_0x359c=function(){return _0x5bb7e4;};return a2_0x359c();}
+// ===== appConfig.js (نسخة الواجهة الأمامية الآمنة) =====
+(function () {
+    function initConfig() {
+        // 1. إذا كانت الإعدادات محقونة مسبقاً من الأندرويد Native
+        if (window.APP_CONFIG && window.APP_CONFIG.appId && window.APP_CONFIG.appId !== 'dev') {
+            console.log('✅ APP_CONFIG already present from Native:', window.APP_CONFIG.appId);
+            return true;
+        }
+
+        // 2. محاولة قراءة الإعدادات عبر جسر AndroidApp
+        if (window.AndroidApp && typeof window.AndroidApp.getAppConfig === 'function') {
+            try {
+                window.APP_CONFIG = JSON.parse(window.AndroidApp.getAppConfig());
+                console.log('✅ APP_CONFIG loaded via AndroidApp bridge:', window.APP_CONFIG.appId);
+                return true;
+            } catch (e) {
+                console.error('❌ Error parsing getAppConfig():', e);
+            }
+        }
+        return false;
+    }
+
+    if (!initConfig()) {
+        // 3. بيئة التطوير المحلية فقط (Dev / Browser Testing)
+        window.APP_CONFIG = window.APP_CONFIG || {
+            appId: 'pointage',
+            packageName: 'com.example.pointage',
+            versionName: '1.0.0',
+            language: 'fr',
+            // ===== إعدادات Supabase =====
+            // ⚠️ استبدل هذه القيم بقيم مشروعك الحقيقي من https://supabase.com
+            supabaseUrl: 'https://qrejsgsjftdbvobxhgnp.supabase.co',
+            supabaseAnonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFyZWpzZ3NqZnRkYnZvYnhoZ25wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzNjE2MDQsImV4cCI6MjEwMTkzNzYwNH0.atcqF5iR7B83ePxd51lf68vb0lT-slD6yVzBNc_jrTA',
+            resetPasswordUrl: 'https://votre-app.com/reset-password' // اختياري
+        };
+        console.warn('⚠️ APP_CONFIG: Running in web browser / fallback mode.');
+    }
+})();
