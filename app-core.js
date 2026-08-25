@@ -7,7 +7,7 @@
 window.onload = async () => {
     loadData();
 
-    // ===== معالجة العودة من OAuth (Google) =====
+    // ===== معالجة العودة من OAuth (Google / Facebook) =====
     try {
         const hashParams = new URLSearchParams(window.location.hash.substring(1));
         const accessToken = hashParams.get('access_token');
@@ -16,14 +16,14 @@ window.onload = async () => {
         if (accessToken) {
             console.log('🔄 Détection du token OAuth, tentative de connexion...');
             
-            // 1. طريقة AuthService
+            // Méthode 1: Via AuthService
             if (window.AuthService && typeof window.AuthService.setSessionToken === 'function') {
                 const user = await window.AuthService.setSessionToken(accessToken);
                 if (user) {
-                    console.log('✅ Authentification Google réussie pour:', user.email);
+                    console.log('✅ Authentification OAuth réussie pour:', user.email || user.phone || user.id);
                     window.history.replaceState({}, document.title, window.location.pathname);
                     if (typeof showToast === 'function') {
-                        showToast('✅ Connexion avec Google réussie', 2000);
+                        showToast('✅ Connexion réussie', 2000);
                     }
                 } else {
                     console.warn('⚠️ Échec via AuthService, tentative fallback...');
@@ -34,13 +34,13 @@ window.onload = async () => {
                             refresh_token: refreshToken || ''
                         });
                         if (!error && data?.user) {
-                            console.log('✅ Authentification Google réussie (fallback):', data.user.email);
+                            console.log('✅ Authentification OAuth réussie (fallback):', data.user.email);
                             window.history.replaceState({}, document.title, window.location.pathname);
                             if (window.AuthService && typeof window.AuthService.onAuthSuccess === 'function') {
                                 await window.AuthService.onAuthSuccess(data.user);
                             }
                             if (typeof showToast === 'function') {
-                                showToast('✅ Connexion avec Google réussie', 2000);
+                                showToast('✅ Connexion réussie', 2000);
                             }
                         }
                     }
@@ -50,7 +50,7 @@ window.onload = async () => {
     } catch (err) {
         console.warn('⚠️ Erreur lors du traitement du callback OAuth:', err);
         if (typeof showToast === 'function') {
-            showToast('❌ Erreur lors de la connexion Google', 3000);
+            showToast('❌ Erreur lors de la connexion', 3000);
         }
     }
 
