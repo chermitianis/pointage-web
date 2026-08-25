@@ -1055,59 +1055,83 @@ if ('serviceWorker' in navigator) {
 
 <!-- ===== نافذة تسجيل الدخول / إنشاء حساب ===== -->
 <div id="auth-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; align-items:center; justify-content:center; backdrop-filter:blur(4px);">
-    <div style="background:var(--card-bg, #ffffff); padding:30px 25px 20px; border-radius:16px; width:92%; max-width:380px; text-align:center; box-shadow:0 20px 50px rgba(0,0,0,0.3); position:relative; transition:all 0.3s ease;">
+    <div style="background:var(--card-bg, #ffffff); padding:30px 25px 20px; border-radius:16px; width:92%; max-width:400px; text-align:center; box-shadow:0 20px 50px rgba(0,0,0,0.3); position:relative; transition:all 0.3s ease;">
 
-        <!-- أيقونة -->
         <div style="font-size:48px; margin-bottom:8px;">🔐</div>
+        <h3 id="authTitle" style="margin-bottom:6px; color:var(--text-color, #333); font-size:20px; font-weight:700;">Se connecter</h3>
+        <p id="authSubtitle" style="margin-bottom:20px; color:var(--gray, #888); font-size:13px;">Entrez vos identifiants</p>
 
-        <h3 id="authTitle" style="margin-bottom:12px; color:var(--text-color, #333); font-size:20px; font-weight:700;">تسجيل الدخول</h3>
-        <p id="authSubtitle" style="margin-bottom:20px; color:var(--gray, #888); font-size:13px;">أدخل بياناتك للوصول إلى حسابك</p>
-
-        <!-- حقل البريد الإلكتروني -->
-        <div style="position:relative; margin-bottom:12px;">
-            <input type="email" id="authEmail" placeholder="البريد الإلكتروني"
+        <!-- مجموعة البريد الإلكتروني -->
+        <div id="authEmailGroup" style="margin-bottom:12px;">
+            <label for="authEmail" style="display:block; text-align:left; font-size:13px; color:var(--gray); margin-bottom:4px;">Email</label>
+            <input type="email" id="authEmail" placeholder="exemple@domaine.com"
                    style="width:100%; padding:12px 14px; border:2px solid var(--border-color, #e0e0e0); border-radius:10px; box-sizing:border-box; font-size:15px; background:var(--input-bg, #f8f9fa); color:var(--text-color, #333); transition:border-color 0.2s;"
                    onfocus="this.style.borderColor='#2563eb'" onblur="this.style.borderColor='var(--border-color, #e0e0e0)'">
         </div>
 
         <!-- حقل كلمة المرور -->
-        <div style="position:relative; margin-bottom:12px;">
-            <input type="password" id="authPassword" placeholder="كلمة المرور (6 أحرف على الأقل)"
+        <div id="authPasswordGroup" style="margin-bottom:12px;">
+            <label for="authPassword" style="display:block; text-align:left; font-size:13px; color:var(--gray); margin-bottom:4px;">Mot de passe</label>
+            <input type="password" id="authPassword" placeholder="••••••"
                    style="width:100%; padding:12px 14px; border:2px solid var(--border-color, #e0e0e0); border-radius:10px; box-sizing:border-box; font-size:15px; background:var(--input-bg, #f8f9fa); color:var(--text-color, #333); transition:border-color 0.2s;"
                    onfocus="this.style.borderColor='#2563eb'" onblur="this.style.borderColor='var(--border-color, #e0e0e0)'">
         </div>
 
-        <!-- زر الإجراء الرئيسي -->
-        <button id="authPrimaryBtn" onclick="handleAuthSubmit()"
-                style="width:100%; padding:12px; background:linear-gradient(135deg, #2563eb, #1d4ed8); color:#fff; border:none; border-radius:10px; font-weight:700; font-size:16px; cursor:pointer; transition:transform 0.15s, box-shadow 0.2s; box-shadow:0 4px 14px rgba(37,99,235,0.35);"
-                onmousedown="this.style.transform='scale(0.97)'" onmouseup="this.style.transform='scale(1)'" onmouseleave="this.style.transform='scale(1)'">
-            دخول
-        </button>
-
-        <!-- حالة التحميل -->
-        <div id="authLoading" style="display:none; margin-top:10px; font-size:14px; color:#2563eb;">
-            ⏳ جاري المعالجة...
+        <!-- مجموعة الهاتف (مخفية افتراضياً) -->
+        <div id="authPhoneGroup" style="display:none; margin-bottom:12px;">
+            <label for="authPhone" style="display:block; text-align:left; font-size:13px; color:var(--gray); margin-bottom:4px;">Numéro de téléphone</label>
+            <input type="tel" id="authPhone" placeholder="+216 99 999 999"
+                   style="width:100%; padding:12px 14px; border:2px solid var(--border-color, #e0e0e0); border-radius:10px; box-sizing:border-box; font-size:15px; background:var(--input-bg, #f8f9fa); color:var(--text-color, #333);">
         </div>
 
-        <!-- رسالة الخطأ -->
-        <div id="authError" style="display:none; margin-top:8px; font-size:13px; color:#dc2626; background:#fee2e2; padding:8px 12px; border-radius:8px;"></div>
+        <!-- حقل OTP (مخفى) -->
+        <div id="authOtpGroup" style="display:none; margin-bottom:12px;">
+            <label for="authOtp" style="display:block; text-align:left; font-size:13px; color:var(--gray); margin-bottom:4px;">Code de vérification</label>
+            <input type="text" id="authOtp" placeholder="123456"
+                   style="width:100%; padding:12px 14px; border:2px solid var(--border-color, #e0e0e0); border-radius:10px; box-sizing:border-box; font-size:15px; background:var(--input-bg, #f8f9fa); color:var(--text-color, #333);">
+        </div>
+
+        <!-- زر الإجراء الرئيسي -->
+        <button id="authPrimaryBtn" onclick="handleAuthSubmit()"
+                style="width:100%; padding:12px; background:linear-gradient(135deg, #2563eb, #1d4ed8); color:#fff; border:none; border-radius:10px; font-weight:700; font-size:16px; cursor:pointer; transition:transform 0.15s, box-shadow 0.2s; box-shadow:0 4px 14px rgba(37,99,235,0.35); margin-bottom:8px;">
+            Connexion
+        </button>
+
+        <!-- رابط نسيت كلمة المرور -->
+        <div style="text-align:right; margin-bottom:12px;">
+            <a href="#" id="authForgotLink" onclick="handleForgotPassword(); return false;" style="color:#2563eb; text-decoration:none; font-size:13px;">Mot de passe oublié ?</a>
+        </div>
+
+        <!-- حالة التحميل -->
+        <div id="authLoading" style="display:none; margin-top:6px; font-size:14px; color:#2563eb;">⏳ Chargement...</div>
+        <div id="authError" style="display:none; margin-top:6px; font-size:13px; color:#dc2626; background:#fee2e2; padding:8px 12px; border-radius:8px;"></div>
 
         <!-- التبديل بين تسجيل الدخول وإنشاء الحساب -->
-        <div style="margin-top:18px; font-size:14px; color:var(--gray, #666);">
-            <span id="authToggleText">ليس لديك حساب؟</span>
-            <a href="#" onclick="toggleAuthMode(); return false;" id="authToggleLink" style="color:#2563eb; text-decoration:none; font-weight:600; margin-left:4px;">إنشاء حساب جديد</a>
+        <div style="margin-top:12px; font-size:14px; color:var(--gray, #666);">
+            <span id="authToggleText">Pas de compte ?</span>
+            <a href="#" onclick="toggleAuthMode(); return false;" id="authToggleLink" style="color:#2563eb; text-decoration:none; font-weight:600; margin-left:4px;">Créer un compte</a>
+        </div>
+
+        <!-- أزرار إضافية: Facebook و الهاتف -->
+        <div style="display:flex; flex-direction:column; gap:8px; margin-top:12px;">
+            <button id="authFacebookBtn" onclick="window.signInWithFacebook()" style="padding:10px; background:#1877f2; color:#fff; border:none; border-radius:8px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;">
+                <span>📘</span> Continuer avec Facebook
+            </button>
+            <button id="authPhoneToggleBtn" onclick="togglePhoneMode()" style="padding:10px; background:#34b7f1; color:#fff; border:none; border-radius:8px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;">
+                <span>📱</span> Connexion par téléphone
+            </button>
         </div>
 
         <!-- خيار الدخول كزائر -->
-        <div style="margin-top:10px; font-size:13px;">
-            <a href="#" onclick="closeAuthModal(); return false;" style="color:var(--gray, #999); text-decoration:none;">☕ متابعة كزائر</a>
+        <div style="margin-top:12px; font-size:13px;">
+            <a href="#" id="authGuestLink" onclick="closeAuthModal(); return false;" style="color:var(--gray, #999); text-decoration:none;">☕ Continuer en tant qu'invité</a>
         </div>
 
         <!-- زر الإغلاق -->
         <button onclick="closeAuthModal()"
                 style="margin-top:14px; background:transparent; border:none; color:var(--gray, #aaa); cursor:pointer; font-size:14px; padding:6px 16px; border-radius:20px; transition:background 0.2s;"
                 onmouseenter="this.style.background='var(--hover-bg, #f0f0f0)'" onmouseleave="this.style.background='transparent'">
-            ✕ إلغاء
+            ✕ Fermer
         </button>
     </div>
 </div>
