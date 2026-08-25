@@ -1,24 +1,37 @@
 // ===================================================================
 // app-core.js — Noyau principal de l'application : Initialisation, Navigation, Mode Sombre, Formatage, En-tête et Statut Premium.
-// Fait partie de l'application Pointage — Dépend de data.js et supabase-engine.js
+// Fait partie de l'application Pointage — Dépend de data.js et supabaseSync.js
 // ===================================================================
 
 // ===== نقطة انطلاق التطبيق — Point d'entrée de l'application =====
 window.onload = async () => {
     loadData();
 
-    // المزامنة التلقائية مع السحابة (Supabase) قبل بدء تشغيل الواجهة إن وجد المحرك
-    if (window.SupabaseSyncEngine && typeof window.SupabaseSyncEngine.pull === 'function') {
-        try {
-            await window.SupabaseSyncEngine.pull();
-            // إعادة تحميل البيانات المحلية بعد السحب من السحابة
-            loadData();
-        } catch (err) {
-            console.warn('Sync cloud initialisation issue:', err);
+    // التحقق من وجود مستخدم مسجل الدخول وسحب البيانات من السحابة
+    try {
+        if (window.AuthService && typeof window.AuthService.getCurrentUser === 'function') {
+            const user = await window.AuthService.getCurrentUser();
+            if (user) {
+                console.log('👤 Utilisateur connecté:', user.email || user.phone || user.id);
+                // سحب البيانات من السحابة إذا كان المستخدم مسجلاً
+                if (window.SupabaseSyncEngine && typeof window.SupabaseSyncEngine.pullAll === 'function') {
+                    await window.SupabaseSyncEngine.pullAll();
+                    // إعادة تحميل البيانات المحلية بعد السحب من السحابة
+                    loadData();
+                }
+            } else {
+                console.log('👤 Aucun utilisateur connecté, mode local.');
+            }
         }
+    } catch (err) {
+        console.warn('⚠️ Erreur lors de la vérification de l\'utilisateur:', err);
     }
 
+    // Chargement des notes, tâches et rappels
     if (typeof loadNotesData === 'function') loadNotesData();
+    if (typeof loadTasksData === 'function') loadTasksData();
+    if (typeof loadRemindersData === 'function') loadRemindersData();
+    
     initializeApp();
 };
 
