@@ -3,17 +3,19 @@
 let supabaseClient = null;
 
 function initSupabaseClient() {
-    // استخدام كائن Supabase الموحد من authService إن وجد
+    // 1. استخدام العميل المعرف سابقاً في authService
     if (window.AuthService && typeof window.AuthService.getClient === 'function') {
-        const client = window.AuthService.getClient();
-        if (client) {
-            supabaseClient = client;
+        const existingClient = window.AuthService.getClient();
+        if (existingClient) {
+            supabaseClient = existingClient;
             return supabaseClient;
         }
     }
     
+    // 2. تجنب إعادة التعرّف إذا كان الكائن موجوداً بالفعل
     if (supabaseClient) return supabaseClient;
     
+    // 3. إنشاء عميل جديد فقط في حالة عدم وجود عميل في authService
     if (window.supabase && window.APP_CONFIG && window.APP_CONFIG.supabaseUrl) {
         supabaseClient = window.supabase.createClient(
             window.APP_CONFIG.supabaseUrl,
@@ -80,23 +82,19 @@ async function pullAllCloudData() {
             client.from('user_tasks').select('tasks').eq('user_id', user.id).maybeSingle()
         ]);
 
-        // Mise à jour de workData
         window.workData = (workRes.data && workRes.data.work_data) ? workRes.data.work_data : {};
         localStorage.setItem('pointageWorkData', JSON.stringify(window.workData));
 
-        // Mise à jour de settings
         if (settRes.data && settRes.data.settings) {
             window.settings = { language: 'fr', ...settRes.data.settings };
             localStorage.setItem('pointageSettings', JSON.stringify(window.settings));
         }
 
-        // Mise à jour de notesData
         if (notesRes.data && notesRes.data.notes) {
             window.notesData = notesRes.data.notes;
             localStorage.setItem('pointageNotesData', JSON.stringify(window.notesData));
         }
 
-        // Mise à jour de tasksData
         if (tasksRes.data && tasksRes.data.tasks) {
             window.tasksData = tasksRes.data.tasks;
             localStorage.setItem('pointageTasksData', JSON.stringify(window.tasksData));
