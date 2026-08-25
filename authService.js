@@ -49,7 +49,6 @@
     }
 
     const AuthService = {
-        // ===== دالة ضبط التوكن المضافة للتوافق مع MainActivity و authUI =====
         async setSessionToken(accessToken) {
             const client = getClient();
             if (!client || !accessToken) return null;
@@ -66,6 +65,11 @@
                         email: currentUser.email,
                         lastLogin: new Date().toISOString()
                     }));
+                    
+                    if (window.SupabaseSyncEngine && typeof window.SupabaseSyncEngine.pullAll === 'function') {
+                        await window.SupabaseSyncEngine.pullAll();
+                    }
+
                     if (typeof window.updatePremiumStatus === 'function') window.updatePremiumStatus();
                     return currentUser;
                 }
@@ -75,7 +79,6 @@
             return null;
         },
 
-        // ===== توافق المسميات مع authUI.js =====
         async login(email, password) {
             const data = await this.signIn(email, password);
             const session = await this.getSession();
@@ -125,11 +128,26 @@
             const client = getClient();
             if (client) await client.auth.signOut();
             currentUser = null;
+            
+            // Nettoyage complet des données locales
             localStorage.removeItem('supabase_user_session');
+            localStorage.removeItem('pointageWorkData');
+            localStorage.removeItem('pointageNotesData');
+            localStorage.removeItem('pointageTasksData');
+            localStorage.removeItem('pointageRemindersData');
+            
+            if (window.workData) window.workData = {};
+            if (window.notesData) window.notesData = {};
+            if (window.tasksData) window.tasksData = {};
+
             if (typeof window.showToast === 'function') {
                 window.showToast(getMessage('signedOut'), 2000);
             }
             if (typeof window.updatePremiumStatus === 'function') window.updatePremiumStatus();
+
+            setTimeout(() => {
+                location.reload();
+            }, 500);
         },
 
         async getCurrentUser() {
@@ -168,8 +186,15 @@
                     window.AndroidApp.saveUserToken(session.access_token);
                 }
             } catch (e) { /* ignore */ }
-            await this.syncLocalDataToCloud(user.id);
+
+            // Téléchargement immédiat des données du compte connecté
+            if (window.SupabaseSyncEngine && typeof window.SupabaseSyncEngine.pullAll === 'function') {
+                await window.SupabaseSyncEngine.pullAll();
+            }
+
             if (typeof window.updatePremiumStatus === 'function') window.updatePremiumStatus();
+            
+            location.reload();
         },
 
         async syncLocalDataToCloud(userId) {
@@ -200,30 +225,10 @@
         },
 
         async syncCloudDataToLocal() {
-            const user = await this.getCurrentUser();
-            if (!user) return false;
-            const client = getClient();
-            if (!client) return false;
-            try {
-                const { data, error } = await client
-                    .from('app_users')
-                    .select('features_used')
-                    .eq('user_id', user.id)
-                    .eq('app_id', window.APP_CONFIG?.appId || 'pointage')
-                    .order('updated_at', { ascending: false })
-                    .limit(1)
-                    .single();
-                if (error || !data || !data.features_used) return false;
-                const cloudData = JSON.parse(data.features_used);
-                if (cloudData.settings && window.settings) Object.assign(window.settings, cloudData.settings);
-                if (cloudData.workData && window.workData) Object.assign(window.workData, cloudData.workData);
-                if (typeof window.saveData === 'function') window.saveData();
-                console.log('✅ Cloud data imported successfully');
-                return true;
-            } catch (e) {
-                console.error('Failed to import cloud data:', e);
-                return false;
+            if (window.SupabaseSyncEngine && typeof window.SupabaseSyncEngine.pullAll === 'function') {
+                return await window.SupabaseSyncEngine.pullAll();
             }
+            return false;
         },
 
         async changePassword(newPassword) {
@@ -245,7 +250,6 @@
         }
     };
 
-    // ===== ترجمة وإتاحة الواجهات العامة =====
     function getMessage(key) {
         const isAr = (window.settings?.language === 'ar');
         const messages = {
@@ -285,7 +289,6 @@
 
     window.AuthService = AuthService;
 
-    // ===== استرجاع الجلسة عند تحميل العناصر =====
     document.addEventListener('DOMContentLoaded', async function() {
         try {
             const session = localStorage.getItem('supabase_user_session');
