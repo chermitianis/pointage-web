@@ -58,14 +58,15 @@ const urlsToCache = [
     // ==========================================
     // ✅ الأيقونات - الأهم لظهور الأيقونة
     // ==========================================
-    './assets/icon-72x72.png',
-    './assets/icon-96x96.png',
-    './assets/icon-128x128.png',
-    './assets/icon-144x144.png',
-    './assets/icon-152x152.png',
-    './assets/icon-192x192.png',
-    './assets/icon-384x384.png',
-    './assets/icon-512x512.png'
+    './assets/icon-72.png',
+    './assets/icon-96.png',
+    './assets/icon-128.png',
+    './assets/icon-144.png',
+    './assets/icon-152.png',
+    './assets/icon-192.png',
+    './assets/icon-384.png',
+    './assets/icon-512.png',
+    './assets/apple-touch-icon.png'
 ];
 
 // ===== التثبيت =====
