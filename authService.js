@@ -3,7 +3,6 @@
     let supabaseClient = null;
     let currentUser = null;
 
-    // ===== عنوان التطبيق (عدّل حسب رابطك الفعلي) =====
     const APP_URL = 'https://chermitianis.github.io/pointage-web/';
 
     function getClient() {
@@ -61,6 +60,7 @@
             return getClient();
         },
 
+        // تسجيل الدخول باستخدام Session Token (من OAuth)
         async setSessionToken(accessToken) {
             const client = getClient();
             if (!client || !accessToken) return null;
@@ -77,7 +77,6 @@
                         email: currentUser.email,
                         lastLogin: new Date().toISOString()
                     }));
-                    await this.onAuthSuccess(currentUser);
                     return currentUser;
                 }
             } catch (e) {
@@ -86,22 +85,30 @@
             return null;
         },
 
-        async login(email, password) {
-            const data = await this.signIn(email, password);
-            return { user: data.user };
+        // تسجيل الدخول بالبريد وكلمة المرور
+        async signIn(email, password) {
+            const client = getClient();
+            if (!client) throw new Error(getMessage('connectionError'));
+            const { data, error } = await client.auth.signInWithPassword({ email, password });
+            if (error) throw error;
+            if (data?.user) {
+                currentUser = data.user;
+                await this.onAuthSuccess(data.user);
+            }
+            return data;
         },
 
-        async logout() {
-            await this.signOut();
-        },
-
-        async signUp(email, password) {
+        // إنشاء حساب جديد بالبريد وكلمة المرور
+        async signUp(email, password, fullName) {
             const client = getClient();
             if (!client) throw new Error(getMessage('connectionError'));
             const { data, error } = await client.auth.signUp({
-                email, password,
+                email,
+                password,
                 options: {
                     data: {
+                        full_name: fullName,
+                        has_password: true, // علامة أن المستخدم لديه كلمة مرور
                         app_id: window.APP_CONFIG?.appId || 'pointage',
                         device_id: getDeviceId()
                     }
@@ -115,61 +122,35 @@
             return data;
         },
 
-        async signIn(email, password) {
-            const client = getClient();
-            if (!client) throw new Error(getMessage('connectionError'));
-            const { data, error } = await client.auth.signInWithPassword({ email, password });
-            if (error) throw error;
-            if (data?.user) {
-                currentUser = data.user;
-                await this.onAuthSuccess(data.user);
-            }
-            return data;
-        },
-
-        // ===== تسجيل الدخول عبر Google =====
+        // تسجيل الدخول عبر Google (للمستخدمين الذين لديهم كلمة مرور أيضاً)
         async signInWithGoogle() {
             const client = getClient();
             if (!client) throw new Error(getMessage('connectionError'));
-            console.log('🔄 Redirecting to Google with redirectTo:', APP_URL);
             const { data, error } = await client.auth.signInWithOAuth({
                 provider: 'google',
                 options: {
-                    redirectTo: APP_URL,
-                    queryParams: {
-                        access_type: 'offline',
-                        prompt: 'consent'
-                    }
+                    redirectTo: APP_URL + '?signup=google' // علامة للتمييز
                 }
             });
-            if (error) {
-                console.error('❌ Google OAuth error:', error);
-                throw error;
-            }
-            console.log('✅ Google OAuth initiated:', data);
+            if (error) throw error;
             return data;
         },
 
-        // ===== تسجيل الدخول عبر Facebook =====
+        // تسجيل الدخول عبر Facebook
         async signInWithFacebook() {
             const client = getClient();
             if (!client) throw new Error(getMessage('connectionError'));
-            console.log('🔄 Redirecting to Facebook with redirectTo:', APP_URL);
             const { data, error } = await client.auth.signInWithOAuth({
                 provider: 'facebook',
                 options: {
-                    redirectTo: APP_URL
+                    redirectTo: APP_URL + '?signup=facebook'
                 }
             });
-            if (error) {
-                console.error('❌ Facebook OAuth error:', error);
-                throw error;
-            }
-            console.log('✅ Facebook OAuth initiated:', data);
+            if (error) throw error;
             return data;
         },
 
-        // ===== تسجيل الدخول عبر الهاتف (OTP) =====
+        // تسجيل الدخول عبر الهاتف (OTP)
         async signInWithPhone(phoneNumber) {
             const client = getClient();
             if (!client) throw new Error(getMessage('connectionError'));
@@ -196,12 +177,30 @@
             return data;
         },
 
+        // تعيين كلمة مرور لحساب OAuth (للمستخدمين الذين سجلوا عبر Google/فيسبوك)
+        async setPasswordForOAuthUser(password) {
+            const client = getClient();
+            if (!client) throw new Error(getMessage('connectionError'));
+            const { data, error } = await client.auth.updateUser({
+                password: password,
+                data: { has_password: true } // تحديث العلامة
+            });
+            if (error) throw error;
+            return data;
+        },
+
+        // التحقق مما إذا كان المستخدم لديه كلمة مرور
+        async hasPassword() {
+            const user = await this.getCurrentUser();
+            if (!user) return false;
+            return user.user_metadata?.has_password === true;
+        },
+
         async signOut() {
             const client = getClient();
             if (client) await client.auth.signOut();
             currentUser = null;
 
-            // مسح جميع بيانات التطبيق من localStorage
             const keys = [
                 'pointageWorkData',
                 'pointageSettings',
@@ -213,7 +212,6 @@
             ];
             keys.forEach(key => localStorage.removeItem(key));
 
-            // إعادة تعيين المتغيرات العامة
             window.workData = {};
             window.notesData = {};
             window.tasksData = {};
@@ -267,7 +265,6 @@
                 }
             } catch (e) { /* ignore */ }
 
-            // سحب جميع البيانات من السحابة
             if (window.SupabaseSyncEngine && typeof window.SupabaseSyncEngine.pullAll === 'function') {
                 await window.SupabaseSyncEngine.pullAll();
             }
@@ -339,8 +336,8 @@
     }
 
     // ===== تصدير الدوال العامة =====
-    window.signUpWithEmail = async function(email, password) {
-        try { const result = await AuthService.signUp(email, password); return { user: result.user, error: null }; }
+    window.signUpWithEmail = async function(email, password, fullName) {
+        try { const result = await AuthService.signUp(email, password, fullName); return { user: result.user, error: null }; }
         catch (error) { return { user: null, error: error }; }
     };
     window.signInWithEmail = async function(email, password) {
@@ -348,22 +345,12 @@
         catch (error) { return { user: null, error: error }; }
     };
     window.signInWithGoogle = async function() {
-        try { 
-            const data = await AuthService.signInWithGoogle(); 
-            return { data, error: null }; 
-        } catch (error) { 
-            console.error('❌ signInWithGoogle error:', error);
-            return { data: null, error: error }; 
-        }
+        try { const data = await AuthService.signInWithGoogle(); return { data, error: null }; }
+        catch (error) { return { data: null, error: error }; }
     };
     window.signInWithFacebook = async function() {
-        try { 
-            const data = await AuthService.signInWithFacebook(); 
-            return { data, error: null }; 
-        } catch (error) { 
-            console.error('❌ signInWithFacebook error:', error);
-            return { data: null, error: error }; 
-        }
+        try { const data = await AuthService.signInWithFacebook(); return { data, error: null }; }
+        catch (error) { return { data: null, error: error }; }
     };
     window.signInWithPhone = async function(phone) {
         try { const data = await AuthService.signInWithPhone(phone); return { data, error: null }; }
@@ -372,6 +359,13 @@
     window.verifyPhoneOtp = async function(phone, token) {
         try { const data = await AuthService.verifyPhoneOtp(phone, token); return { user: data.user, error: null }; }
         catch (error) { return { user: null, error: error }; }
+    };
+    window.setPasswordForOAuthUser = async function(password) {
+        try { const data = await AuthService.setPasswordForOAuthUser(password); return { data, error: null }; }
+        catch (error) { return { data: null, error: error }; }
+    };
+    window.hasPassword = async function() {
+        return await AuthService.hasPassword();
     };
     window.signOutUser = async function() { await AuthService.signOut(); };
     window.getCurrentUser = async function() { return await AuthService.getCurrentUser(); };
