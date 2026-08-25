@@ -4,13 +4,10 @@
     let currentUser = null;
 
     function getClient() {
-        // 1. استخدام الكائن الموحد إذا كان معرفاً مسبقاً على مستوى التطبيق
         if (window.supabaseInstance) {
             supabaseClient = window.supabaseInstance;
             return supabaseClient;
         }
-
-        // 2. إنشاء العميل لأول مرة وتخزينه في window.supabaseInstance
         if (!supabaseClient && window.APP_CONFIG && window.APP_CONFIG.supabaseUrl) {
             try {
                 const { createClient } = window.supabase;
@@ -18,7 +15,7 @@
                     window.APP_CONFIG.supabaseUrl,
                     window.APP_CONFIG.supabaseAnonKey
                 );
-                window.supabaseInstance = supabaseClient; // Global Singleton
+                window.supabaseInstance = supabaseClient;
                 console.log('✅ Supabase client initialized');
             } catch (e) {
                 console.error('❌ Failed to initialize Supabase client:', e);
@@ -57,7 +54,6 @@
     }
 
     const AuthService = {
-        // إتاحة الوصول إلى الكائن الموحد
         getClient() {
             return getClient();
         },
@@ -79,11 +75,8 @@
                         lastLogin: new Date().toISOString()
                     }));
                     
-                    if (window.SupabaseSyncEngine && typeof window.SupabaseSyncEngine.pullAll === 'function') {
-                        await window.SupabaseSyncEngine.pullAll();
-                    }
-
-                    if (typeof window.updatePremiumStatus === 'function') window.updatePremiumStatus();
+                    // سحب البيانات من السحابة بعد تسجيل الدخول
+                    await this.onAuthSuccess(currentUser);
                     return currentUser;
                 }
             } catch (e) {
@@ -94,11 +87,7 @@
 
         async login(email, password) {
             const data = await this.signIn(email, password);
-            const session = await this.getSession();
-            return {
-                user: data.user,
-                token: session?.access_token || ''
-            };
+            return { user: data.user };
         },
 
         async logout() {
@@ -137,27 +126,85 @@
             return data;
         },
 
+        // === تسجيل الدخول عبر Facebook ===
+        async signInWithFacebook() {
+            const client = getClient();
+            if (!client) throw new Error(getMessage('connectionError'));
+            const { data, error } = await client.auth.signInWithOAuth({
+                provider: 'facebook',
+                options: {
+                    redirectTo: window.location.origin
+                }
+            });
+            if (error) throw error;
+            return data;
+        },
+
+        // === تسجيل الدخول عبر رقم الهاتف (OTP) ===
+        async signInWithPhone(phoneNumber) {
+            const client = getClient();
+            if (!client) throw new Error(getMessage('connectionError'));
+            const { data, error } = await client.auth.signInWithOtp({
+                phone: phoneNumber,
+            });
+            if (error) throw error;
+            return data;
+        },
+
+        // === التحقق من رمز OTP للهاتف ===
+        async verifyPhoneOtp(phoneNumber, token) {
+            const client = getClient();
+            if (!client) throw new Error(getMessage('connectionError'));
+            const { data, error } = await client.auth.verifyOtp({
+                phone: phoneNumber,
+                token: token,
+                type: 'sms'
+            });
+            if (error) throw error;
+            if (data?.user) {
+                currentUser = data.user;
+                await this.onAuthSuccess(data.user);
+            }
+            return data;
+        },
+
         async signOut() {
             const client = getClient();
             if (client) await client.auth.signOut();
             currentUser = null;
             
-            // تنظيف البيانات المحلية
-            localStorage.removeItem('supabase_user_session');
-            localStorage.removeItem('pointageWorkData');
-            localStorage.removeItem('pointageNotesData');
-            localStorage.removeItem('pointageTasksData');
-            localStorage.removeItem('pointageRemindersData');
+            // === مسح جميع بيانات التطبيق من localStorage ===
+            const keys = [
+                'pointageWorkData',
+                'pointageSettings',
+                'pointageNotesData',
+                'pointageTasksData',
+                'pointageRemindersData',
+                'supabase_user_session',
+                'pointage_device_id',
+                // أي مفاتيح أخرى تستخدمها
+            ];
+            keys.forEach(key => localStorage.removeItem(key));
             
-            if (window.workData) window.workData = {};
-            if (window.notesData) window.notesData = {};
-            if (window.tasksData) window.tasksData = {};
+            // إعادة تعيين المتغيرات العامة
+            window.workData = {};
+            window.notesData = {};
+            window.tasksData = {};
+            window.remindersData = {};
+            // إعادة تعيين الإعدادات إلى القيم الافتراضية (مع الفرنسية)
+            window.settings = {
+                language: 'fr',
+                numberFormat: 'western',
+                // ... نسخ القيم الافتراضية من data.js
+                // يمكن استدعاء loadData() لتعيينها، لكننا سنقوم بإعادة تحميل الصفحة
+            };
 
             if (typeof window.showToast === 'function') {
                 window.showToast(getMessage('signedOut'), 2000);
             }
             if (typeof window.updatePremiumStatus === 'function') window.updatePremiumStatus();
 
+            // إعادة تحميل الصفحة لتصبح كأنها جديدة
             setTimeout(() => {
                 location.reload();
             }, 500);
@@ -200,12 +247,14 @@
                 }
             } catch (e) { /* ignore */ }
 
+            // === سحب جميع البيانات من السحابة ===
             if (window.SupabaseSyncEngine && typeof window.SupabaseSyncEngine.pullAll === 'function') {
                 await window.SupabaseSyncEngine.pullAll();
             }
 
             if (typeof window.updatePremiumStatus === 'function') window.updatePremiumStatus();
             
+            // إعادة تحميل الصفحة لتحديث الواجهة بالبيانات المسحوبة
             location.reload();
         },
 
@@ -271,16 +320,27 @@
         return messages[key] || key;
     }
 
+    // تصدير الدوال العامة
     window.signUpWithEmail = async function(email, password) {
         try { const result = await AuthService.signUp(email, password); return { user: result.user, error: null }; }
         catch (error) { return { user: null, error: error }; }
     };
-
     window.signInWithEmail = async function(email, password) {
         try { const result = await AuthService.signIn(email, password); return { user: result.user, error: null }; }
         catch (error) { return { user: null, error: error }; }
     };
-
+    window.signInWithFacebook = async function() {
+        try { const data = await AuthService.signInWithFacebook(); return { data, error: null }; }
+        catch (error) { return { data: null, error: error }; }
+    };
+    window.signInWithPhone = async function(phone) {
+        try { const data = await AuthService.signInWithPhone(phone); return { data, error: null }; }
+        catch (error) { return { data: null, error: error }; }
+    };
+    window.verifyPhoneOtp = async function(phone, token) {
+        try { const data = await AuthService.verifyPhoneOtp(phone, token); return { user: data.user, error: null }; }
+        catch (error) { return { user: null, error: error }; }
+    };
     window.signOutUser = async function() { await AuthService.signOut(); };
     window.getCurrentUser = async function() { return await AuthService.getCurrentUser(); };
     window.isUserAuthenticated = async function() { return await AuthService.isAuthenticated(); };
@@ -301,6 +361,7 @@
 
     window.AuthService = AuthService;
 
+    // عند تحميل الصفحة، التحقق من وجود جلسة نشطة
     document.addEventListener('DOMContentLoaded', async function() {
         try {
             const session = localStorage.getItem('supabase_user_session');
@@ -310,6 +371,10 @@
                     console.log('✅ Active user:', user.email);
                     currentUser = user;
                     if (typeof window.updatePremiumStatus === 'function') window.updatePremiumStatus();
+                    // سحب البيانات من السحابة إذا كانت هناك جلسة
+                    if (window.SupabaseSyncEngine && typeof window.SupabaseSyncEngine.pullAll === 'function') {
+                        await window.SupabaseSyncEngine.pullAll();
+                    }
                 }
             }
         } catch (e) { /* ignore */ }
