@@ -16,18 +16,38 @@ window.onload = async () => {
         if (accessToken) {
             console.log('🔄 Détection du token OAuth, tentative de connexion...');
             
-            // Méthode 1: Via AuthService
             if (window.AuthService && typeof window.AuthService.setSessionToken === 'function') {
                 const user = await window.AuthService.setSessionToken(accessToken);
                 if (user) {
                     console.log('✅ Authentification OAuth réussie pour:', user.email || user.phone || user.id);
                     window.history.replaceState({}, document.title, window.location.pathname);
-                    if (typeof showToast === 'function') {
-                        showToast('✅ Connexion réussie', 2000);
+                    
+                    // ===== Vérifier si l'utilisateur a un mot de passe =====
+                    const hasPassword = user.user_metadata?.has_password === true;
+                    const isOAuthUser = user.app_metadata?.provider === 'google' || user.app_metadata?.provider === 'facebook';
+                    
+                    if (isOAuthUser && !hasPassword) {
+                        console.log('🔄 Utilisateur OAuth sans mot de passe, demande de création');
+                        // Attendre un peu que tout soit chargé
+                        setTimeout(() => {
+                            if (typeof window.showSetPasswordModal === 'function') {
+                                const fullName = user.user_metadata?.full_name || user.user_metadata?.name || '';
+                                window.showSetPasswordModal(user.email, fullName);
+                            }
+                        }, 500);
+                    } else {
+                        console.log('👤 Utilisateur avec mot de passe:', user.email);
+                        if (typeof showToast === 'function') {
+                            showToast('✅ Connexion réussie', 2000);
+                        }
+                        // Synchronisation des données
+                        if (window.SupabaseSyncEngine && typeof window.SupabaseSyncEngine.pullAll === 'function') {
+                            await window.SupabaseSyncEngine.pullAll();
+                            loadData();
+                        }
                     }
                 } else {
                     console.warn('⚠️ Échec via AuthService, tentative fallback...');
-                    // Fallback: utilisation directe du client
                     if (window.supabaseInstance) {
                         const { data, error } = await window.supabaseInstance.auth.setSession({
                             access_token: accessToken,
@@ -60,9 +80,24 @@ window.onload = async () => {
             const user = await window.AuthService.getCurrentUser();
             if (user) {
                 console.log('👤 Utilisateur connecté:', user.email || user.phone || user.id);
-                if (window.SupabaseSyncEngine && typeof window.SupabaseSyncEngine.pullAll === 'function') {
-                    await window.SupabaseSyncEngine.pullAll();
-                    loadData();
+                
+                // Vérifier si l'utilisateur OAuth a besoin de définir un mot de passe
+                const hasPassword = user.user_metadata?.has_password === true;
+                const isOAuthUser = user.app_metadata?.provider === 'google' || user.app_metadata?.provider === 'facebook';
+                
+                if (isOAuthUser && !hasPassword) {
+                    console.log('🔄 Utilisateur OAuth sans mot de passe, affichage du formulaire');
+                    setTimeout(() => {
+                        if (typeof window.showSetPasswordModal === 'function') {
+                            const fullName = user.user_metadata?.full_name || user.user_metadata?.name || '';
+                            window.showSetPasswordModal(user.email, fullName);
+                        }
+                    }, 500);
+                } else {
+                    if (window.SupabaseSyncEngine && typeof window.SupabaseSyncEngine.pullAll === 'function') {
+                        await window.SupabaseSyncEngine.pullAll();
+                        loadData();
+                    }
                 }
             } else {
                 console.log('👤 Aucun utilisateur connecté, mode local.');
