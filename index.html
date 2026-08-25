@@ -31,17 +31,14 @@
 
     <!-- ===== Service Worker Registration ===== -->
     <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('/pointage-web/sw.js')
-                    .then(function(reg) {
-                        console.log('✅ Service Worker registered successfully');
-                    })
-                    .catch(function(err) {
-                        console.warn('⚠️ Service Worker registration failed:', err);
-                    });
-            });
-        }
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    // تسجيل sw.js باستخدام مسار نسبي يتطابق مع مجلد GitHub Pages
+    navigator.serviceWorker.register('./sw.js', { scope: './' })
+      .then(reg => console.log('✅ Service Worker registered with scope:', reg.scope))
+      .catch(err => console.warn('⚠️ Service Worker registration failed:', err));
+  });
+}
     </script>
 </head>
 <body>
