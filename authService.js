@@ -49,6 +49,11 @@
     }
 
     const AuthService = {
+        // ===== كشف العميل للعموم لمنع التكرار =====
+        getClient() {
+            return getClient();
+        },
+
         async setSessionToken(accessToken) {
             const client = getClient();
             if (!client || !accessToken) return null;
@@ -129,7 +134,7 @@
             if (client) await client.auth.signOut();
             currentUser = null;
             
-            // Nettoyage complet des données locales
+            // تنظيف التخزين المحلي فور خروج الحساب
             localStorage.removeItem('supabase_user_session');
             localStorage.removeItem('pointageWorkData');
             localStorage.removeItem('pointageNotesData');
@@ -187,7 +192,6 @@
                 }
             } catch (e) { /* ignore */ }
 
-            // Téléchargement immédiat des données du compte connecté
             if (window.SupabaseSyncEngine && typeof window.SupabaseSyncEngine.pullAll === 'function') {
                 await window.SupabaseSyncEngine.pullAll();
             }
