@@ -3,6 +3,9 @@
     let supabaseClient = null;
     let currentUser = null;
 
+    // ===== عنوان التطبيق =====
+    const APP_URL = 'https://chermitianis.github.io/pointage-web/';
+
     function getClient() {
         if (window.supabaseInstance) {
             supabaseClient = window.supabaseInstance;
@@ -128,13 +131,18 @@
         async signInWithGoogle() {
             const client = getClient();
             if (!client) throw new Error(getMessage('connectionError'));
+            console.log('🔄 Redirecting to Google with redirectTo:', APP_URL);
             const { data, error } = await client.auth.signInWithOAuth({
                 provider: 'google',
                 options: {
-                    redirectTo: window.location.origin
+                    redirectTo: APP_URL
                 }
             });
-            if (error) throw error;
+            if (error) {
+                console.error('❌ Google OAuth error:', error);
+                throw error;
+            }
+            console.log('✅ Google OAuth initiated:', data);
             return data;
         },
 
@@ -170,7 +178,6 @@
             if (client) await client.auth.signOut();
             currentUser = null;
 
-            // مسح جميع بيانات التطبيق من localStorage
             const keys = [
                 'pointageWorkData',
                 'pointageSettings',
@@ -182,7 +189,6 @@
             ];
             keys.forEach(key => localStorage.removeItem(key));
 
-            // إعادة تعيين المتغيرات العامة
             window.workData = {};
             window.notesData = {};
             window.tasksData = {};
@@ -236,7 +242,6 @@
                 }
             } catch (e) { /* ignore */ }
 
-            // سحب جميع البيانات من السحابة
             if (window.SupabaseSyncEngine && typeof window.SupabaseSyncEngine.pullAll === 'function') {
                 await window.SupabaseSyncEngine.pullAll();
             }
@@ -291,7 +296,7 @@
             const client = getClient();
             if (!client) throw new Error(getMessage('connectionError'));
             const { data, error } = await client.auth.resetPasswordForEmail(email, {
-                redirectTo: window.APP_CONFIG?.resetPasswordUrl || window.location.origin
+                redirectTo: APP_URL
             });
             if (error) throw error;
             return data;
@@ -318,7 +323,10 @@
     };
     window.signInWithGoogle = async function() {
         try { const data = await AuthService.signInWithGoogle(); return { data, error: null }; }
-        catch (error) { return { data: null, error: error }; }
+        catch (error) { 
+            console.error('❌ signInWithGoogle error:', error);
+            return { data: null, error: error }; 
+        }
     };
     window.signInWithPhone = async function(phone) {
         try { const data = await AuthService.signInWithPhone(phone); return { data, error: null }; }
@@ -365,5 +373,5 @@
         } catch (e) { /* ignore */ }
     });
 
-    console.log('authService.js loaded successfully');
+    console.log('authService.js loaded successfully with APP_URL:', APP_URL);
 })();
