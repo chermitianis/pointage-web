@@ -3,7 +3,7 @@
     let supabaseClient = null;
     let currentUser = null;
 
-    // ===== عنوان التطبيق =====
+    // ===== عنوان التطبيق (عدّل هذا الرابط حسب رابطك الفعلي) =====
     const APP_URL = 'https://chermitianis.github.io/pointage-web/';
 
     function getClient() {
@@ -322,8 +322,10 @@
         catch (error) { return { user: null, error: error }; }
     };
     window.signInWithGoogle = async function() {
-        try { const data = await AuthService.signInWithGoogle(); return { data, error: null }; }
-        catch (error) { 
+        try { 
+            const data = await AuthService.signInWithGoogle(); 
+            return { data, error: null }; 
+        } catch (error) { 
             console.error('❌ signInWithGoogle error:', error);
             return { data: null, error: error }; 
         }
