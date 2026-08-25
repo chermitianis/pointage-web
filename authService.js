@@ -4,6 +4,13 @@
     let currentUser = null;
 
     function getClient() {
+        // 1. استخدام الكائن الموحد إذا كان معرفاً مسبقاً على مستوى التطبيق
+        if (window.supabaseInstance) {
+            supabaseClient = window.supabaseInstance;
+            return supabaseClient;
+        }
+
+        // 2. إنشاء العميل لأول مرة وتخزينه في window.supabaseInstance
         if (!supabaseClient && window.APP_CONFIG && window.APP_CONFIG.supabaseUrl) {
             try {
                 const { createClient } = window.supabase;
@@ -11,6 +18,7 @@
                     window.APP_CONFIG.supabaseUrl,
                     window.APP_CONFIG.supabaseAnonKey
                 );
+                window.supabaseInstance = supabaseClient; // Global Singleton
                 console.log('✅ Supabase client initialized');
             } catch (e) {
                 console.error('❌ Failed to initialize Supabase client:', e);
@@ -49,7 +57,7 @@
     }
 
     const AuthService = {
-        // ===== كشف العميل للعموم لمنع التكرار =====
+        // إتاحة الوصول إلى الكائن الموحد
         getClient() {
             return getClient();
         },
@@ -134,7 +142,7 @@
             if (client) await client.auth.signOut();
             currentUser = null;
             
-            // تنظيف التخزين المحلي فور خروج الحساب
+            // تنظيف البيانات المحلية
             localStorage.removeItem('supabase_user_session');
             localStorage.removeItem('pointageWorkData');
             localStorage.removeItem('pointageNotesData');
