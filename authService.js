@@ -3,7 +3,7 @@
     let supabaseClient = null;
     let currentUser = null;
 
-    // ===== عنوان التطبيق (عدّل هذا الرابط حسب رابطك الفعلي) =====
+    // ===== عنوان التطبيق (عدّل حسب رابطك الفعلي) =====
     const APP_URL = 'https://chermitianis.github.io/pointage-web/';
 
     function getClient() {
@@ -135,7 +135,11 @@
             const { data, error } = await client.auth.signInWithOAuth({
                 provider: 'google',
                 options: {
-                    redirectTo: APP_URL
+                    redirectTo: APP_URL,
+                    queryParams: {
+                        access_type: 'offline',
+                        prompt: 'consent'
+                    }
                 }
             });
             if (error) {
@@ -143,6 +147,25 @@
                 throw error;
             }
             console.log('✅ Google OAuth initiated:', data);
+            return data;
+        },
+
+        // ===== تسجيل الدخول عبر Facebook =====
+        async signInWithFacebook() {
+            const client = getClient();
+            if (!client) throw new Error(getMessage('connectionError'));
+            console.log('🔄 Redirecting to Facebook with redirectTo:', APP_URL);
+            const { data, error } = await client.auth.signInWithOAuth({
+                provider: 'facebook',
+                options: {
+                    redirectTo: APP_URL
+                }
+            });
+            if (error) {
+                console.error('❌ Facebook OAuth error:', error);
+                throw error;
+            }
+            console.log('✅ Facebook OAuth initiated:', data);
             return data;
         },
 
@@ -178,6 +201,7 @@
             if (client) await client.auth.signOut();
             currentUser = null;
 
+            // مسح جميع بيانات التطبيق من localStorage
             const keys = [
                 'pointageWorkData',
                 'pointageSettings',
@@ -189,6 +213,7 @@
             ];
             keys.forEach(key => localStorage.removeItem(key));
 
+            // إعادة تعيين المتغيرات العامة
             window.workData = {};
             window.notesData = {};
             window.tasksData = {};
@@ -242,6 +267,7 @@
                 }
             } catch (e) { /* ignore */ }
 
+            // سحب جميع البيانات من السحابة
             if (window.SupabaseSyncEngine && typeof window.SupabaseSyncEngine.pullAll === 'function') {
                 await window.SupabaseSyncEngine.pullAll();
             }
@@ -327,6 +353,15 @@
             return { data, error: null }; 
         } catch (error) { 
             console.error('❌ signInWithGoogle error:', error);
+            return { data: null, error: error }; 
+        }
+    };
+    window.signInWithFacebook = async function() {
+        try { 
+            const data = await AuthService.signInWithFacebook(); 
+            return { data, error: null }; 
+        } catch (error) { 
+            console.error('❌ signInWithFacebook error:', error);
             return { data: null, error: error }; 
         }
     };
