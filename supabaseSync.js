@@ -3,7 +3,7 @@
 let supabaseClient = null;
 
 function initSupabaseClient() {
-    // 1. استخدام العميل المعرف سابقاً في authService
+    // 1. إعادة استخدام عميل authService لمنع إنشاء كائنات متعددة
     if (window.AuthService && typeof window.AuthService.getClient === 'function') {
         const existingClient = window.AuthService.getClient();
         if (existingClient) {
@@ -11,11 +11,9 @@ function initSupabaseClient() {
             return supabaseClient;
         }
     }
-    
-    // 2. تجنب إعادة التعرّف إذا كان الكائن موجوداً بالفعل
+
     if (supabaseClient) return supabaseClient;
-    
-    // 3. إنشاء عميل جديد فقط في حالة عدم وجود عميل في authService
+
     if (window.supabase && window.APP_CONFIG && window.APP_CONFIG.supabaseUrl) {
         supabaseClient = window.supabase.createClient(
             window.APP_CONFIG.supabaseUrl,
