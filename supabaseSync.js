@@ -3,21 +3,33 @@
 let supabaseClient = null;
 
 function initSupabaseClient() {
-    // 1. استخدام العميل المعرف بالفعل في AuthService لتجنب التكرار
+    // 1. التحقق أولاً من الكائن الموحد على مستوى التطبيق (Global Singleton)
+    if (window.supabaseInstance) {
+        supabaseClient = window.supabaseInstance;
+        return supabaseClient;
+    }
+
+    // 2. محاولة جلب العميل من AuthService
     if (window.AuthService && typeof window.AuthService.getClient === 'function') {
-        const existingClient = window.AuthService.getClient();
-        if (existingClient) {
-            supabaseClient = existingClient;
+        const client = window.AuthService.getClient();
+        if (client) {
+            supabaseClient = client;
+            window.supabaseInstance = client; // تعيينه عالمياً للـ Single Instance
             return supabaseClient;
         }
     }
+
+    // 3. كحل أخير (Fallback) في حال لم يتم تهيئة AuthService بعد
+    if (!supabaseClient && window.supabase && window.APP_CONFIG && window.APP_CONFIG.supabaseUrl) {
+        supabaseClient = window.supabase.createClient(
+            window.APP_CONFIG.supabaseUrl,
+            window.APP_CONFIG.supabaseAnonKey
+        );
+        window.supabaseInstance = supabaseClient;
+        console.log('✅ Client Supabase initialisé avec succès.');
+    }
     
-    // 2. إرجاع العميل المحلي إذا كان معرّفاً سابقاً
-    if (supabaseClient) return supabaseClient;
-    
-    // 3. في حالة استدعائه قبل جاهزية AuthService، نحاول جلب العميل مباشرة
-    console.warn('⚠️ AuthService client not ready yet for SupabaseSyncEngine.');
-    return null;
+    return supabaseClient;
 }
 
 async function getCurrentUser() {
