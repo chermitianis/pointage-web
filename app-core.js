@@ -7,7 +7,60 @@
 window.onload = async () => {
     loadData();
 
-    // التحقق من وجود مستخدم مسجل الدخول وسحب البيانات من السحابة
+    // ===== معالجة العودة من OAuth (Google) =====
+    try {
+        // التحقق من وجود معلمات إعادة التوجيه في الـ hash
+        const hashParams = new URLSearchParams(window.location.hash.substring(1));
+        const accessToken = hashParams.get('access_token');
+        const refreshToken = hashParams.get('refresh_token');
+        const expiresAt = hashParams.get('expires_at');
+
+        if (accessToken) {
+            console.log('🔄 Détection du token OAuth, tentative de connexion...');
+            if (window.AuthService && typeof window.AuthService.setSessionToken === 'function') {
+                // استخدم setSessionToken لتسجيل الدخول بالتوكن
+                const user = await window.AuthService.setSessionToken(accessToken);
+                if (user) {
+                    console.log('✅ Authentification Google réussie pour:', user.email);
+                    // نزيل الـ hash من الرابط لتنظيفه
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                    
+                    // نعرض رسالة نجاح
+                    if (typeof showToast === 'function') {
+                        showToast('✅ Connexion avec Google réussie', 2000);
+                    }
+                } else {
+                    console.warn('⚠️ Échec de l\'authentification avec le token');
+                }
+            } else {
+                // Fallback: utiliser directement le client Supabase
+                if (window.supabaseInstance) {
+                    const { data, error } = await window.supabaseInstance.auth.setSession({
+                        access_token: accessToken,
+                        refresh_token: refreshToken || ''
+                    });
+                    if (!error && data?.user) {
+                        console.log('✅ Authentification Google réussie (fallback):', data.user.email);
+                        window.history.replaceState({}, document.title, window.location.pathname);
+                        // تحديث حالة المستخدم
+                        if (window.AuthService && typeof window.AuthService.onAuthSuccess === 'function') {
+                            await window.AuthService.onAuthSuccess(data.user);
+                        }
+                        if (typeof showToast === 'function') {
+                            showToast('✅ Connexion avec Google réussie', 2000);
+                        }
+                    }
+                }
+            }
+        }
+    } catch (err) {
+        console.warn('⚠️ Erreur lors du traitement du callback OAuth:', err);
+        if (typeof showToast === 'function') {
+            showToast('❌ Erreur lors de la connexion Google', 3000);
+        }
+    }
+
+    // ===== Vérification de l'utilisateur connecté =====
     try {
         if (window.AuthService && typeof window.AuthService.getCurrentUser === 'function') {
             const user = await window.AuthService.getCurrentUser();
