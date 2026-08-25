@@ -1,18 +1,17 @@
 /**
- * AuthUI.js - إدارة واجهة التوثيق لبرنامج Pointage
- * مع دعم الفرنسية كلغة افتراضية، وإضافة Facebook، OTP، واسترجاع كلمة المرور
+ * AuthUI.js - إدارة واجهة التوثيق مع دعم Google
  */
 
 (function () {
     let isSignUpMode = false;
-    let isPhoneMode = false; // للتبديل بين البريد الإلكتروني والهاتف
+    let isPhoneMode = false;
 
     // دالة مساعدة للحصول على اللغة الحالية
     function getLanguage() {
         return (window.settings && window.settings.language) || 'fr';
     }
 
-    // نصوص مترجمة (داخلية حتى لا نعتمد على translations.js)
+    // نصوص مترجمة (داخلية)
     const strings = {
         fr: {
             signIn: 'Se connecter',
@@ -34,6 +33,7 @@
             resetInstruction: 'Entrez votre email pour recevoir un lien de réinitialisation',
             sendReset: 'Envoyer',
             facebookLogin: 'Continuer avec Facebook',
+            googleLogin: 'Continuer avec Google',
             phoneLogin: 'Connexion par téléphone',
             enterPhone: 'Entrez votre numéro de téléphone',
             sendCode: 'Envoyer le code',
@@ -68,6 +68,7 @@
             resetInstruction: 'أدخل بريدك الإلكتروني لتلقي رابط إعادة التعيين',
             sendReset: 'إرسال',
             facebookLogin: 'المتابعة عبر Facebook',
+            googleLogin: 'المتابعة عبر Google',
             phoneLogin: 'الدخول عبر رقم الهاتف',
             enterPhone: 'أدخل رقم هاتفك',
             sendCode: 'إرسال الرمز',
@@ -100,7 +101,6 @@
                 modal.style.display = 'flex';
                 this.updateUITexts();
                 this.clearErrors();
-                // إعادة تعيين وضع البريد/الهاتف
                 isPhoneMode = false;
                 this.updatePhoneModeUI();
             } else {
@@ -116,7 +116,6 @@
             this.clearErrors();
         },
 
-        // تحديث كل النصوص بناءً على اللغة الحالية
         updateUITexts: function () {
             const title = document.getElementById('authTitle');
             const subtitle = document.getElementById('authSubtitle');
@@ -124,9 +123,8 @@
             const toggleText = document.getElementById('authToggleText');
             const toggleLink = document.getElementById('authToggleLink');
             const forgotLink = document.getElementById('authForgotLink');
-            const emailLabel = document.querySelector('label[for="authEmail"]');
-            const passLabel = document.querySelector('label[for="authPassword"]');
             const guestLink = document.getElementById('authGuestLink');
+            const googleBtn = document.getElementById('authGoogleBtn');
 
             if (isSignUpMode) {
                 if (title) title.innerText = t('signUp');
@@ -142,19 +140,10 @@
                 if (toggleLink) toggleLink.innerText = t('signupLink');
             }
             if (forgotLink) forgotLink.innerText = t('forgotPassword');
-            if (emailLabel) emailLabel.innerText = t('email');
-            if (passLabel) passLabel.innerText = t('password');
             if (guestLink) guestLink.innerText = t('continueAsGuest');
-
-            // تحديث زر Facebook
-            const fbBtn = document.getElementById('authFacebookBtn');
-            if (fbBtn) fbBtn.innerText = t('facebookLogin');
-            // تحديث زر الهاتف
-            const phoneBtn = document.getElementById('authPhoneToggleBtn');
-            if (phoneBtn) phoneBtn.innerText = t('phoneLogin');
+            if (googleBtn) googleBtn.innerHTML = '🟢 ' + t('googleLogin');
         },
 
-        // تبديل بين البريد الإلكتروني والهاتف
         togglePhoneMode: function () {
             isPhoneMode = !isPhoneMode;
             this.updatePhoneModeUI();
@@ -201,82 +190,38 @@
             }
         },
 
-        // تبديل وضع تسجيل الدخول / إنشاء حساب
         toggleMode: function () {
             isSignUpMode = !isSignUpMode;
             this.updateUITexts();
             this.clearErrors();
-            // إذا كان وضع الهاتف مفعلاً، نعيده إلى البريد
             if (isPhoneMode) {
                 isPhoneMode = false;
                 this.updatePhoneModeUI();
             }
         },
 
-        // معالج تسجيل الدخول / إنشاء الحساب
+        // ===== تسجيل الدخول عبر Google =====
+        handleGoogleLogin: async function () {
+            try {
+                const result = await window.signInWithGoogle();
+                if (result.error) throw result.error;
+                // سيتم إعادة التوجيه إلى Google، لا نغلق النافذة هنا
+                // يمكننا عرض رسالة انتظار
+                this.showError('⏳ Redirection vers Google...');
+            } catch (err) {
+                this.showError(err.message || t('errorGeneric'));
+            }
+        },
+
+        // ===== معالج البريد الإلكتروني =====
         handleSubmit: async function () {
             const emailInput = document.getElementById('authEmail');
             const passInput = document.getElementById('authPassword');
-            const phoneInput = document.getElementById('authPhone');
-            const otpInput = document.getElementById('authOtp');
             const loading = document.getElementById('authLoading');
             const btn = document.getElementById('authPrimaryBtn');
 
             this.clearErrors();
 
-            // إذا كان وضع الهاتف
-            if (isPhoneMode) {
-                const phone = phoneInput ? phoneInput.value.trim() : '';
-                if (!phone) {
-                    this.showError(t('errorPhoneRequired'));
-                    return;
-                }
-                // إذا كان هناك رمز OTP تم إدخاله، نتحقق منه
-                const otp = otpInput ? otpInput.value.trim() : '';
-                if (otp) {
-                    // تحقق من الرمز
-                    if (loading) loading.style.display = 'block';
-                    if (btn) btn.disabled = true;
-                    try {
-                        const result = await window.verifyPhoneOtp(phone, otp);
-                        if (result.error) throw result.error;
-                        this.closeModal();
-                        await this.updateAuthStatusUI();
-                    } catch (err) {
-                        this.showError(err.message || t('errorGeneric'));
-                    } finally {
-                        if (loading) loading.style.display = 'none';
-                        if (btn) btn.disabled = false;
-                    }
-                    return;
-                } else {
-                    // إرسال رمز OTP
-                    if (loading) loading.style.display = 'block';
-                    if (btn) btn.disabled = true;
-                    try {
-                        const result = await window.signInWithPhone(phone);
-                        if (result.error) throw result.error;
-                        // عرض حقل OTP
-                        const otpGroup = document.getElementById('authOtpGroup');
-                        if (otpGroup) otpGroup.style.display = 'block';
-                        const phoneToggleBtn = document.getElementById('authPhoneToggleBtn');
-                        if (phoneToggleBtn) phoneToggleBtn.style.display = 'none';
-                        // تحديث زر الإجراء ليصبح "تحقق"
-                        if (btn) btn.innerText = t('verifyCode');
-                        // حفظ رقم الهاتف في متغير
-                        window._authPhone = phone;
-                        this.showError(''); // مسح الأخطاء
-                    } catch (err) {
-                        this.showError(err.message || t('errorGeneric'));
-                    } finally {
-                        if (loading) loading.style.display = 'none';
-                        if (btn) btn.disabled = false;
-                    }
-                    return;
-                }
-            }
-
-            // وضع البريد الإلكتروني
             const email = emailInput ? emailInput.value.trim() : '';
             const password = passInput ? passInput.value : '';
             if (!email) {
@@ -309,16 +254,13 @@
             }
         },
 
-        // معالج استرجاع كلمة المرور
         handleForgotPassword: function () {
             const email = prompt(t('resetInstruction'));
             if (!email) return;
-            // التحقق من صحة البريد
             if (!email.includes('@')) {
                 alert(t('errorEmailRequired'));
                 return;
             }
-            // استدعاء resetPassword
             window.resetUserPassword(email)
                 .then(result => {
                     if (result.error) {
@@ -330,7 +272,6 @@
                 .catch(err => alert(err.message));
         },
 
-        // تسجيل الخروج
         handleSignOut: async function () {
             try {
                 if (window.AuthService && typeof window.AuthService.signOut === 'function') {
@@ -344,7 +285,6 @@
             }
         },
 
-        // تحديث واجهة حالة المستخدم
         updateAuthStatusUI: async function () {
             const statusDiv = document.getElementById('authStatus');
             const loginBtn = document.querySelector('button[onclick="openAuthModal()"]');
@@ -373,14 +313,14 @@
         }
     };
 
-    // ===== تصدير الدوال إلى النطاق العام =====
+    // ===== تصدير الدوال العالمية =====
     window.openAuthModal = function () { AuthUI.openModal(); };
     window.closeAuthModal = function () { AuthUI.closeModal(); };
     window.toggleAuthMode = function () { AuthUI.toggleMode(); };
     window.handleAuthSubmit = function () { AuthUI.handleSubmit(); };
     window.handleForgotPassword = function () { AuthUI.handleForgotPassword(); };
     window.signOutUser = function () { AuthUI.handleSignOut(); };
-    window.togglePhoneMode = function () { AuthUI.togglePhoneMode(); };
+    window.handleGoogleLogin = function () { AuthUI.handleGoogleLogin(); };
 
     window.AuthUI = AuthUI;
 
