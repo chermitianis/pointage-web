@@ -1,12 +1,11 @@
-// ===== otaUpdate.js - نظام تحديث محتوى التطبيق (OTA) عبر Supabase =====
+// ===== otaUpdate.js - نظام تحديث التطبيق الكامل (APK) عبر Supabase =====
 
 const OTA_SKIPPED_VERSION_KEY = 'pointageSkippedContentVersion';
 const OTA_LAST_CHECK_KEY = 'pointageLastUpdateCheck';
 const OTA_DISPLAY_VERSION_KEY = 'otaDisplayVersion';
-const OTA_CHECK_INTERVAL_MS = 5 * 60 * 1000; // 5 دقائق فقط لتجنب الإزعاج المفرط
+const OTA_CHECK_INTERVAL_MS = 5 * 60 * 1000; // 5 دقائق بين الفحوصات
 
 async function checkForContentUpdate() {
-    if (!window.AndroidApp || typeof AndroidApp.downloadContentUpdate !== 'function') return;
     if (!window.APP_CONFIG || typeof isSupabaseConfigured !== 'function' || !isSupabaseConfigured()) return;
 
     const lastCheck = parseInt(localStorage.getItem(OTA_LAST_CHECK_KEY) || '0', 10);
@@ -37,7 +36,7 @@ async function checkForContentUpdate() {
 }
 
 function showOtaUpdateModal(manifest) {
-    const isAr = settings.language === 'ar';
+    const isAr = typeof settings !== 'undefined' && settings.language === 'ar';
     const existing = document.getElementById('otaUpdateModal');
     if (existing) existing.remove();
 
@@ -53,7 +52,7 @@ function showOtaUpdateModal(manifest) {
             </p>
             <div style="display: flex; flex-direction: column; gap: 8px;">
                 <button id="otaDownloadBtn" class="modal-btn" style="margin:0; background: linear-gradient(135deg, #4CAF50, #388E3C);">
-                    ${isAr ? '⬇️ تحميل الآن' : '⬇️ Télécharger'}
+                    ${isAr ? '⬇️ تحميل وتثبيت (APK)' : '⬇️ Télécharger & Installer'}
                 </button>
                 <button id="otaLaterBtn" class="modal-btn" style="margin:0; background: #9E9E9E;">
                     ${isAr ? 'ذكرني لاحقاً' : 'Plus tard'}
@@ -70,11 +69,9 @@ function showOtaUpdateModal(manifest) {
     document.getElementById('otaDownloadBtn').onclick = () => startOtaDownload(manifest);
     document.getElementById('otaLaterBtn').onclick = () => {
         closeOtaUpdateModal();
-        // ✅ حذف وقت آخر فحص ليتم التحقق مجدداً في المرة القادمة فوراً
         localStorage.removeItem(OTA_LAST_CHECK_KEY);
     };
     document.getElementById('otaSkipBtn').onclick = () => {
-        // ✅ حفظ الإصدار المتجاهل (لن يظهر مرة أخرى حتى مسح التخزين)
         localStorage.setItem(OTA_SKIPPED_VERSION_KEY, String(manifest.contentVersion));
         closeOtaUpdateModal();
     };
@@ -87,18 +84,23 @@ function closeOtaUpdateModal() {
 }
 
 function startOtaDownload(manifest) {
-    const isAr = settings.language === 'ar';
+    const isAr = typeof settings !== 'undefined' && settings.language === 'ar';
     const btn = document.getElementById('otaDownloadBtn');
     if (btn) {
-        btn.textContent = isAr ? '⏳ جاري التحميل...' : '⏳ Téléchargement...';
+        btn.textContent = isAr ? '⏳ جاري بدء التحميل...' : '⏳ Téléchargement...';
         btn.disabled = true;
         btn.style.opacity = '0.7';
     }
-    window.AndroidApp.downloadContentUpdate(
-        manifest.bundleUrl,
-        String(manifest.contentVersion),
-        manifest.checksum || ''
-    );
+
+    // توجيه المتصفح/النظام لتحميل تثبيت الـ APK مباشرة
+    setTimeout(() => {
+        if (window.Capacitor?.isNativePlatform()) {
+            window.open(manifest.bundleUrl, '_system');
+        } else {
+            window.location.href = manifest.bundleUrl;
+        }
+        closeOtaUpdateModal();
+    }, 1000);
 }
 
 function getDisplayVersion() {
@@ -106,16 +108,7 @@ function getDisplayVersion() {
     return otaVersion || window.APP_CONFIG?.versionName || '1.0.0';
 }
 
-window.onContentUpdateError = function (message) {
-    const isAr = settings.language === 'ar';
-    closeOtaUpdateModal();
-    showToast(
-        isAr ? '⚠️ تعذر تنزيل التحديث: ' + message : '⚠️ Échec de la mise à jour: ' + message,
-        4000
-    );
-};
-
 window.checkForContentUpdate = checkForContentUpdate;
 window.getDisplayVersion = getDisplayVersion;
 
-console.log('otaUpdate.js loaded successfully');
+console.log('otaUpdate.js (APK Version) loaded successfully');
