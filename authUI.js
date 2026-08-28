@@ -1,12 +1,10 @@
 /**
  * AuthUI.js - إدارة واجهة التوثيق مع دعم Google, Facebook, Téléphone (Firebase OTP)
- * Version avec écran de connexion simplifié et options d'inscription avancées
- * + Formulaire de définition de mot de passe pour les utilisateurs OAuth
- * + Firebase Phone Authentication (OTP)
  */
 
 (function () {
-    // ===== الحالة =====
+    'use strict';
+
     let isSignUpMode = false;
     let isPhoneSignUp = false;
     let currentPhoneNumber = '';
@@ -169,40 +167,34 @@
         renderLoginForm() {
             const container = document.getElementById('authContent');
             if (!container) return;
-
             const isAr = getLanguage() === 'ar';
             const dir = isAr ? 'rtl' : 'ltr';
 
             container.innerHTML = `
                 <div style="text-align:center; direction:${dir};">
                     <div style="font-size:48px; margin-bottom:8px;">🔐</div>
-                    <h3 id="authTitle" style="margin-bottom:6px; color:var(--text-color, #333); font-size:20px; font-weight:700;">${t('signInTitle')}</h3>
-                    <p id="authSubtitle" style="margin-bottom:20px; color:var(--gray, #888); font-size:13px;">${t('signInSub')}</p>
+                    <h3 style="margin-bottom:6px; color:var(--text-color, #333); font-size:20px; font-weight:700;">${t('signInTitle')}</h3>
+                    <p style="margin-bottom:20px; color:var(--gray, #888); font-size:13px;">${t('signInSub')}</p>
 
                     <div style="margin-bottom:12px;">
                         <label for="authEmail" style="display:block; text-align:left; font-size:13px; color:var(--gray); margin-bottom:4px;">${t('emailOrPhone')}</label>
                         <input type="text" id="authEmail" placeholder="exemple@domaine.com"
-                               style="width:100%; padding:12px 14px; border:2px solid var(--border-color, #e0e0e0); border-radius:10px; box-sizing:border-box; font-size:15px; background:var(--input-bg, #f8f9fa); color:var(--text-color, #333); transition:border-color 0.2s;"
-                               onfocus="this.style.borderColor='#2563eb'" onblur="this.style.borderColor='var(--border-color, #e0e0e0)'">
+                               style="width:100%; padding:12px 14px; border:2px solid var(--border-color, #e0e0e0); border-radius:10px; box-sizing:border-box; font-size:15px; background:var(--input-bg, #f8f9fa); color:var(--text-color, #333);">
                     </div>
 
                     <div style="margin-bottom:12px;">
                         <label for="authPassword" style="display:block; text-align:left; font-size:13px; color:var(--gray); margin-bottom:4px;">${t('password')}</label>
                         <input type="password" id="authPassword" placeholder="••••••"
-                               style="width:100%; padding:12px 14px; border:2px solid var(--border-color, #e0e0e0); border-radius:10px; box-sizing:border-box; font-size:15px; background:var(--input-bg, #f8f9fa); color:var(--text-color, #333); transition:border-color 0.2s;"
-                               onfocus="this.style.borderColor='#2563eb'" onblur="this.style.borderColor='var(--border-color, #e0e0e0)'"
-                               onkeydown="if(event.key==='Enter') window.AuthUI.handleLogin()">
+                               style="width:100%; padding:12px 14px; border:2px solid var(--border-color, #e0e0e0); border-radius:10px; box-sizing:border-box; font-size:15px; background:var(--input-bg, #f8f9fa); color:var(--text-color, #333);"
+                               onkeydown="if(event.key==='Enter') handleAuthSubmit()">
                     </div>
 
-                    <button id="authPrimaryBtn" onclick="window.AuthUI.handleLogin()"
-                            style="width:100%; padding:12px; background:linear-gradient(135deg, #2563eb, #1d4ed8); color:#fff; border:none; border-radius:10px; font-weight:700; font-size:16px; cursor:pointer; transition:transform 0.15s, box-shadow 0.2s; box-shadow:0 4px 14px rgba(37,99,235,0.35); margin-bottom:8px;">
+                    <button id="authPrimaryBtn" onclick="handleAuthSubmit()"
+                            style="width:100%; padding:12px; background:linear-gradient(135deg, #2563eb, #1d4ed8); color:#fff; border:none; border-radius:10px; font-weight:700; font-size:16px; cursor:pointer; margin-bottom:8px;">
                         ${t('signInBtn')}
                     </button>
 
-                    <!-- Google Button -->
-                    <button onclick="window.AuthUI.handleGoogleLogin()" style="width:100%; padding:10px; margin-bottom:10px; background:#fff; color:#333; border:1px solid #ddd; border-radius:8px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; transition:background 0.2s, box-shadow 0.2s;"
-                            onmouseover="this.style.background='#f1f1f1'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'"
-                            onmouseout="this.style.background='#fff'; this.style.boxShadow='none'">
+                    <button onclick="handleGoogleLogin()" style="width:100%; padding:10px; margin-bottom:10px; background:#fff; color:#333; border:1px solid #ddd; border-radius:8px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px;">
                         <svg width="20" height="20" viewBox="0 0 48 48">
                             <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
                             <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
@@ -213,24 +205,23 @@
                     </button>
 
                     <div style="text-align:right; margin-bottom:12px;">
-                        <a href="#" id="authForgotLink" onclick="window.AuthUI.handleForgotPassword(); return false;" style="color:#2563eb; text-decoration:none; font-size:13px;">${t('forgotPassword')}</a>
+                        <a href="#" id="authForgotLink" onclick="handleForgotPassword(); return false;" style="color:#2563eb; text-decoration:none; font-size:13px;">${t('forgotPassword')}</a>
                     </div>
 
                     <div style="margin-top:12px; font-size:14px; color:var(--gray, #666);">
                         <span id="authToggleText">${t('noAccount')}</span>
-                        <a href="#" onclick="window.AuthUI.toggleAuthMode(); return false;" id="authToggleLink" style="color:#2563eb; text-decoration:none; font-weight:600; margin-left:4px;">${t('createAccount')}</a>
+                        <a href="#" onclick="toggleAuthMode(); return false;" id="authToggleLink" style="color:#2563eb; text-decoration:none; font-weight:600; margin-left:4px;">${t('createAccount')}</a>
                     </div>
 
                     <div style="margin-top:12px; font-size:13px;">
-                        <a href="#" id="authGuestLink" onclick="window.AuthUI.closeModal(); return false;" style="color:var(--gray, #999); text-decoration:none;">☕ ${t('continueAsGuest')}</a>
+                        <a href="#" id="authGuestLink" onclick="closeAuthModal(); return false;" style="color:var(--gray, #999); text-decoration:none;">☕ ${t('continueAsGuest')}</a>
                     </div>
 
                     <div id="authLoading" style="display:none; margin-top:6px; font-size:14px; color:#2563eb;">⏳ ${t('loading')}</div>
                     <div id="authError" style="display:none; margin-top:6px; font-size:13px; color:#dc2626; background:#fee2e2; padding:8px 12px; border-radius:8px;"></div>
 
-                    <button onclick="window.AuthUI.closeModal()"
-                            style="margin-top:14px; background:transparent; border:none; color:var(--gray, #aaa); cursor:pointer; font-size:14px; padding:6px 16px; border-radius:20px; transition:background 0.2s;"
-                            onmouseenter="this.style.background='var(--hover-bg, #f0f0f0)'" onmouseleave="this.style.background='transparent'">
+                    <button onclick="closeAuthModal()"
+                            style="margin-top:14px; background:transparent; border:none; color:var(--gray, #aaa); cursor:pointer; font-size:14px; padding:6px 16px; border-radius:20px;">
                         ✕ ${t('close')}
                     </button>
                 </div>
@@ -240,7 +231,6 @@
         renderSignUpOptions() {
             const container = document.getElementById('authContent');
             if (!container) return;
-
             const isAr = getLanguage() === 'ar';
             const dir = isAr ? 'rtl' : 'ltr';
 
@@ -250,10 +240,7 @@
                     <h3 style="margin-bottom:6px; color:var(--text-color, #333); font-size:20px; font-weight:700;">${t('signUpTitle')}</h3>
                     <p style="margin-bottom:20px; color:var(--gray, #888); font-size:13px;">${t('signUpSub')}</p>
 
-                    <!-- Google -->
-                    <button onclick="window.AuthUI.handleGoogleLogin()" style="width:100%; padding:10px; margin-bottom:10px; background:#fff; color:#333; border:1px solid #ddd; border-radius:8px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; transition:background 0.2s, box-shadow 0.2s;"
-                            onmouseover="this.style.background='#f1f1f1'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'"
-                            onmouseout="this.style.background='#fff'; this.style.boxShadow='none'">
+                    <button onclick="handleGoogleLogin()" style="width:100%; padding:10px; margin-bottom:10px; background:#fff; color:#333; border:1px solid #ddd; border-radius:8px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px;">
                         <svg width="20" height="20" viewBox="0 0 48 48">
                             <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
                             <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
@@ -263,31 +250,26 @@
                         <span>${t('google')}</span>
                     </button>
 
-                    <!-- Facebook -->
-                    <button onclick="window.AuthUI.handleFacebookLogin()" style="width:100%; padding:10px; margin-bottom:10px; background:#1877f2; color:#fff; border:none; border-radius:8px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; transition:background 0.2s;"
-                            onmouseover="this.style.background='#166fe5'" onmouseout="this.style.background='#1877f2'">
+                    <button onclick="handleFacebookLogin()" style="width:100%; padding:10px; margin-bottom:10px; background:#1877f2; color:#fff; border:none; border-radius:8px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px;">
                         <svg width="20" height="20" viewBox="0 0 48 48">
                             <path fill="#fff" d="M24 2.5c-11.9 0-21.5 9.6-21.5 21.5 0 10.7 7.8 19.6 17.9 21.3V30.8h-5.4V24h5.4v-4.7c0-5.3 3.2-8.2 8-8.2 2.3 0 4.7.4 4.7.4v5.1h-2.6c-2.6 0-3.4 1.6-3.4 3.3V24h5.8l-.9 6.8h-4.9V45.3c10.1-1.7 17.9-10.6 17.9-21.3 0-11.9-9.6-21.5-21.5-21.5z"/>
                         </svg>
                         <span>${t('facebook')}</span>
                     </button>
 
-                    <!-- Téléphone -->
-                    <button onclick="window.AuthUI.startPhoneSignUp()" style="width:100%; padding:10px; margin-bottom:10px; background:#34b7f1; color:#fff; border:none; border-radius:8px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; transition:background 0.2s;"
-                            onmouseover="this.style.background='#2aa3d9'" onmouseout="this.style.background='#34b7f1'">
+                    <button onclick="startPhoneSignUp()" style="width:100%; padding:10px; margin-bottom:10px; background:#34b7f1; color:#fff; border:none; border-radius:8px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px;">
                         <span style="font-size:18px;">📱</span>
                         <span>${t('phone')}</span>
                     </button>
 
                     <div style="margin-top:12px; font-size:13px;">
-                        <a href="#" onclick="window.AuthUI.toggleAuthMode(); return false;" style="color:var(--gray, #999); text-decoration:none;">← ${t('backToLogin')}</a>
+                        <a href="#" onclick="toggleAuthMode(); return false;" style="color:var(--gray, #999); text-decoration:none;">← ${t('backToLogin')}</a>
                     </div>
 
                     <div id="authError" style="display:none; margin-top:6px; font-size:13px; color:#dc2626; background:#fee2e2; padding:8px 12px; border-radius:8px;"></div>
 
-                    <button onclick="window.AuthUI.closeModal()"
-                            style="margin-top:14px; background:transparent; border:none; color:var(--gray, #aaa); cursor:pointer; font-size:14px; padding:6px 16px; border-radius:20px; transition:background 0.2s;"
-                            onmouseenter="this.style.background='var(--hover-bg, #f0f0f0)'" onmouseleave="this.style.background='transparent'">
+                    <button onclick="closeAuthModal()"
+                            style="margin-top:14px; background:transparent; border:none; color:var(--gray, #aaa); cursor:pointer; font-size:14px; padding:6px 16px; border-radius:20px;">
                         ✕ ${t('close')}
                     </button>
                 </div>
@@ -297,7 +279,6 @@
         renderPhoneSignUp() {
             const container = document.getElementById('authContent');
             if (!container) return;
-
             const isAr = getLanguage() === 'ar';
             const dir = isAr ? 'rtl' : 'ltr';
 
@@ -308,25 +289,24 @@
 
                     <div style="margin-bottom:12px;">
                         <label for="authPhone" style="display:block; text-align:left; font-size:13px; color:var(--gray); margin-bottom:4px;">${t('emailOrPhone')}</label>
-                        <input type="tel" id="authPhone" placeholder="${t('phonePlaceholder')}" value="${currentPhoneNumber}"
-                               style="width:100%; padding:12px 14px; border:2px solid var(--border-color, #e0e0e0); border-radius:10px; box-sizing:border-box; font-size:15px; background:var(--input-bg, #f8f9fa); color:var(--text-color, #333);"
-                               ${isOtpSent ? 'disabled' : ''}>
+                        <input type="tel" id="authPhone" placeholder="${t('phonePlaceholder')}"
+                               style="width:100%; padding:12px 14px; border:2px solid var(--border-color, #e0e0e0); border-radius:10px; box-sizing:border-box; font-size:15px; background:var(--input-bg, #f8f9fa); color:var(--text-color, #333);">
                     </div>
 
                     <div id="authOtpGroup" style="display:${isOtpSent ? 'block' : 'none'}; margin-bottom:12px;">
                         <label for="authOtp" style="display:block; text-align:left; font-size:13px; color:var(--gray); margin-bottom:4px;">${t('otpPlaceholder')}</label>
                         <input type="text" id="authOtp" placeholder="123456"
                                style="width:100%; padding:12px 14px; border:2px solid var(--border-color, #e0e0e0); border-radius:10px; box-sizing:border-box; font-size:15px; background:var(--input-bg, #f8f9fa); color:var(--text-color, #333);"
-                               onkeydown="if(event.key==='Enter') window.AuthUI.handleVerifyOTP()">
+                               onkeydown="if(event.key==='Enter') handleVerifyOTP()">
                     </div>
 
-                    <button id="send-sms-btn" onclick="${isOtpSent ? 'window.AuthUI.handleVerifyOTP()' : 'window.AuthUI.handleSendSMS()'}"
-                            style="width:100%; padding:12px; background:linear-gradient(135deg, #34b7f1, #1d8fc7); color:#fff; border:none; border-radius:10px; font-weight:700; font-size:16px; cursor:pointer; transition:transform 0.15s; margin-bottom:8px;">
+                    <button id="send-sms-btn" onclick="handleSendSMS()"
+                            style="width:100%; padding:12px; background:linear-gradient(135deg, #34b7f1, #1d8fc7); color:#fff; border:none; border-radius:10px; font-weight:700; font-size:16px; cursor:pointer; margin-bottom:8px;">
                         ${isOtpSent ? t('verifyCode') : t('sendCode')}
                     </button>
 
                     ${isOtpSent ? `
-                        <button id="resend-sms-btn" onclick="window.AuthUI.handleSendSMS()"
+                        <button id="resend-sms-btn" onclick="handleSendSMS()"
                                 style="width:100%; padding:8px; background:transparent; color:var(--gray, #666); border:1px solid var(--border-color, #ddd); border-radius:8px; font-size:13px; cursor:pointer; margin-bottom:8px;">
                             🔄 ${isAr ? 'إعادة إرسال الرمز' : 'Renvoyer le code'}
                         </button>
@@ -336,12 +316,11 @@
                     <div id="authError" style="display:none; margin-top:6px; font-size:13px; color:#dc2626; background:#fee2e2; padding:8px 12px; border-radius:8px;"></div>
 
                     <div style="margin-top:12px; font-size:13px;">
-                        <a href="#" onclick="window.AuthUI.cancelPhoneSignUp(); return false;" style="color:var(--gray, #999); text-decoration:none;">← ${t('backToSignUp')}</a>
+                        <a href="#" onclick="cancelPhoneSignUp(); return false;" style="color:var(--gray, #999); text-decoration:none;">← ${t('backToSignUp')}</a>
                     </div>
 
-                    <button onclick="window.AuthUI.closeModal()"
-                            style="margin-top:14px; background:transparent; border:none; color:var(--gray, #aaa); cursor:pointer; font-size:14px; padding:6px 16px; border-radius:20px; transition:background 0.2s;"
-                            onmouseenter="this.style.background='var(--hover-bg, #f0f0f0)'" onmouseleave="this.style.background='transparent'">
+                    <button onclick="closeAuthModal()"
+                            style="margin-top:14px; background:transparent; border:none; color:var(--gray, #aaa); cursor:pointer; font-size:14px; padding:6px 16px; border-radius:20px;">
                         ✕ ${t('close')}
                     </button>
                 </div>
@@ -350,11 +329,12 @@
 
         showSetPasswordModal: function (email, fullName) {
             const container = document.getElementById('authContent');
-            if (!container) return;
-
+            if (!container) {
+                console.warn('⚠️ authContent not found');
+                return;
+            }
             const modal = this.getModalElement();
             if (modal) modal.style.display = 'flex';
-
             const isAr = getLanguage() === 'ar';
             const dir = isAr ? 'rtl' : 'ltr';
 
@@ -387,11 +367,11 @@
                         <label style="display:block; text-align:left; font-size:13px; color:var(--gray); margin-bottom:4px;">${t('confirmPassword')}</label>
                         <input type="password" id="signupConfirmPassword" placeholder="${t('confirmPassword')}"
                                style="width:100%; padding:12px 14px; border:2px solid var(--border-color, #e0e0e0); border-radius:10px; box-sizing:border-box; font-size:15px; background:var(--input-bg, #f8f9fa); color:var(--text-color, #333);"
-                               onkeydown="if(event.key==='Enter') window.AuthUI.handleFinalizeSignUp()">
+                               onkeydown="if(event.key==='Enter') handleFinalizeSignUp()">
                     </div>
 
-                    <button onclick="window.AuthUI.handleFinalizeSignUp()"
-                            style="width:100%; padding:12px; background:linear-gradient(135deg, #4CAF50, #388E3C); color:#fff; border:none; border-radius:10px; font-weight:700; font-size:16px; cursor:pointer; transition:transform 0.15s; margin-bottom:8px;">
+                    <button onclick="handleFinalizeSignUp()"
+                            style="width:100%; padding:12px; background:linear-gradient(135deg, #4CAF50, #388E3C); color:#fff; border:none; border-radius:10px; font-weight:700; font-size:16px; cursor:pointer; margin-bottom:8px;">
                         ${t('createAccountBtn')}
                     </button>
 
@@ -399,7 +379,7 @@
                     <div id="authError" style="display:none; margin-top:6px; font-size:13px; color:#dc2626; background:#fee2e2; padding:8px 12px; border-radius:8px;"></div>
 
                     <div style="margin-top:12px; font-size:13px;">
-                        <a href="#" onclick="window.AuthUI.closeModal(); return false;" style="color:var(--gray, #999); text-decoration:none;">${t('cancel')}</a>
+                        <a href="#" onclick="closeAuthModal(); return false;" style="color:var(--gray, #999); text-decoration:none;">${t('cancel')}</a>
                     </div>
                 </div>
             `;
@@ -451,7 +431,6 @@
 
                 this.closeModal();
                 setTimeout(() => location.reload(), 1500);
-
             } catch (err) {
                 this.showError(err.message || t('errorGeneric'));
             } finally {
@@ -477,14 +456,6 @@
             }
         },
 
-        toggleAuthMode() {
-            isSignUpMode = !isSignUpMode;
-            isPhoneSignUp = false;
-            isOtpSent = false;
-            this.renderView();
-        },
-
-        // ===== تسجيل الدخول بالبريد =====
         handleLogin: async function () {
             const emailInput = document.getElementById('authEmail');
             const passInput = document.getElementById('authPassword');
@@ -524,9 +495,7 @@
                 if (result.error) throw result.error;
 
                 this.closeModal();
-                if (typeof this.updateAuthStatusUI === 'function') {
-                    await this.updateAuthStatusUI();
-                }
+                await this.updateAuthStatusUI();
             } catch (err) {
                 this.showError(err.message || t('errorGeneric'));
             } finally {
@@ -535,7 +504,6 @@
             }
         },
 
-        // ===== Google =====
         handleGoogleLogin: async function () {
             try {
                 const result = await window.signInWithGoogle();
@@ -546,7 +514,6 @@
             }
         },
 
-        // ===== Facebook =====
         handleFacebookLogin: async function () {
             try {
                 const result = await window.signInWithFacebook();
@@ -557,7 +524,6 @@
             }
         },
 
-        // ===== Firebase Phone OTP =====
         startPhoneSignUp: function () {
             isPhoneSignUp = true;
             isOtpSent = false;
@@ -570,48 +536,51 @@
             this.renderView();
         },
 
-        // ⚡ تعديل إرسال الرمز عبر Firebase ⚡
         handleSendSMS: async function () {
             const phoneInput = document.getElementById('authPhone');
             const loading = document.getElementById('authPhoneLoading');
             const btn = document.getElementById('send-sms-btn');
+            const otpGroup = document.getElementById('authOtpGroup');
 
             this.clearErrors();
 
-            const phoneNumber = phoneInput ? phoneInput.value.trim() : currentPhoneNumber;
-
-            if (!phoneNumber) {
+            const phone = phoneInput ? phoneInput.value.trim() : '';
+            if (!phone || phone.length < 8) {
                 this.showError(t('errorPhoneRequired'));
                 return;
             }
 
-            currentPhoneNumber = phoneNumber;
-
             if (loading) loading.style.display = 'block';
-            if (btn) btn.disabled = true;
+            if (btn) {
+                btn.disabled = true;
+                btn.textContent = t('sending');
+            }
 
             try {
-                if (typeof window.sendFirebaseOTP !== 'function') {
-                    throw new Error("دالة window.sendFirebaseOTP غير معرفة في authService.js");
+                const result = await window.sendFirebaseOTP(phone);
+                if (result.success) {
+                    isOtpSent = true;
+                    if (otpGroup) otpGroup.style.display = 'block';
+                    if (btn) {
+                        btn.textContent = t('verifyCode');
+                        btn.onclick = handleVerifyOTP;
+                        btn.style.background = 'linear-gradient(135deg, #4CAF50, #388E3C)';
+                    }
+                    currentPhoneNumber = phone;
+                    this.showError(t('otpSent'));
                 }
-
-                await window.sendFirebaseOTP(phoneNumber);
-                
-                isOtpSent = true;
-                if (typeof window.showToast === 'function') {
-                    window.showToast(t('otpSent'), 3000);
-                }
-                this.renderView();
             } catch (err) {
-                console.error("Firebase SMS Error:", err);
                 this.showError(err.message || t('otpError'));
+                if (btn) {
+                    btn.textContent = t('sendCode');
+                    btn.disabled = false;
+                }
             } finally {
                 if (loading) loading.style.display = 'none';
                 if (btn) btn.disabled = false;
             }
         },
 
-        // ⚡ تعديل تأكيد الرمز عبر Firebase ⚡
         handleVerifyOTP: async function () {
             const otpInput = document.getElementById('authOtp');
             const loading = document.getElementById('authPhoneLoading');
@@ -619,71 +588,130 @@
 
             this.clearErrors();
 
-            const otpCode = otpInput ? otpInput.value.trim() : '';
-
-            if (!otpCode || otpCode.length !== 6) {
+            const otp = otpInput ? otpInput.value.trim() : '';
+            if (!otp || otp.length < 4) {
                 this.showError(t('errorOtpRequired'));
                 return;
             }
 
             if (loading) loading.style.display = 'block';
-            if (btn) btn.disabled = true;
+            if (btn) {
+                btn.disabled = true;
+                btn.textContent = t('verifying');
+            }
 
             try {
-                if (typeof window.verifyFirebaseOTP !== 'function') {
-                    throw new Error("دالة window.verifyFirebaseOTP غير معرفة في authService.js");
-                }
-
-                const result = await window.verifyFirebaseOTP(otpCode);
-                
-                if (result && result.user) {
-                    if (typeof window.showToast === 'function') {
-                        window.showToast(t('otpVerifySuccess'), 3000);
-                    }
+                const result = await window.verifyOTPAndLogin(otp);
+                if (result.success) {
+                    this.showError(t('otpVerifySuccess'));
                     this.closeModal();
-                    setTimeout(() => location.reload(), 1000);
+                    await this.updateAuthStatusUI();
+                    if (typeof showToast === 'function') {
+                        showToast(t('otpVerifySuccess'), 2000);
+                    }
                 }
             } catch (err) {
-                console.error("Firebase OTP Verification Error:", err);
                 this.showError(err.message || t('otpVerifyError'));
+                if (btn) {
+                    btn.textContent = t('verifyCode');
+                    btn.disabled = false;
+                }
             } finally {
                 if (loading) loading.style.display = 'none';
                 if (btn) btn.disabled = false;
             }
         },
 
-        handleForgotPassword: async function () {
-            const emailInput = document.getElementById('authEmail');
-            const email = emailInput ? emailInput.value.trim() : '';
-
-            if (!email || !email.includes('@')) {
-                this.showError(t('resetInstruction'));
+        handleForgotPassword: function () {
+            const email = prompt(t('resetInstruction'));
+            if (!email) return;
+            if (!email.includes('@')) {
+                alert(t('errorEmailRequired'));
                 return;
             }
+            window.resetUserPassword(email)
+                .then(result => {
+                    if (result.error) {
+                        alert(result.error.message);
+                    } else {
+                        alert(t('resetSent'));
+                    }
+                })
+                .catch(err => alert(err.message));
+        },
+
+        handleSignOut: async function () {
+            try {
+                if (window.AuthService && typeof window.AuthService.signOut === 'function') {
+                    await window.AuthService.signOut();
+                } else if (window.supabaseClient && window.supabaseClient.auth) {
+                    await window.supabaseClient.auth.signOut();
+                }
+                await this.updateAuthStatusUI();
+            } catch (err) {
+                console.error('❌ Error signing out:', err);
+            }
+        },
+
+        updateAuthStatusUI: async function () {
+            const statusDiv = document.getElementById('authStatus');
+            const loginBtn = document.querySelector('button[onclick="openAuthModal()"]');
+            const logoutBtn = document.querySelector('button[onclick="window.signOutUser()"]') ||
+                             document.querySelector('button[onclick="signOutUser()"]');
 
             try {
-                if (typeof window.resetPassword === 'function') {
-                    await window.resetPassword(email);
-                    alert(t('resetSent'));
+                const user = window.AuthService ? await window.AuthService.getCurrentUser() : null;
+                if (user) {
+                    if (statusDiv) {
+                        statusDiv.innerHTML = `${t('connectedAs')} <strong>${user.email || user.phone || user.id}</strong>`;
+                        statusDiv.style.color = '#10b981';
+                    }
+                    if (loginBtn) loginBtn.style.display = 'none';
+                    if (logoutBtn) logoutBtn.style.display = 'block';
+                } else {
+                    if (statusDiv) {
+                        statusDiv.innerHTML = t('notConnected');
+                        statusDiv.style.color = 'var(--gray, #6b7280)';
+                    }
+                    if (loginBtn) loginBtn.style.display = 'block';
+                    if (logoutBtn) logoutBtn.style.display = 'none';
                 }
-            } catch (err) {
-                this.showError(err.message || t('errorGeneric'));
+            } catch (e) {
+                if (statusDiv) statusDiv.innerHTML = t('notConnected');
             }
         }
     };
 
-    // التصدير على النطاق العام
-    window.AuthUI = AuthUI;
-    window.handleAuthSubmit = () => AuthUI.handleLogin();
-    window.handleGoogleLogin = () => AuthUI.handleGoogleLogin();
-    window.handleFacebookLogin = () => AuthUI.handleFacebookLogin();
-    window.handleSendSMS = () => AuthUI.handleSendSMS();
-    window.handleVerifyOTP = () => AuthUI.handleVerifyOTP();
-    window.startPhoneSignUp = () => AuthUI.startPhoneSignUp();
-    window.cancelPhoneSignUp = () => AuthUI.cancelPhoneSignUp();
-    window.toggleAuthMode = () => AuthUI.toggleAuthMode();
-    window.closeAuthModal = () => AuthUI.closeModal();
-    window.handleForgotPassword = () => AuthUI.handleForgotPassword();
-    window.handleFinalizeSignUp = () => AuthUI.handleFinalizeSignUp();
+    // ===== تصدير الدوال العالمية (WINDOW) =====
+    window.openAuthModal = function () { AuthUI.openModal(); };
+    window.closeAuthModal = function () { AuthUI.closeModal(); };
+    window.toggleAuthMode = function () {
+        isSignUpMode = !isSignUpMode;
+        isPhoneSignUp = false;
+        isOtpSent = false;
+        AuthUI.renderView();
+        AuthUI.clearErrors();
+    };
+    window.handleAuthSubmit = function () { AuthUI.handleLogin(); };
+    window.handleForgotPassword = function () { AuthUI.handleForgotPassword(); };
+    window.signOutUser = function () { AuthUI.handleSignOut(); };
+    window.handleGoogleLogin = function () { AuthUI.handleGoogleLogin(); };
+    window.handleFacebookLogin = function () { AuthUI.handleFacebookLogin(); };
+    window.startPhoneSignUp = function () { AuthUI.startPhoneSignUp(); };
+    window.cancelPhoneSignUp = function () { AuthUI.cancelPhoneSignUp(); };
+    window.handleSendSMS = function () { AuthUI.handleSendSMS(); };
+    window.handleVerifyOTP = function () { AuthUI.handleVerifyOTP(); };
+    window.showSetPasswordModal = function(email, fullName) { AuthUI.showSetPasswordModal(email, fullName); };
+    window.handleFinalizeSignUp = function() { AuthUI.handleFinalizeSignUp(); };
 
+    window.AuthUI = AuthUI;
+
+    document.addEventListener('DOMContentLoaded', function() {
+        AuthUI.updateAuthStatusUI();
+        if (window.initRecaptcha) {
+            window.initRecaptcha('send-sms-btn');
+        }
+    });
+
+    console.log('✅ authUI.js loaded successfully (Firebase OTP support)');
 })();
