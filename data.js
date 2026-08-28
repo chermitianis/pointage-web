@@ -1,4 +1,4 @@
-﻿// ===== البيانات الأساسية — Gestion des données et stockage =====
+// ===== البيانات الأساسية — Gestion des données et stockage =====
 let workData = {};
 let selectedDate = null;
 let currentCalendarMonth = new Date();
@@ -12,13 +12,13 @@ let settings = {
     shift3Bonus: 100,
     annualVacation: 18,
     language: 'fr',
-    numberFormat: 'western', // 'western' أو 'arabic'
+    numberFormat: 'western',
     hourlyRate: 5,
     monthlySalary: 800,
     hoursPerDay: 8,
-    currency: 'DT', // رمز العملة — قابل للتعديل بالكامل من الإعدادات
+    currency: 'DT',
     paidBonuses: {},
-    apiEnabled: false, // تفعيل/تعطيل واجهة PointageAPI
+    apiEnabled: false,
 
     overtimeSettings: {
         normalMultiplier: 1.25,
@@ -55,14 +55,9 @@ let settings = {
         { date: '2026-09-06', name_ar: 'المولد النبوي الشريف', name_fr: 'Mawlid Ennabaoui', recurring: false }
     ],
 
-    // === الإعدادات الخاصة بنظام الحصص ===
-    numShifts: 3,                // عدد الحصص (1, 2, 3, 4)
-    shiftStartHour: 8,           // وقت بداية الحصة الأولى (0-23)
-    shiftBonuses: {              // مكافآت الحصص (دينار/أسبوع)
-        2: 75,
-        3: 100,
-        4: 125
-    }
+    numShifts: 3,
+    shiftStartHour: 8,
+    shiftBonuses: { 2: 75, 3: 100, 4: 125 }
 };
 
 /**
@@ -93,10 +88,11 @@ function loadData() {
         if (data) workData = JSON.parse(data);
         if (sett) {
             const loadedSettings = JSON.parse(sett);
+            // دمج الإعدادات مع الاحتفاظ بالإعدادات الافتراضية
             settings = {
                 ...settings,
                 ...loadedSettings,
-                language: loadedSettings.language || 'fr', // الفرنسية دائماً في حال عدم توفر اللغة
+                language: loadedSettings.language || 'fr',
                 overtimeSettings: loadedSettings.overtimeSettings || settings.overtimeSettings,
                 workHours: loadedSettings.workHours || settings.workHours,
                 numberFormat: loadedSettings.numberFormat || 'western',
@@ -434,7 +430,7 @@ async function exportData() {
 
     const success = await downloadFileSmart(blob, exportFileDefaultName);
     if (success) {
-        showToast(typeof t === 'function' ? t('dataExported') : 'Données exportées', 2000);
+        showToast(settings.language === 'ar' ? 'تم تصدير البيانات ✓' : 'Données exportées ✓', 2000);
     } else {
         showToast(settings.language === 'ar' ? 'تعذر تصدير البيانات' : 'Échec de l\'exportation des données', 2500);
     }
@@ -444,40 +440,100 @@ function importData() {
     document.getElementById('fileInput').click();
 }
 
+// ===== دالة الاستيراد المحسنة بالكامل =====
 function handleFileImport(event) {
     const file = event.target.files[0];
-    if (!file) return;
+    if (!file) {
+        showToast('⚠️ Aucun fichier sélectionné', 2000);
+        return;
+    }
+
+    // التحقق من نوع الملف
+    if (!file.name.endsWith('.json')) {
+        showToast('⚠️ Le fichier doit être au format JSON', 2500);
+        event.target.value = '';
+        return;
+    }
 
     const reader = new FileReader();
     reader.onload = async function(e) {
         try {
             const importedData = JSON.parse(e.target.result);
-            const confirmMsg = typeof t === 'function' ? t('confirmRestore') : (settings.language === 'ar' ? 'هل أنت تأكد من استعادة البيانات؟' : 'Voulez-vous restaurer les données ?');
-
-            const confirmed = await showConfirmDialog(confirmMsg);
-            if (confirmed) {
-                if (importedData.workData) {
-                    workData = importedData.workData;
-                }
-                if (importedData.settings) {
-                    settings = { ...settings, ...importedData.settings };
-                }
-
-                saveData();
-                location.reload();
+            
+            // التحقق من صحة البيانات المستوردة
+            if (!importedData.workData && !importedData.settings) {
+                showToast('⚠️ Fichier invalide: données manquantes', 3000);
+                return;
             }
+
+            // عرض معلومات الملف للمستخدم
+            const exportDate = importedData.exportDate ? new Date(importedData.exportDate).toLocaleString() : 'inconnue';
+            const version = importedData.version || 'inconnue';
+            const confirmMsg = settings.language === 'ar' ? 
+                `سيتم استبدال جميع البيانات الحالية بالبيانات المستوردة.\n\n📅 تاريخ التصدير: ${exportDate}\n📦 الإصدار: ${version}\n\nهل أنت متأكد؟` :
+                `Toutes les données actuelles seront remplacées.\n\n📅 Date d'export: ${exportDate}\n📦 Version: ${version}\n\nConfirmez-vous ?`;
+            
+            const confirmed = await showConfirmDialog(confirmMsg);
+            if (!confirmed) {
+                event.target.value = '';
+                return;
+            }
+
+            // استيراد البيانات مع الاحتفاظ بالإعدادات الافتراضية
+            if (importedData.workData) {
+                workData = importedData.workData;
+            }
+            
+            if (importedData.settings) {
+                // دمج الإعدادات المستوردة مع الإعدادات الافتراضية
+                settings = {
+                    ...settings,
+                    ...importedData.settings,
+                    language: importedData.settings.language || 'fr',
+                    overtimeSettings: importedData.settings.overtimeSettings || settings.overtimeSettings,
+                    workHours: importedData.settings.workHours || settings.workHours,
+                    shiftBonuses: importedData.settings.shiftBonuses || { 2: 75, 3: 100, 4: 125 },
+                    weeklyRestDays: importedData.settings.weeklyRestDays || settings.weeklyRestDays,
+                    holidays: importedData.settings.holidays || settings.holidays
+                };
+            }
+
+            // حفظ البيانات فوراً
+            saveData();
+
+            // تحديث الواجهة قبل إعادة التحميل
+            const isAr = settings.language === 'ar';
+            showToast(isAr ? '✅ تم استيراد البيانات بنجاح' : '✅ Données importées avec succès', 2500);
+
+            // إعادة تحميل الصفحة بعد تأخير قصير لضمان حفظ البيانات
+            setTimeout(() => {
+                location.reload();
+            }, 800);
+
         } catch (error) {
             console.error('خطأ في استيراد البيانات:', error);
-            showToast(typeof t === 'function' ? t('invalidFile') : 'Fichier invalide', 3000);
+            const isAr = settings.language === 'ar';
+            showToast(`❌ ${isAr ? 'خطأ في الاستيراد' : 'Erreur d\'importation'}: ${error.message}`, 3000);
         }
     };
+    
+    reader.onerror = function() {
+        showToast('❌ Erreur de lecture du fichier', 3000);
+    };
+    
     reader.readAsText(file);
 
+    // إعادة تعيين input file
     event.target.value = '';
 }
 
+// ===== مسح جميع البيانات =====
 async function clearData() {
-    const confirmMsg = typeof t === 'function' ? t('confirmClear') : (settings.language === 'ar' ? 'هل أنت تأكد من مسح جميع البيانات؟' : 'Voulez-vous réinitialiser toutes les données ?');
+    const isAr = settings.language === 'ar';
+    const confirmMsg = isAr ? 
+        '⚠️ هل أنت متأكد من مسح جميع البيانات؟ هذا الإجراء لا يمكن التراجع عنه.' :
+        '⚠️ Voulez-vous vraiment effacer toutes les données ? Cette action est irréversible.';
+    
     const confirmed = await showConfirmDialog(confirmMsg);
 
     if (confirmed) {
@@ -485,13 +541,14 @@ async function clearData() {
         localStorage.removeItem('pointageWorkData');
         localStorage.removeItem('pointageSettings');
 
+        // إعادة تعيين الإعدادات مع الاحتفاظ بالإعدادات الافتراضية
         settings = {
             monthStartDay: 1,
             monthEndDay: 31,
             shift2Bonus: 75,
             shift3Bonus: 100,
             annualVacation: 18,
-            language: 'fr', // الفرنسية افتراضياً
+            language: 'fr',
             numberFormat: 'western',
             hourlyRate: 5,
             monthlySalary: 800,
@@ -517,14 +574,20 @@ async function clearData() {
             holidays: [...settings.holidays],
             numShifts: settings.numShifts || 3,
             shiftStartHour: settings.shiftStartHour !== undefined ? settings.shiftStartHour : 8,
-            shiftBonuses: settings.shiftBonuses || { 2: 75, 3: 100, 4: 125 }
+            shiftBonuses: settings.shiftBonuses || { 2: 75, 3: 100, 4: 125 },
+            apiEnabled: false
         };
         
         saveData();
-        location.reload();
+        showToast(isAr ? '🗑️ تم مسح جميع البيانات' : '🗑️ Toutes les données ont été effacées', 2000);
+        
+        setTimeout(() => {
+            location.reload();
+        }, 500);
     }
 }
 
+// ===== عرض رسالة منبثقة =====
 function showToast(message, duration = 3000) {
     const toast = document.getElementById('toast');
     if (!toast) {
