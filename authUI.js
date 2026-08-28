@@ -1,21 +1,21 @@
 /**
- * AuthUI.js - إدارة واجهة التوثيق مع دعم Google, Facebook, Téléphone
+ * AuthUI.js - إدارة واجهة التوثيق مع دعم Google, Facebook, Téléphone (Firebase OTP)
  * Version avec écran de connexion simplifié et options d'inscription avancées
  * + Formulaire de définition de mot de passe pour les utilisateurs OAuth
+ * + Firebase Phone Authentication (OTP)
  */
 
 (function () {
     // ===== الحالة =====
-    let isSignUpMode = false;       // true = عرض خيارات التسجيل، false = عرض نموذج تسجيل الدخول
-    let isPhoneSignUp = false;      // true = عرض نموذج الهاتف (OTP)
+    let isSignUpMode = false;
+    let isPhoneSignUp = false;
     let currentPhoneNumber = '';
+    let isOtpSent = false;
 
-    // ===== اللغة =====
     function getLanguage() {
         return (window.settings && window.settings.language) || 'fr';
     }
 
-    // ===== النصوص المترجمة =====
     const strings = {
         fr: {
             signInTitle: 'Se connecter',
@@ -61,7 +61,13 @@
             passwordMismatch: 'Les mots de passe ne correspondent pas',
             passwordTooShort: 'Le mot de passe doit comporter au moins 6 caractères',
             emailRequired: 'L\'email est requis',
-            accountCreated: '✅ Compte créé avec succès'
+            accountCreated: '✅ Compte créé avec succès',
+            otpSent: '✅ Code envoyé par SMS',
+            otpError: '❌ Erreur lors de l\'envoi du code',
+            otpVerifySuccess: '✅ Vérification réussie',
+            otpVerifyError: '❌ Code invalide ou expiré',
+            sending: 'Envoi en cours...',
+            verifying: 'Vérification en cours...'
         },
         ar: {
             signInTitle: 'تسجيل الدخول',
@@ -107,7 +113,13 @@
             passwordMismatch: 'كلمة المرور غير متطابقة',
             passwordTooShort: 'كلمة المرور يجب أن تكون 6 أحرف على الأقل',
             emailRequired: 'البريد الإلكتروني مطلوب',
-            accountCreated: '✅ تم إنشاء الحساب بنجاح'
+            accountCreated: '✅ تم إنشاء الحساب بنجاح',
+            otpSent: '✅ تم إرسال الرمز عبر SMS',
+            otpError: '❌ خطأ في إرسال الرمز',
+            otpVerifySuccess: '✅ تم التحقق بنجاح',
+            otpVerifyError: '❌ رمز غير صحيح أو منتهي الصلاحية',
+            sending: 'جاري الإرسال...',
+            verifying: 'جاري التحقق...'
         }
     };
 
@@ -116,7 +128,6 @@
         return strings[lang]?.[key] || strings.fr[key] || key;
     }
 
-    // ===== كائن AuthUI =====
     const AuthUI = {
         getModalElement() {
             return document.getElementById('authModal') || document.getElementById('auth-modal');
@@ -128,6 +139,7 @@
                 modal.style.display = 'flex';
                 isSignUpMode = false;
                 isPhoneSignUp = false;
+                isOtpSent = false;
                 this.renderView();
                 this.clearErrors();
             } else {
@@ -139,9 +151,9 @@
             const modal = this.getModalElement();
             if (modal) modal.style.display = 'none';
             this.clearErrors();
+            isOtpSent = false;
         },
 
-        // ===== عرض الواجهة حسب الحالة =====
         renderView() {
             if (isSignUpMode) {
                 if (isPhoneSignUp) {
@@ -154,7 +166,6 @@
             }
         },
 
-        // ===== 1. نموذج تسجيل الدخول =====
         renderLoginForm() {
             const container = document.getElementById('authContent');
             if (!container) return;
@@ -188,9 +199,9 @@
                         ${t('signInBtn')}
                     </button>
 
-                    <!-- ===== زر Google dans l'écran de connexion ===== -->
+                    <!-- Google Button -->
                     <button onclick="handleGoogleLogin()" style="width:100%; padding:10px; margin-bottom:10px; background:#fff; color:#333; border:1px solid #ddd; border-radius:8px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; transition:background 0.2s, box-shadow 0.2s;"
-                            onmouseover="this.style.background='#f1f1f1'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'" 
+                            onmouseover="this.style.background='#f1f1f1'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'"
                             onmouseout="this.style.background='#fff'; this.style.boxShadow='none'">
                         <svg width="20" height="20" viewBox="0 0 48 48">
                             <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
@@ -226,7 +237,6 @@
             `;
         },
 
-        // ===== 2. خيارات التسجيل (Google, Facebook, Téléphone) =====
         renderSignUpOptions() {
             const container = document.getElementById('authContent');
             if (!container) return;
@@ -242,7 +252,7 @@
 
                     <!-- Google -->
                     <button onclick="handleGoogleLogin()" style="width:100%; padding:10px; margin-bottom:10px; background:#fff; color:#333; border:1px solid #ddd; border-radius:8px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; transition:background 0.2s, box-shadow 0.2s;"
-                            onmouseover="this.style.background='#f1f1f1'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'" 
+                            onmouseover="this.style.background='#f1f1f1'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'"
                             onmouseout="this.style.background='#fff'; this.style.boxShadow='none'">
                         <svg width="20" height="20" viewBox="0 0 48 48">
                             <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
@@ -284,7 +294,6 @@
             `;
         },
 
-        // ===== 3. نموذج التسجيل عبر الهاتف (OTP) =====
         renderPhoneSignUp() {
             const container = document.getElementById('authContent');
             if (!container) return;
@@ -303,16 +312,24 @@
                                style="width:100%; padding:12px 14px; border:2px solid var(--border-color, #e0e0e0); border-radius:10px; box-sizing:border-box; font-size:15px; background:var(--input-bg, #f8f9fa); color:var(--text-color, #333);">
                     </div>
 
-                    <div id="authOtpGroup" style="display:none; margin-bottom:12px;">
+                    <div id="authOtpGroup" style="display:${isOtpSent ? 'block' : 'none'}; margin-bottom:12px;">
                         <label for="authOtp" style="display:block; text-align:left; font-size:13px; color:var(--gray); margin-bottom:4px;">${t('otpPlaceholder')}</label>
                         <input type="text" id="authOtp" placeholder="123456"
-                               style="width:100%; padding:12px 14px; border:2px solid var(--border-color, #e0e0e0); border-radius:10px; box-sizing:border-box; font-size:15px; background:var(--input-bg, #f8f9fa); color:var(--text-color, #333);">
+                               style="width:100%; padding:12px 14px; border:2px solid var(--border-color, #e0e0e0); border-radius:10px; box-sizing:border-box; font-size:15px; background:var(--input-bg, #f8f9fa); color:var(--text-color, #333);"
+                               onkeydown="if(event.key==='Enter') handleVerifyOTP()">
                     </div>
 
-                    <button id="authPhoneBtn" onclick="handlePhoneSignUp()"
+                    <button id="send-sms-btn" onclick="handleSendSMS()"
                             style="width:100%; padding:12px; background:linear-gradient(135deg, #34b7f1, #1d8fc7); color:#fff; border:none; border-radius:10px; font-weight:700; font-size:16px; cursor:pointer; transition:transform 0.15s; margin-bottom:8px;">
-                        ${t('sendCode')}
+                        ${isOtpSent ? t('verifyCode') : t('sendCode')}
                     </button>
+
+                    ${isOtpSent ? `
+                        <button id="resend-sms-btn" onclick="handleSendSMS()"
+                                style="width:100%; padding:8px; background:transparent; color:var(--gray, #666); border:1px solid var(--border-color, #ddd); border-radius:8px; font-size:13px; cursor:pointer; margin-bottom:8px;">
+                            🔄 ${isAr ? 'إعادة إرسال الرمز' : 'Renvoyer le code'}
+                        </button>
+                    ` : ''}
 
                     <div id="authPhoneLoading" style="display:none; margin-top:6px; font-size:14px; color:#2563eb;">⏳ ${t('loading')}</div>
                     <div id="authError" style="display:none; margin-top:6px; font-size:13px; color:#dc2626; background:#fee2e2; padding:8px 12px; border-radius:8px;"></div>
@@ -330,7 +347,6 @@
             `;
         },
 
-        // ===== 4. نموذج تعيين كلمة المرور بعد OAuth =====
         showSetPasswordModal: function (email, fullName) {
             const container = document.getElementById('authContent');
             if (!container) {
@@ -338,7 +354,6 @@
                 return;
             }
 
-            // Ouvrir le modal s'il n'est pas visible
             const modal = this.getModalElement();
             if (modal) modal.style.display = 'flex';
 
@@ -353,7 +368,7 @@
 
                     <div style="margin-bottom:12px;">
                         <label style="display:block; text-align:left; font-size:13px; color:var(--gray); margin-bottom:4px;">${t('fullName')}</label>
-                        <input type="text" id="signupFullName" value="${fullName || ''}" 
+                        <input type="text" id="signupFullName" value="${fullName || ''}"
                                placeholder="${t('fullName')}"
                                style="width:100%; padding:12px 14px; border:2px solid var(--border-color, #e0e0e0); border-radius:10px; box-sizing:border-box; font-size:15px; background:var(--input-bg, #f8f9fa); color:var(--text-color, #333);">
                     </div>
@@ -392,7 +407,6 @@
             `;
         },
 
-        // ===== 5. معالج إنهاء التسجيل (تعيين كلمة المرور) =====
         handleFinalizeSignUp: async function () {
             const fullName = document.getElementById('signupFullName')?.value.trim() || '';
             const email = document.getElementById('signupEmail')?.value.trim() || '';
@@ -418,29 +432,25 @@
             if (loading) loading.style.display = 'block';
 
             try {
-                // 1. Définir le mot de passe pour l'utilisateur OAuth
                 const result = await window.setPasswordForOAuthUser(password);
                 if (result.error) throw result.error;
 
-                // 2. Mettre à jour le nom complet si fourni
                 if (fullName && window.AuthService) {
                     const client = window.AuthService.getClient();
                     if (client) {
-                        await client.auth.updateUser({ 
-                            data: { 
+                        await client.auth.updateUser({
+                            data: {
                                 full_name: fullName,
-                                has_password: true 
-                            } 
+                                has_password: true
+                            }
                         });
                     }
                 }
 
-                // 3. Afficher un message de succès
                 if (typeof window.showToast === 'function') {
                     window.showToast(t('accountCreated'), 3000);
                 }
 
-                // 4. Fermer le modal et recharger
                 this.closeModal();
                 setTimeout(() => location.reload(), 1500);
 
@@ -451,7 +461,6 @@
             }
         },
 
-        // ===== Actions =====
         clearErrors() {
             const errDiv = document.getElementById('authError');
             if (errDiv) {
@@ -541,71 +550,118 @@
             }
         },
 
-        // ===== Téléphone (OTP) =====
+        // ===== Firebase Phone OTP =====
         startPhoneSignUp: function () {
             isPhoneSignUp = true;
+            isOtpSent = false;
             this.renderView();
         },
 
         cancelPhoneSignUp: function () {
             isPhoneSignUp = false;
+            isOtpSent = false;
             this.renderView();
         },
 
-        handlePhoneSignUp: async function () {
+        handleSendSMS: async function () {
             const phoneInput = document.getElementById('authPhone');
-            const otpInput = document.getElementById('authOtp');
-            const btn = document.getElementById('authPhoneBtn');
             const loading = document.getElementById('authPhoneLoading');
+            const btn = document.getElementById('send-sms-btn');
+            const otpGroup = document.getElementById('authOtpGroup');
+            const errorDiv = document.getElementById('authError');
 
             this.clearErrors();
 
             const phone = phoneInput ? phoneInput.value.trim() : '';
-            const otp = otpInput ? otpInput.value.trim() : '';
-
-            if (!phone) {
+            if (!phone || phone.length < 8) {
                 this.showError(t('errorPhoneRequired'));
                 return;
             }
 
-            if (otp) {
-                if (otp.length < 4) {
-                    this.showError(t('errorOtpRequired'));
-                    return;
+            if (loading) loading.style.display = 'block';
+            if (btn) {
+                btn.disabled = true;
+                btn.textContent = t('sending');
+            }
+
+            try {
+                const result = await window.sendFirebaseOTP(phone);
+                if (result.success) {
+                    isOtpSent = true;
+                    if (otpGroup) otpGroup.style.display = 'block';
+                    if (btn) btn.textContent = t('verifyCode');
+                    currentPhoneNumber = phone;
+                    this.showError(t('otpSent'));
+                    // تحديث الواجهة لإظهار حقل OTP وزر التحقق
+                    this.renderPhoneSignUp();
+                    // إعادة تعيين الأزرار
+                    const newBtn = document.getElementById('send-sms-btn');
+                    if (newBtn) {
+                        newBtn.textContent = t('verifyCode');
+                        newBtn.onclick = handleVerifyOTP;
+                        newBtn.style.background = 'linear-gradient(135deg, #4CAF50, #388E3C)';
+                    }
+                    // إظهار حقل OTP
+                    const otpGroupNew = document.getElementById('authOtpGroup');
+                    if (otpGroupNew) otpGroupNew.style.display = 'block';
+                    // إظهار زر إعادة الإرسال
+                    const resendBtn = document.getElementById('resend-sms-btn');
+                    if (resendBtn) resendBtn.style.display = 'block';
                 }
-                if (loading) loading.style.display = 'block';
-                if (btn) btn.disabled = true;
-                try {
-                    const result = await window.verifyPhoneOtp(phone, otp);
-                    if (result.error) throw result.error;
-                    this.closeModal();
-                    await this.updateAuthStatusUI();
-                } catch (err) {
-                    this.showError(err.message || t('errorGeneric'));
-                } finally {
-                    if (loading) loading.style.display = 'none';
-                    if (btn) btn.disabled = false;
+            } catch (err) {
+                this.showError(err.message || t('otpError'));
+                if (btn) {
+                    btn.textContent = t('sendCode');
+                    btn.disabled = false;
                 }
+            } finally {
+                if (loading) loading.style.display = 'none';
+                if (btn) {
+                    btn.disabled = false;
+                }
+            }
+        },
+
+        handleVerifyOTP: async function () {
+            const otpInput = document.getElementById('authOtp');
+            const loading = document.getElementById('authPhoneLoading');
+            const btn = document.getElementById('send-sms-btn');
+
+            this.clearErrors();
+
+            const otp = otpInput ? otpInput.value.trim() : '';
+            if (!otp || otp.length < 4) {
+                this.showError(t('errorOtpRequired'));
                 return;
             }
 
             if (loading) loading.style.display = 'block';
-            if (btn) btn.disabled = true;
+            if (btn) {
+                btn.disabled = true;
+                btn.textContent = t('verifying');
+            }
 
             try {
-                const result = await window.signInWithPhone(phone);
-                if (result.error) throw result.error;
-
-                const otpGroup = document.getElementById('authOtpGroup');
-                if (otpGroup) otpGroup.style.display = 'block';
-                if (btn) btn.innerText = t('verifyCode');
-                currentPhoneNumber = phone;
-                this.clearErrors();
+                const result = await window.verifyOTPAndLogin(otp);
+                if (result.success) {
+                    this.showError(t('otpVerifySuccess'));
+                    this.closeModal();
+                    await this.updateAuthStatusUI();
+                    if (typeof showToast === 'function') {
+                        showToast(t('otpVerifySuccess'), 2000);
+                    }
+                }
             } catch (err) {
-                this.showError(err.message || t('errorGeneric'));
+                this.showError(err.message || t('otpVerifyError'));
+                if (btn) {
+                    btn.textContent = t('verifyCode');
+                    btn.disabled = false;
+                }
             } finally {
                 if (loading) loading.style.display = 'none';
-                if (btn) btn.disabled = false;
+                if (btn) {
+                    btn.disabled = false;
+                }
             }
         },
 
@@ -678,6 +734,7 @@
     window.toggleAuthMode = function () {
         isSignUpMode = !isSignUpMode;
         isPhoneSignUp = false;
+        isOtpSent = false;
         AuthUI.renderView();
         AuthUI.clearErrors();
     };
@@ -688,7 +745,8 @@
     window.handleFacebookLogin = function () { AuthUI.handleFacebookLogin(); };
     window.startPhoneSignUp = function () { AuthUI.startPhoneSignUp(); };
     window.cancelPhoneSignUp = function () { AuthUI.cancelPhoneSignUp(); };
-    window.handlePhoneSignUp = function () { AuthUI.handlePhoneSignUp(); };
+    window.handleSendSMS = function () { AuthUI.handleSendSMS(); };
+    window.handleVerifyOTP = function () { AuthUI.handleVerifyOTP(); };
     window.showSetPasswordModal = function(email, fullName) { AuthUI.showSetPasswordModal(email, fullName); };
     window.handleFinalizeSignUp = function() { AuthUI.handleFinalizeSignUp(); };
 
@@ -696,7 +754,11 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         AuthUI.updateAuthStatusUI();
+        // تهيئة reCAPTCHA عند تحميل الصفحة (اختياري)
+        if (window.initRecaptcha) {
+            window.initRecaptcha('send-sms-btn');
+        }
     });
 
-    console.log('authUI.js loaded successfully');
+    console.log('✅ authUI.js loaded successfully (Firebase OTP support)');
 })();
