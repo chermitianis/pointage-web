@@ -1,30 +1,5 @@
 // ===== appConfig.js =====
 (function () {
-    // ===== Firebase Configuration =====
-    const firebaseConfig = {
-        apiKey: "AIzaSyCOT8WjtJ9qEcUWbv_pIgV7RFisrryes6o",
-        authDomain: "pointage-454ef.firebaseapp.com",
-        projectId: "pointage-454ef",
-        storageBucket: "pointage-454ef.firebasestorage.app",
-        messagingSenderId: "521883437469",
-        appId: "1:521883437469:web:5885b451e7c47c34db8774",
-        measurementId: "G-J5HMPC95W8"
-    };
-
-    // ===== تهيئة Firebase =====
-    if (typeof firebase !== 'undefined' && firebase.initializeApp) {
-        try {
-            const app = firebase.initializeApp(firebaseConfig);
-            window.firebaseApp = app;
-            console.log('✅ Firebase initialized successfully');
-        } catch (e) {
-            console.warn('⚠️ Firebase already initialized or error:', e);
-            window.firebaseApp = firebase.app();
-        }
-    } else {
-        console.warn('⚠️ Firebase SDK not loaded, skipping initialization');
-    }
-
     function initConfig() {
         if (window.APP_CONFIG && window.APP_CONFIG.appId && window.APP_CONFIG.appId !== 'dev') {
             console.log('✅ APP_CONFIG already present from Native:', window.APP_CONFIG.appId);
