@@ -3,6 +3,37 @@
 // Fait partie de l'application Pointage — Dépend de data.js et supabaseSync.js
 // ===================================================================
 
+// ===== معالجة OAuth callback (للاستخدام من الناتيف) =====
+window.handleOAuthCallback = async function(accessToken) {
+    console.log('🔄 handleOAuthCallback appelé avec token:', accessToken ? accessToken.substring(0, 20) + '...' : 'null');
+    if (!accessToken) return;
+    try {
+        if (window.AuthService && typeof window.AuthService.setSessionToken === 'function') {
+            const user = await window.AuthService.setSessionToken(accessToken);
+            if (user) {
+                console.log('✅ Connexion OAuth réussie pour:', user.email);
+                if (typeof showToast === 'function') {
+                    showToast('✅ Connexion réussie', 2000);
+                }
+                if (window.AndroidApp && typeof window.AndroidApp.saveUserToken === 'function') {
+                    window.AndroidApp.saveUserToken(accessToken);
+                }
+                if (window.SupabaseSyncEngine && typeof window.SupabaseSyncEngine.pullAll === 'function') {
+                    await window.SupabaseSyncEngine.pullAll();
+                    if (typeof loadData === 'function') loadData();
+                }
+                if (typeof updatePremiumStatus === 'function') updatePremiumStatus();
+                setTimeout(() => location.reload(), 500);
+            }
+        }
+    } catch (e) {
+        console.error('❌ Erreur handleOAuthCallback:', e);
+        if (typeof showToast === 'function') {
+            showToast('❌ Erreur lors de la connexion', 3000);
+        }
+    }
+};
+
 // ===== نقطة انطلاق التطبيق — Point d'entrée de l'application =====
 window.onload = async () => {
     loadData();
@@ -15,17 +46,17 @@ window.onload = async () => {
 
         if (accessToken) {
             console.log('🔄 Détection du token OAuth, tentative de connexion...');
-            
+
             if (window.AuthService && typeof window.AuthService.setSessionToken === 'function') {
                 const user = await window.AuthService.setSessionToken(accessToken);
                 if (user) {
                     console.log('✅ Authentification OAuth réussie pour:', user.email || user.phone || user.id);
                     window.history.replaceState({}, document.title, window.location.pathname);
-                    
+
                     // ===== Vérifier si l'utilisateur a un mot de passe =====
                     const hasPassword = user.user_metadata?.has_password === true;
                     const isOAuthUser = user.app_metadata?.provider === 'google' || user.app_metadata?.provider === 'facebook';
-                    
+
                     if (isOAuthUser && !hasPassword) {
                         console.log('🔄 Utilisateur OAuth sans mot de passe, demande de création');
                         // Attendre un peu que tout soit chargé
@@ -80,11 +111,11 @@ window.onload = async () => {
             const user = await window.AuthService.getCurrentUser();
             if (user) {
                 console.log('👤 Utilisateur connecté:', user.email || user.phone || user.id);
-                
+
                 // Vérifier si l'utilisateur OAuth a besoin de définir un mot de passe
                 const hasPassword = user.user_metadata?.has_password === true;
                 const isOAuthUser = user.app_metadata?.provider === 'google' || user.app_metadata?.provider === 'facebook';
-                
+
                 if (isOAuthUser && !hasPassword) {
                     console.log('🔄 Utilisateur OAuth sans mot de passe, affichage du formulaire');
                     setTimeout(() => {
@@ -111,7 +142,7 @@ window.onload = async () => {
     if (typeof loadNotesData === 'function') loadNotesData();
     if (typeof loadTasksData === 'function') loadTasksData();
     if (typeof loadRemindersData === 'function') loadRemindersData();
-    
+
     initializeApp();
 };
 
