@@ -3,7 +3,12 @@
     let supabaseClient = null;
     let currentUser = null;
 
-    const APP_URL = 'https://chermitianis.github.io/pointage-web/';
+    function getAppUrl() {
+        if (window.AndroidApp && typeof window.AndroidApp.getDeviceId === 'function') {
+            return 'https://chermitianis.github.io/pointage-web/';
+        }
+        return window.location.origin + window.location.pathname;
+    }
 
     function getClient() {
         if (window.supabaseInstance) {
@@ -55,12 +60,131 @@
         }
     }
 
+    // ===== Firebase OTP (Phone Authentication) =====
+    window.initRecaptcha = function(buttonId = 'send-sms-btn') {
+        try {
+            if (!window.recaptchaVerifier) {
+                if (typeof firebase === 'undefined' || !firebase.auth) {
+                    console.error('❌ Firebase Auth not available');
+                    return null;
+                }
+                window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(buttonId, {
+                    'size': 'invisible',
+                    'callback': function() {
+                        console.log('✅ reCAPTCHA resolved');
+                    }
+                });
+                console.log('✅ reCAPTCHA initialized');
+            }
+            return window.recaptchaVerifier;
+        } catch (e) {
+            console.error('❌ initRecaptcha error:', e);
+            return null;
+        }
+    };
+
+    // Send OTP SMS
+    window.sendFirebaseOTP = async function(phoneNumber) {
+        try {
+            if (!phoneNumber || phoneNumber.length < 8) {
+                throw new Error(getMessage('invalidPhone'));
+            }
+            const appVerifier = window.initRecaptcha('send-sms-btn');
+            if (!appVerifier) {
+                throw new Error(getMessage('recaptchaError'));
+            }
+            const confirmationResult = await firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier);
+            window.confirmationResult = confirmationResult;
+            return { success: true, message: getMessage('otpSent') };
+        } catch (error) {
+            console.error('❌ sendFirebaseOTP error:', error);
+            if (window.recaptchaVerifier) {
+                try {
+                    window.recaptchaVerifier.render().then(widgetId => {
+                        if (typeof grecaptcha !== 'undefined') {
+                            grecaptcha.reset(widgetId);
+                        }
+                    });
+                } catch (e) {}
+            }
+            throw error;
+        }
+    };
+
+    // Verify OTP & Sign In to Supabase using Firebase token
+    window.verifyOTPAndLogin = async function(otpCode) {
+        try {
+            if (!otpCode || otpCode.length < 4) {
+                throw new Error(getMessage('invalidOtp'));
+            }
+            if (!window.confirmationResult) {
+                throw new Error(getMessage('noConfirmation'));
+            }
+            const result = await window.confirmationResult.confirm(otpCode);
+            const firebaseUser = result.user;
+            if (!firebaseUser) {
+                throw new Error(getMessage('authFailed'));
+            }
+            const idToken = await firebaseUser.getIdToken();
+
+            const client = getClient();
+            if (!client) {
+                throw new Error(getMessage('connectionError'));
+            }
+            const { data, error } = await client.auth.signInWithIdToken({
+                provider: 'firebase',
+                token: idToken,
+            });
+
+            if (error) throw error;
+            if (data?.user) {
+                currentUser = data.user;
+                await AuthService.onAuthSuccess(data.user);
+                return { success: true, user: data.user };
+            }
+            throw new Error(getMessage('authFailed'));
+        } catch (error) {
+            console.error('❌ verifyOTPAndLogin error:', error);
+            throw error;
+        }
+    };
+
+    // ===== OAuth Callback Handler =====
+    window.handleOAuthCallback = async function(accessToken) {
+        console.log('🔄 handleOAuthCallback appelé avec token:', accessToken ? accessToken.substring(0, 20) + '...' : 'null');
+        if (!accessToken) return;
+        try {
+            if (window.AuthService && typeof window.AuthService.setSessionToken === 'function') {
+                const user = await window.AuthService.setSessionToken(accessToken);
+                if (user) {
+                    console.log('✅ Connexion OAuth réussie pour:', user.email);
+                    if (typeof showToast === 'function') {
+                        showToast('✅ Connexion réussie', 2000);
+                    }
+                    if (window.AndroidApp && typeof window.AndroidApp.saveUserToken === 'function') {
+                        window.AndroidApp.saveUserToken(accessToken);
+                    }
+                    if (window.SupabaseSyncEngine && typeof window.SupabaseSyncEngine.pullAll === 'function') {
+                        await window.SupabaseSyncEngine.pullAll();
+                        if (typeof loadData === 'function') loadData();
+                    }
+                    if (typeof updatePremiumStatus === 'function') updatePremiumStatus();
+                    setTimeout(() => location.reload(), 500);
+                }
+            }
+        } catch (e) {
+            console.error('❌ Erreur handleOAuthCallback:', e);
+            if (typeof showToast === 'function') {
+                showToast('❌ Erreur lors de la connexion', 3000);
+            }
+        }
+    };
+
     const AuthService = {
         getClient() {
             return getClient();
         },
 
-        // تسجيل الدخول باستخدام Session Token (من OAuth)
         async setSessionToken(accessToken) {
             const client = getClient();
             if (!client || !accessToken) return null;
@@ -77,6 +201,9 @@
                         email: currentUser.email,
                         lastLogin: new Date().toISOString()
                     }));
+                    if (window.AndroidApp && typeof window.AndroidApp.saveUserToken === 'function') {
+                        window.AndroidApp.saveUserToken(accessToken);
+                    }
                     return currentUser;
                 }
             } catch (e) {
@@ -85,7 +212,6 @@
             return null;
         },
 
-        // تسجيل الدخول بالبريد وكلمة المرور
         async signIn(email, password) {
             const client = getClient();
             if (!client) throw new Error(getMessage('connectionError'));
@@ -98,7 +224,6 @@
             return data;
         },
 
-        // إنشاء حساب جديد بالبريد وكلمة المرور
         async signUp(email, password, fullName) {
             const client = getClient();
             if (!client) throw new Error(getMessage('connectionError'));
@@ -108,7 +233,7 @@
                 options: {
                     data: {
                         full_name: fullName,
-                        has_password: true, // علامة أن المستخدم لديه كلمة مرور
+                        has_password: true,
                         app_id: window.APP_CONFIG?.appId || 'pointage',
                         device_id: getDeviceId()
                     }
@@ -122,74 +247,82 @@
             return data;
         },
 
-        // تسجيل الدخول عبر Google (للمستخدمين الذين لديهم كلمة مرور أيضاً)
         async signInWithGoogle() {
             const client = getClient();
             if (!client) throw new Error(getMessage('connectionError'));
+            const redirectUrl = getAppUrl();
+            console.log('🔄 Google OAuth redirectTo:', redirectUrl);
+
+            const isAndroid = !!(window.AndroidApp && typeof window.AndroidApp.getDeviceId === 'function');
+            const finalRedirectUrl = isAndroid ? redirectUrl + '?signup=google' : redirectUrl;
+
             const { data, error } = await client.auth.signInWithOAuth({
                 provider: 'google',
                 options: {
-                    redirectTo: APP_URL + '?signup=google' // علامة للتمييز
+                    redirectTo: finalRedirectUrl,
+                    queryParams: {
+                        access_type: 'offline',
+                        prompt: 'consent'
+                    }
                 }
             });
             if (error) throw error;
+
+            if (data?.url && isAndroid) {
+                console.log('🔄 Ouverture de l\'URL OAuth dans WebView');
+                window.location.href = data.url;
+            }
+
             return data;
         },
 
-        // تسجيل الدخول عبر Facebook
         async signInWithFacebook() {
             const client = getClient();
             if (!client) throw new Error(getMessage('connectionError'));
+            const redirectUrl = getAppUrl();
+            console.log('🔄 Facebook OAuth redirectTo:', redirectUrl);
+
+            const isAndroid = !!(window.AndroidApp && typeof window.AndroidApp.getDeviceId === 'function');
+            const finalRedirectUrl = isAndroid ? redirectUrl + '?signup=facebook' : redirectUrl;
+
             const { data, error } = await client.auth.signInWithOAuth({
                 provider: 'facebook',
                 options: {
-                    redirectTo: APP_URL + '?signup=facebook'
+                    redirectTo: finalRedirectUrl
                 }
             });
             if (error) throw error;
+
+            if (data?.url && isAndroid) {
+                window.location.href = data.url;
+            }
+
             return data;
         },
 
-        // تسجيل الدخول عبر الهاتف (OTP)
         async signInWithPhone(phoneNumber) {
-            const client = getClient();
-            if (!client) throw new Error(getMessage('connectionError'));
-            const { data, error } = await client.auth.signInWithOtp({
-                phone: phoneNumber,
-            });
-            if (error) throw error;
-            return data;
+            // This is a wrapper for Firebase OTP, we'll use sendFirebaseOTP instead
+            // Keeping for compatibility, but not used directly
+            console.warn('signInWithPhone is deprecated, use sendFirebaseOTP + verifyOTPAndLogin');
+            return { data: null };
         },
 
         async verifyPhoneOtp(phoneNumber, token) {
-            const client = getClient();
-            if (!client) throw new Error(getMessage('connectionError'));
-            const { data, error } = await client.auth.verifyOtp({
-                phone: phoneNumber,
-                token: token,
-                type: 'sms'
-            });
-            if (error) throw error;
-            if (data?.user) {
-                currentUser = data.user;
-                await this.onAuthSuccess(data.user);
-            }
-            return data;
+            console.warn('verifyPhoneOtp is deprecated, use verifyOTPAndLogin');
+            return { user: null };
         },
 
-        // تعيين كلمة مرور لحساب OAuth (للمستخدمين الذين سجلوا عبر Google/فيسبوك)
         async setPasswordForOAuthUser(password) {
             const client = getClient();
             if (!client) throw new Error(getMessage('connectionError'));
             const { data, error } = await client.auth.updateUser({
                 password: password,
-                data: { has_password: true } // تحديث العلامة
+                data: { has_password: true }
             });
             if (error) throw error;
             return data;
         },
 
-        // التحقق مما إذا كان المستخدم لديه كلمة مرور
         async hasPassword() {
             const user = await this.getCurrentUser();
             if (!user) return false;
@@ -200,6 +333,10 @@
             const client = getClient();
             if (client) await client.auth.signOut();
             currentUser = null;
+
+            if (window.AndroidApp && typeof window.AndroidApp.clearUserToken === 'function') {
+                window.AndroidApp.clearUserToken();
+            }
 
             const keys = [
                 'pointageWorkData',
@@ -319,7 +456,7 @@
             const client = getClient();
             if (!client) throw new Error(getMessage('connectionError'));
             const { data, error } = await client.auth.resetPasswordForEmail(email, {
-                redirectTo: APP_URL
+                redirectTo: getAppUrl()
             });
             if (error) throw error;
             return data;
@@ -330,12 +467,18 @@
         const isAr = (window.settings?.language === 'ar');
         const messages = {
             'connectionError': isAr ? 'تعذر الاتصال بـ Supabase' : 'Impossible de se connecter à Supabase',
-            'signedOut': isAr ? '✅ تم تسجيل الخروج بنجاح' : '✅ Déconnexion réussie'
+            'signedOut': isAr ? '✅ تم تسجيل الخروج بنجاح' : '✅ Déconnexion réussie',
+            'invalidPhone': isAr ? 'رقم هاتف غير صحيح' : 'Numéro de téléphone invalide',
+            'recaptchaError': isAr ? 'خطأ في reCAPTCHA' : 'Erreur reCAPTCHA',
+            'otpSent': isAr ? 'تم إرسال رمز التحقق' : 'Code de vérification envoyé',
+            'invalidOtp': isAr ? 'رمز التحقق غير صحيح' : 'Code de vérification invalide',
+            'noConfirmation': isAr ? 'لا توجد جلسة تحقق' : 'Aucune session de vérification',
+            'authFailed': isAr ? 'فشل المصادقة' : 'Échec de l\'authentification'
         };
         return messages[key] || key;
     }
 
-    // ===== تصدير الدوال العامة =====
+    // ===== Exports =====
     window.signUpWithEmail = async function(email, password, fullName) {
         try { const result = await AuthService.signUp(email, password, fullName); return { user: result.user, error: null }; }
         catch (error) { return { user: null, error: error }; }
@@ -353,12 +496,12 @@
         catch (error) { return { data: null, error: error }; }
     };
     window.signInWithPhone = async function(phone) {
-        try { const data = await AuthService.signInWithPhone(phone); return { data, error: null }; }
-        catch (error) { return { data: null, error: error }; }
+        console.warn('signInWithPhone is deprecated, use sendFirebaseOTP');
+        return { data: null };
     };
     window.verifyPhoneOtp = async function(phone, token) {
-        try { const data = await AuthService.verifyPhoneOtp(phone, token); return { user: data.user, error: null }; }
-        catch (error) { return { user: null, error: error }; }
+        console.warn('verifyPhoneOtp is deprecated, use verifyOTPAndLogin');
+        return { user: null };
     };
     window.setPasswordForOAuthUser = async function(password) {
         try { const data = await AuthService.setPasswordForOAuthUser(password); return { data, error: null }; }
@@ -385,6 +528,11 @@
         catch (error) { return { success: false, error: error }; }
     };
 
+    // Export Firebase OTP functions
+    window.sendFirebaseOTP = window.sendFirebaseOTP;
+    window.verifyOTPAndLogin = window.verifyOTPAndLogin;
+    window.initRecaptcha = window.initRecaptcha;
+
     window.AuthService = AuthService;
 
     document.addEventListener('DOMContentLoaded', async function() {
@@ -404,5 +552,5 @@
         } catch (e) { /* ignore */ }
     });
 
-    console.log('authService.js loaded successfully with APP_URL:', APP_URL);
+    console.log('✅ authService.js chargé avec succès (Firebase OTP support)');
 })();
