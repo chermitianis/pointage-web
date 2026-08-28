@@ -3,6 +3,33 @@
     let supabaseClient = null;
     let currentUser = null;
 
+    // ===== Firebase Configuration =====
+    const firebaseConfig = {
+        apiKey: "AIzaSyCOT8WjtJ9qEcUWbv_pIgV7RFisrryes6o",
+        authDomain: "pointage-454ef.firebaseapp.com",
+        projectId: "pointage-454ef",
+        storageBucket: "pointage-454ef.firebasestorage.app",
+        messagingSenderId: "521883437469",
+        appId: "1:521883437469:web:5885b451e7c47c34db8774",
+        measurementId: "G-J5HMPC95W8"
+    };
+
+    // ===== تهيئة Firebase =====
+    if (typeof firebase !== 'undefined' && firebase.initializeApp) {
+        try {
+            if (!firebase.apps || firebase.apps.length === 0) {
+                firebase.initializeApp(firebaseConfig);
+                console.log('✅ Firebase initialized successfully');
+            } else {
+                console.log('✅ Firebase already initialized');
+            }
+        } catch (e) {
+            console.warn('⚠️ Firebase init error:', e);
+        }
+    } else {
+        console.warn('⚠️ Firebase SDK not loaded');
+    }
+
     function getAppUrl() {
         if (window.AndroidApp && typeof window.AndroidApp.getDeviceId === 'function') {
             return 'https://chermitianis.github.io/pointage-web/';
@@ -83,7 +110,7 @@
         }
     };
 
-    // Send OTP SMS
+    // Send OTP SMS via Firebase
     window.sendFirebaseOTP = async function(phoneNumber) {
         try {
             if (!phoneNumber || phoneNumber.length < 8) {
@@ -300,16 +327,13 @@
             return data;
         },
 
+        // Phone authentication via Firebase OTP
         async signInWithPhone(phoneNumber) {
-            // This is a wrapper for Firebase OTP, we'll use sendFirebaseOTP instead
-            // Keeping for compatibility, but not used directly
-            console.warn('signInWithPhone is deprecated, use sendFirebaseOTP + verifyOTPAndLogin');
-            return { data: null };
+            return await window.sendFirebaseOTP(phoneNumber);
         },
 
         async verifyPhoneOtp(phoneNumber, token) {
-            console.warn('verifyPhoneOtp is deprecated, use verifyOTPAndLogin');
-            return { user: null };
+            return await window.verifyOTPAndLogin(token);
         },
 
         async setPasswordForOAuthUser(password) {
@@ -496,12 +520,12 @@
         catch (error) { return { data: null, error: error }; }
     };
     window.signInWithPhone = async function(phone) {
-        console.warn('signInWithPhone is deprecated, use sendFirebaseOTP');
-        return { data: null };
+        try { const data = await AuthService.signInWithPhone(phone); return { data, error: null }; }
+        catch (error) { return { data: null, error: error }; }
     };
     window.verifyPhoneOtp = async function(phone, token) {
-        console.warn('verifyPhoneOtp is deprecated, use verifyOTPAndLogin');
-        return { user: null };
+        try { const data = await AuthService.verifyPhoneOtp(phone, token); return { user: data.user, error: null }; }
+        catch (error) { return { user: null, error: error }; }
     };
     window.setPasswordForOAuthUser = async function(password) {
         try { const data = await AuthService.setPasswordForOAuthUser(password); return { data, error: null }; }
@@ -552,5 +576,5 @@
         } catch (e) { /* ignore */ }
     });
 
-    console.log('✅ authService.js chargé avec succès (Firebase OTP support)');
+    console.log('✅ authService.js chargé avec succès (Firebase OTP + Supabase Auth)');
 })();
