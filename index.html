@@ -1,5 +1,5 @@
-﻿<!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -14,13 +14,13 @@
     <link rel="manifest" href="manifest.json">
 
     <!-- ===== Apple Touch Icons ===== -->
-<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<link rel="apple-touch-icon" sizes="72x72" href="assets/icon-72.png">
-<link rel="apple-touch-icon" sizes="96x96" href="assets/icon-96.png">
-<link rel="apple-touch-icon" sizes="128x128" href="assets/icon-128.png">
-<link rel="apple-touch-icon" sizes="144x144" href="assets/icon-144.png">
-<link rel="apple-touch-icon" sizes="152x152" href="assets/icon-152.png">
-<link rel="apple-touch-icon" sizes="192x192" href="assets/icon-192.png">
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="assets/icon-72.png">
+    <link rel="apple-touch-icon" sizes="96x96" href="assets/icon-96.png">
+    <link rel="apple-touch-icon" sizes="128x128" href="assets/icon-128.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="assets/icon-144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="assets/icon-152.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="assets/icon-192.png">
 
     <!-- ===== Windows Tile ===== -->
     <meta name="msapplication-TileImage" content="assets/icon-144.png">
@@ -29,16 +29,19 @@
     <!-- ===== CSS ===== -->
     <link rel="stylesheet" href="styles.css">
 
+    <!-- ===== Firebase Compat SDKs ===== -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+
     <!-- ===== Service Worker Registration ===== -->
     <script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    // تحديد المسار والـ Scope بدقة ليتوافق مع Subfolder الخاص بـ GitHub Pages
-    navigator.serviceWorker.register('./sw.js', { scope: './' })
-      .then(reg => console.log('✅ Service Worker registered scope:', reg.scope))
-      .catch(err => console.warn('⚠️ Service Worker registration failed:', err));
-  });
-}
+        if ('serviceWorker' in navigator) {
+          window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js', { scope: './' })
+              .then(reg => console.log('✅ Service Worker registered scope:', reg.scope))
+              .catch(err => console.warn('⚠️ Service Worker registration failed:', err));
+          });
+        }
     </script>
 </head>
 <body>
@@ -46,36 +49,35 @@ if ('serviceWorker' in navigator) {
     <!-- Header -->
     <div class="app-header">
         <div class="app-title" data-i18n="appTitle">📊 Pointage</div>
+        <div class="period-badge" id="currentPeriod">Chargement...</div>
 
-        <div class="period-badge" id="currentPeriod">جاري التحميل...</div>
-
-        <!-- تنبيه المكافآت السابقة -->
+        <!-- Bonus Alert -->
         <div class="bonus-alert" id="bonusAlert" style="display: none;">
             <div class="bonus-alert-content">
-                <div class="bonus-alert-title" data-i18n="previousBonus">مكافآت الشهر السابق</div>
-                <div class="bonus-alert-amount" id="previousBonusAmount">0 د</div>
+                <div class="bonus-alert-title" data-i18n="previousBonus">Prime du mois précédent</div>
+                <div class="bonus-alert-amount" id="previousBonusAmount">0 DT</div>
             </div>
-            <button class="bonus-alert-btn" onclick="clearPreviousBonus()" data-i18n="received">تم الاستلام ✓</button>
+            <button class="bonus-alert-btn" onclick="clearPreviousBonus()" data-i18n="received">Reçu ✓</button>
         </div>
 
         <div class="quick-stats">
             <div class="stat-card">
                 <div class="stat-value" id="currentBonusAmount">0</div>
-                <div class="stat-label" data-i18n="currentBonus">مكافآت الشهر</div>
+                <div class="stat-label" data-i18n="currentBonus">Prime du mois</div>
             </div>
             <div class="stat-card">
                 <div class="stat-value" id="workDaysMonth">0</div>
-                <div class="stat-label" data-i18n="workDaysLabel">أيام عمل</div>
+                <div class="stat-label" data-i18n="workDaysLabel">Jours travaillés</div>
             </div>
             <div class="stat-card">
                 <div class="stat-value stat-value-with-sub">
                     <span id="vacationBalance">0</span><span class="stat-sub-value" id="vacationSolde">+0</span>
                 </div>
-                <div class="stat-label" data-i18n="vacationLabel">إجازة</div>
+                <div class="stat-label" data-i18n="vacationLabel">Congé</div>
             </div>
             <div class="stat-card">
                 <div class="stat-value" id="overtimeHours">0</div>
-                <div class="stat-label" data-i18n="overtimeHours">ساعات إضافية</div>
+                <div class="stat-label" data-i18n="overtimeHours">Heures supp.</div>
             </div>
         </div>
     </div>
@@ -84,46 +86,46 @@ if ('serviceWorker' in navigator) {
     <div class="content-area">
         <!-- Dashboard -->
         <div id="dashboard-section" class="section active">
-            <div class="section-title" data-i18n="currentWeek">⏰ الأسبوع الحالي</div>
+            <div class="section-title" data-i18n="currentWeek">⏰ Semaine en cours</div>
             <div class="week-actions">
-                <button class="shift-btn btn-shift-1" onclick="setWeekShift(1)">حصة 1</button>
-                <button class="shift-btn btn-shift-2" onclick="setWeekShift(2)">حصة 2</button>
-                <button class="shift-btn btn-shift-3" onclick="setWeekShift(3)">حصة 3</button>
-                <button class="shift-btn btn-shift-4" onclick="setWeekShift(4)">حصة 4</button>
+                <button class="shift-btn btn-shift-1" onclick="setWeekShift(1)">Poste 1</button>
+                <button class="shift-btn btn-shift-2" onclick="setWeekShift(2)">Poste 2</button>
+                <button class="shift-btn btn-shift-3" onclick="setWeekShift(3)">Poste 3</button>
+                <button class="shift-btn btn-shift-4" onclick="setWeekShift(4)">Poste 4</button>
             </div>
             <div class="days-grid" id="currentWeekGrid"></div>
             <div class="legend">
                 <div class="legend-item">
                     <div class="legend-color shift-1"></div>
-                    <span data-i18n="legendShift1">حصة 1</span>
+                    <span data-i18n="legendShift1">Poste 1</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color shift-2"></div>
-                    <span data-i18n="legendShift2">حصة 2 +15د/يوم</span>
+                    <span data-i18n="legendShift2">Poste 2 +15 DT/j</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color shift-3"></div>
-                    <span data-i18n="legendShift3">حصة 3 +20د/يوم</span>
+                    <span data-i18n="legendShift3">Poste 3 +20 DT/j</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color shift-4"></div>
-                    <span data-i18n="legendShift4">حصة 4</span>
+                    <span data-i18n="legendShift4">Poste 4</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color rest"></div>
-                    <span data-i18n="legendRest">راحة</span>
+                    <span data-i18n="legendRest">Repos</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color vacation"></div>
-                    <span data-i18n="legendVacation">إجازة</span>
+                    <span data-i18n="legendVacation">Congé</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color absence"></div>
-                    <span data-i18n="legendAbsence">غياب</span>
+                    <span data-i18n="legendAbsence">Absence</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color holiday"></div>
-                    <span data-i18n="legendHoliday">عطلة</span>
+                    <span data-i18n="legendHoliday">Férié</span>
                 </div>
             </div>
         </div>
@@ -132,7 +134,7 @@ if ('serviceWorker' in navigator) {
         <div id="calendar-section" class="section">
             <div class="month-nav">
                 <button onclick="changeMonth(-1)">‹</button>
-                <div class="month-title" id="monthTitle">التقويم</div>
+                <div class="month-title" id="monthTitle">Calendrier</div>
                 <button onclick="changeMonth(1)">›</button>
             </div>
             <div class="calendar-grid" id="calendarGrid"></div>
@@ -140,128 +142,122 @@ if ('serviceWorker' in navigator) {
 
         <!-- Reports -->
         <div id="reports-section" class="section">
-            <div class="section-title" data-i18n="reportsTitle">📊 التقارير</div>
+            <div class="section-title" data-i18n="reportsTitle">📊 Rapports</div>
             <div class="report-filters">
                 <select class="filter-select" id="reportYear" onchange="updateReport()"></select>
                 <select class="filter-select" id="reportMonth" onchange="updateReport()"></select>
             </div>
 
-            <!-- Monthly Report -->
             <div class="report-card">
-                <div class="report-title" id="reportPeriod" data-i18n="monthlyReport">التقرير الشهري</div>
+                <div class="report-title" id="reportPeriod" data-i18n="monthlyReport">Rapport mensuel</div>
                 <div class="report-grid">
                     <div class="report-item">
                         <div class="report-value" id="reportWorkDays">0</div>
-                        <div class="report-label" data-i18n="workDays">أيام العمل</div>
+                        <div class="report-label" data-i18n="workDays">Jours travaillés</div>
                     </div>
                     <div class="report-item">
                         <div class="report-value" id="reportVacationDays">0</div>
-                        <div class="report-label" data-i18n="vacationDays">إجازة</div>
+                        <div class="report-label" data-i18n="vacationDays">Congé</div>
                     </div>
                     <div class="report-item">
                         <div class="report-value" id="reportAbsenceDays">0</div>
-                        <div class="report-label" data-i18n="absenceDays">غياب</div>
+                        <div class="report-label" data-i18n="absenceDays">Absences</div>
                     </div>
                     <div class="report-item">
                         <div class="report-value" id="reportHolidays">0</div>
-                        <div class="report-label" data-i18n="holidays">عطل</div>
+                        <div class="report-label" data-i18n="holidays">Fériés</div>
                     </div>
                     <div class="report-item">
                         <div class="report-value" id="reportOvertimeHours">0</div>
-                        <div class="report-label" data-i18n="overtimeHours">ساعات إضافية</div>
+                        <div class="report-label" data-i18n="overtimeHours">Heures supp.</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Salary -->
             <div class="salary-card">
-                <div style="font-size: 11px; opacity: 0.9; margin-bottom: 4px;" data-i18n="monthlySalaryLabel">الراتب الشهري (تحويل بنكي)</div>
-                <div class="salary-amount" id="reportSalary">0 د</div>
+                <div style="font-size: 11px; opacity: 0.9; margin-bottom: 4px;" data-i18n="monthlySalaryLabel">Salaire mensuel (virement)</div>
+                <div class="salary-amount" id="reportSalary">0 DT</div>
                 <div class="salary-details">
                     <div>
-                        <div class="salary-detail-value" id="reportBaseSalary">0 د</div>
-                        <div class="salary-detail-label" data-i18n="baseSalary">الراتب الأساسي</div>
+                        <div class="salary-detail-value" id="reportBaseSalary">0 DT</div>
+                        <div class="salary-detail-label" data-i18n="baseSalary">Salaire de base</div>
                     </div>
                     <div>
-                        <div class="salary-detail-value" id="reportAbsenceDeduction">0 د</div>
-                        <div class="salary-detail-label" data-i18n="absenceDeduction">خصم الغياب</div>
+                        <div class="salary-detail-value" id="reportAbsenceDeduction">0 DT</div>
+                        <div class="salary-detail-label" data-i18n="absenceDeduction">Déduction absence</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Bonus Details -->
             <div class="bonus-card">
-                <div style="font-size: 11px; opacity: 0.9; margin-bottom: 4px;" data-i18n="monthlyBonus">المكافآت الشهرية (نقدي)</div>
-                <div class="bonus-amount" id="reportBonus">0 د</div>
+                <div style="font-size: 11px; opacity: 0.9; margin-bottom: 4px;" data-i18n="monthlyBonus">Primes mensuelles (espèces)</div>
+                <div class="bonus-amount" id="reportBonus">0 DT</div>
                 <div class="bonus-details">
                     <div>
-                        <div class="bonus-detail-value" id="reportShiftBonus">0 د</div>
-                        <div class="bonus-detail-label" data-i18n="shiftsBonusLabel">مكافأة الحصص</div>
+                        <div class="bonus-detail-value" id="reportShiftBonus">0 DT</div>
+                        <div class="bonus-detail-label" data-i18n="shiftsBonusLabel">Prime de poste</div>
                     </div>
                     <div>
-                        <div class="bonus-detail-value" id="reportOvertimeBonus">0 د</div>
-                        <div class="bonus-detail-label" data-i18n="overtime">ساعات إضافية</div>
+                        <div class="bonus-detail-value" id="reportOvertimeBonus">0 DT</div>
+                        <div class="bonus-detail-label" data-i18n="overtime">Heures supp.</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Overtime Details -->
             <div class="overtime-details-card">
-                <div class="overtime-title" data-i18n="overtimeDetails">تفاصيل الساعات الإضافية</div>
+                <div class="overtime-title" data-i18n="overtimeDetails">Détails heures supplémentaires</div>
                 <div class="overtime-grid">
                     <div class="overtime-item">
-                        <div class="overtime-value" id="reportOvertimeNormal">0 د</div>
-                        <div class="overtime-label" id="labelOvertimeNormal" data-i18n="overtimeNormal">ساعات عادية (×1.25)</div>
+                        <div class="overtime-value" id="reportOvertimeNormal">0 DT</div>
+                        <div class="overtime-label" id="labelOvertimeNormal" data-i18n="overtimeNormal">Heures normales (×1.25)</div>
                     </div>
                     <div class="overtime-item">
-                        <div class="overtime-value" id="reportOvertimeNight">0 د</div>
-                        <div class="overtime-label" id="labelOvertimeNight" data-i18n="overtimeNight">ساعات ليلية (×1.50)</div>
+                        <div class="overtime-value" id="reportOvertimeNight">0 DT</div>
+                        <div class="overtime-label" id="labelOvertimeNight" data-i18n="overtimeNight">Heures de nuit (×1.50)</div>
                     </div>
                     <div class="overtime-item">
-                        <div class="overtime-value" id="reportOvertimeRest">0 د</div>
-                        <div class="overtime-label" id="labelOvertimeRest" data-i18n="overtimeRest">يوم راحة (×1.75)</div>
+                        <div class="overtime-value" id="reportOvertimeRest">0 DT</div>
+                        <div class="overtime-label" id="labelOvertimeRest" data-i18n="overtimeRest">Jour de repos (×1.75)</div>
                     </div>
                     <div class="overtime-item">
-                        <div class="overtime-value" id="reportOvertimeHoliday">0 د</div>
-                        <div class="overtime-label" id="labelOvertimeHoliday" data-i18n="overtimeHoliday">أعياد رسمية (×2.00)</div>
+                        <div class="overtime-value" id="reportOvertimeHoliday">0 DT</div>
+                        <div class="overtime-label" id="labelOvertimeHoliday" data-i18n="overtimeHoliday">Jours fériés (×2.00)</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Yearly -->
             <div class="report-card yearly-card">
-                <div class="report-title"><span data-i18n="yearlyReport">الملخص السنوي</span> <span id="yearlyYear">2026</span></div>
+                <div class="report-title"><span data-i18n="yearlyReport">Résumé annuel</span> <span id="yearlyYear">2026</span></div>
                 <div class="report-grid">
                     <div class="report-item">
                         <div class="report-value" id="yearlyWorkDays">0</div>
-                        <div class="report-label" data-i18n="yearlyWorkDays">أيام عمل</div>
+                        <div class="report-label" data-i18n="yearlyWorkDays">Jours travaillés</div>
                     </div>
                     <div class="report-item">
                         <div class="report-value" id="yearlyVacation">0</div>
-                        <div class="report-label" data-i18n="yearlyVacation">إجازة</div>
+                        <div class="report-label" data-i18n="yearlyVacation">Congé</div>
                     </div>
                     <div class="report-item">
                         <div class="report-value" id="yearlyAbsence">0</div>
-                        <div class="report-label" data-i18n="yearlyAbsence">غياب</div>
+                        <div class="report-label" data-i18n="yearlyAbsence">Absences</div>
                     </div>
                     <div class="report-item">
                         <div class="report-value" id="yearlyBonus">0</div>
-                        <div class="report-label" data-i18n="yearlyBonus">مكافآت (د)</div>
+                        <div class="report-label" data-i18n="yearlyBonus">Primes (DT)</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Export Tools Section -->
             <div class="export-tools-section">
-                <div class="section-title" data-i18n="exportTools">📤 أدوات التصدير</div>
+                <div class="section-title" data-i18n="exportTools">📤 Outils d'export</div>
                 <div class="export-buttons-grid">
                     <button class="export-action-btn" onclick="openExportModal()">
                         <span>📄</span>
-                        <span data-i18n="exportReportBtn">تصدير تقرير عام</span>
+                        <span data-i18n="exportReportBtn">Exporter rapport général</span>
                     </button>
                     <button class="export-action-btn vacation-export-btn" onclick="openVacationExportModal()">
                         <span>🏖️</span>
-                        <span data-i18n="exportVacationBtn">تصدير أيام الإجازة</span>
+                        <span data-i18n="exportVacationBtn">Exporter les congés</span>
                     </button>
                 </div>
             </div>
@@ -269,55 +265,51 @@ if ('serviceWorker' in navigator) {
 
         <!-- Notes -->
         <div id="notes-section" class="section">
-            <div class="section-title" data-i18n="notesTitle">📔 المذكرات</div>
+            <div class="section-title" data-i18n="notesTitle">📔 Notes</div>
 
-            <!-- ===== شريط التبديل بين الميزات الثلاث ===== -->
             <div class="notes-hub-tabs">
                 <button class="notes-hub-tab active" id="hubTabBtn-tasks" onclick="switchNotesHub('tasks')">
                     <span class="hub-tab-icon">🗓️</span>
-                    <span class="hub-tab-label" data-i18n="hubTasks">جدول أعمالي</span>
+                    <span class="hub-tab-label" data-i18n="hubTasks">Mon agenda</span>
                 </button>
                 <button class="notes-hub-tab" id="hubTabBtn-notes" onclick="switchNotesHub('notes')">
                     <span class="hub-tab-icon">📔</span>
-                    <span class="hub-tab-label" data-i18n="hubNotes">مفكراتي</span>
+                    <span class="hub-tab-label" data-i18n="hubNotes">Mes notes</span>
                 </button>
                 <button class="notes-hub-tab" id="hubTabBtn-reminders" onclick="switchNotesHub('reminders')">
                     <span class="hub-tab-icon">⏰</span>
-                    <span class="hub-tab-label" data-i18n="hubReminders">تذكير</span>
+                    <span class="hub-tab-label" data-i18n="hubReminders">Rappels</span>
                     <span class="hub-tab-badge" id="remindersDueBadge" style="display:none;">0</span>
                 </button>
             </div>
 
-            <!-- ===== لوحة 1: جدول أعمالي (Tasks / Agenda) ===== -->
             <div class="notes-hub-panel active" id="hubPanel-tasks">
                 <div class="hub-panel-toolbar">
                     <div class="tasks-filter-pills">
-                        <button class="filter-pill active" data-filter="upcoming" onclick="setTasksFilter('upcoming')" data-i18n="tasksFilterUpcoming">القادمة</button>
-                        <button class="filter-pill" data-filter="today" onclick="setTasksFilter('today')" data-i18n="tasksFilterToday">اليوم</button>
-                        <button class="filter-pill" data-filter="done" onclick="setTasksFilter('done')" data-i18n="tasksFilterDone">منجزة</button>
-                        <button class="filter-pill" data-filter="all" onclick="setTasksFilter('all')" data-i18n="tasksFilterAll">الكل</button>
+                        <button class="filter-pill active" data-filter="upcoming" onclick="setTasksFilter('upcoming')" data-i18n="tasksFilterUpcoming">À venir</button>
+                        <button class="filter-pill" data-filter="today" onclick="setTasksFilter('today')" data-i18n="tasksFilterToday">Aujourd'hui</button>
+                        <button class="filter-pill" data-filter="done" onclick="setTasksFilter('done')" data-i18n="tasksFilterDone">Terminées</button>
+                        <button class="filter-pill" data-filter="all" onclick="setTasksFilter('all')" data-i18n="tasksFilterAll">Toutes</button>
                     </div>
                 </div>
                 <div class="hub-list" id="tasksList"></div>
                 <div class="hub-empty-state" id="tasksEmptyState" style="display:none;">
                     <div class="hub-empty-icon">🗓️</div>
-                    <div class="hub-empty-text" data-i18n="tasksEmpty">لا توجد مهام بعد. اضغط + لإضافة أول مهمة في جدول أعمالك.</div>
+                    <div class="hub-empty-text" data-i18n="tasksEmpty">Aucune tâche. Appuyez sur + pour ajouter votre première tâche.</div>
                 </div>
                 <button class="hub-fab" onclick="openTaskModal()" title="+">+</button>
             </div>
 
-            <!-- ===== لوحة 2: مفكراتي (Notes) ===== -->
             <div class="notes-hub-panel" id="hubPanel-notes">
-                <div class="notes-subtitle" data-i18n="notesSubtitle">مساحتك الخاصة لتدوين أفكارك ويومياتك</div>
-
+                <div class="notes-subtitle" data-i18n="notesSubtitle">Votre espace personnel pour vos idées et votre journal</div>
                 <div class="notes-toolbar">
                     <div class="notes-view-toggle">
-                        <button id="notesViewMonthBtn" class="notes-view-btn active" onclick="switchNotesView('month')" data-i18n="notesViewMonth">شهر</button>
-                        <button id="notesViewWeekBtn" class="notes-view-btn" onclick="switchNotesView('week')" data-i18n="notesViewWeek">أسبوع</button>
+                        <button id="notesViewMonthBtn" class="notes-view-btn active" onclick="switchNotesView('month')" data-i18n="notesViewMonth">Mois</button>
+                        <button id="notesViewWeekBtn" class="notes-view-btn" onclick="switchNotesView('week')" data-i18n="notesViewWeek">Semaine</button>
                     </div>
-                    <button class="notes-today-btn" onclick="goToNotesToday()" data-i18n="notesToday">اليوم</button>
+                    <button class="notes-today-btn" onclick="goToNotesToday()" data-i18n="notesToday">Aujourd'hui</button>
                     <button class="notes-today-btn notes-export-btn" onclick="openNotesExportModal()">
-                        📄 <span data-i18n="exportNotesBtn">تصدير PDF</span>
+                        📄 <span data-i18n="exportNotesBtn">Exporter PDF</span>
                     </button>
                 </div>
 
@@ -331,19 +323,18 @@ if ('serviceWorker' in navigator) {
                 <div class="notes-week-list" id="notesWeekList" style="display:none;"></div>
             </div>
 
-            <!-- ===== لوحة 3: تذكير (Reminders) ===== -->
             <div class="notes-hub-panel" id="hubPanel-reminders">
                 <div class="hub-panel-toolbar">
                     <div class="tasks-filter-pills">
-                        <button class="filter-pill active" data-filter="upcoming" onclick="setRemindersFilter('upcoming')" data-i18n="tasksFilterUpcoming">القادمة</button>
-                        <button class="filter-pill" data-filter="past" onclick="setRemindersFilter('past')" data-i18n="remindersFilterPast">السابقة</button>
-                        <button class="filter-pill" data-filter="all" onclick="setRemindersFilter('all')" data-i18n="tasksFilterAll">الكل</button>
+                        <button class="filter-pill active" data-filter="upcoming" onclick="setRemindersFilter('upcoming')" data-i18n="tasksFilterUpcoming">À venir</button>
+                        <button class="filter-pill" data-filter="past" onclick="setRemindersFilter('past')" data-i18n="remindersFilterPast">Passés</button>
+                        <button class="filter-pill" data-filter="all" onclick="setRemindersFilter('all')" data-i18n="tasksFilterAll">Tous</button>
                     </div>
                 </div>
                 <div class="hub-list" id="remindersList"></div>
                 <div class="hub-empty-state" id="remindersEmptyState" style="display:none;">
                     <div class="hub-empty-icon">⏰</div>
-                    <div class="hub-empty-text" data-i18n="remindersEmpty">لا توجد تذكيرات بعد. اضغط + لإضافة تذكير جديد.</div>
+                    <div class="hub-empty-text" data-i18n="remindersEmpty">Aucun rappel. Appuyez sur + pour en ajouter un.</div>
                 </div>
                 <button class="hub-fab" onclick="openReminderModal()" title="+">+</button>
             </div>
@@ -351,9 +342,8 @@ if ('serviceWorker' in navigator) {
 
         <!-- Settings -->
         <div id="settings-section" class="section">
-            <div class="section-title" data-i18n="settingsTitle">⚙️ الإعدادات</div>
+            <div class="section-title" data-i18n="settingsTitle">⚙️ Paramètres</div>
 
-            <!-- زر تسجيل الدخول - أضفه داخل settings-section -->
             <details class="settings-group" open>
                 <summary class="settings-group-header">
                     <span class="settings-icon">🔐</span>
@@ -371,7 +361,6 @@ if ('serviceWorker' in navigator) {
                 </div>
             </details>
 
-            <!-- ===== 1. Général ===== -->
             <details class="settings-group" open>
                 <summary class="settings-group-header">
                     <span class="settings-icon">⚙️</span>
@@ -379,37 +368,33 @@ if ('serviceWorker' in navigator) {
                     <span class="settings-toggle-icon">▾</span>
                 </summary>
                 <div class="settings-group-body">
-                    <!-- Language -->
                     <div class="setting-row">
-                        <div class="setting-label" data-i18n="selectLanguage">اختر اللغة:</div>
+                        <div class="setting-label" data-i18n="selectLanguage">Choisir la langue :</div>
                         <select class="setting-input" id="languageSelect" onchange="changeLanguage(this.value)">
                             <option value="ar" data-i18n="arabic">العربية</option>
                             <option value="fr" data-i18n="french">Français</option>
                         </select>
                     </div>
-                    <!-- Number Format -->
                     <div class="setting-row">
-                        <div class="setting-label" data-i18n="numberFormat">نوع الأرقام:</div>
+                        <div class="setting-label" data-i18n="numberFormat">Format des nombres :</div>
                         <select class="setting-input" id="numberFormatSelect" onchange="changeNumberFormat(this.value)">
-                            <option value="western" data-i18n="westernNumbers">أرقام عادية (1,2,3)</option>
-                            <option value="arabic" data-i18n="arabicNumbers">أرقام عربية (١,٢,٣)</option>
+                            <option value="western" data-i18n="westernNumbers">Occidentaux (1,2,3)</option>
+                            <option value="arabic" data-i18n="arabicNumbers">Arabes (١,٢,٣)</option>
                         </select>
                     </div>
-                    <!-- Theme -->
                     <div class="setting-row">
-                        <div class="setting-label" data-i18n="theme">الثيم:</div>
+                        <div class="setting-label" data-i18n="theme">Thème :</div>
                         <div class="theme-toggle-container">
                             <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeToggleBtn">
                                 <span id="themeIcon">🌙</span>
-                                <span id="themeLabel" data-i18n="darkMode">الوضع الداكن</span>
+                                <span id="themeLabel" data-i18n="darkMode">Mode sombre</span>
                             </button>
-                            <button class="theme-reset-btn" onclick="resetTheme()" title="إعادة تعيين الثيم">↺</button>
+                            <button class="theme-reset-btn" onclick="resetTheme()" title="Réinitialiser le thème">↺</button>
                         </div>
                     </div>
                 </div>
             </details>
 
-            <!-- ===== 2. Méthode de calcul ===== -->
             <details class="settings-group">
                 <summary class="settings-group-header">
                     <span class="settings-icon">📊</span>
@@ -417,81 +402,75 @@ if ('serviceWorker' in navigator) {
                     <span class="settings-toggle-icon">▾</span>
                 </summary>
                 <div class="settings-group-body">
-                    <!-- Month Cycle -->
                     <div class="settings-subgroup">
                         <div class="settings-subgroup-header">
-                            <h4 data-i18n="monthCycle">دورة الشهر</h4>
+                            <h4 data-i18n="monthCycle">Cycle du mois</h4>
                         </div>
                         <div class="setting-row">
-                            <div class="setting-label" data-i18n="startDay">يبدأ من يوم:</div>
+                            <div class="setting-label" data-i18n="startDay">Commence le :</div>
                             <input type="number" class="setting-input" id="monthStartDay" min="1" max="31" value="1">
                         </div>
                         <div class="setting-row">
-                            <div class="setting-label" data-i18n="endDay">ينتهي في يوم:</div>
+                            <div class="setting-label" data-i18n="endDay">Se termine le :</div>
                             <input type="number" class="setting-input" id="monthEndDay" min="1" max="31" value="31">
                         </div>
-                        <div class="setting-note" data-i18n="monthCycleNote">💡 يتم حساب نهاية الشهر تلقائياً حسب عدد أيام الشهر (30، 31، أو 28/29)</div>
+                        <div class="setting-note" data-i18n="monthCycleNote">💡 La fin du mois est calculée automatiquement selon le nombre de jours du mois (30, 31, ou 28/29)</div>
                     </div>
 
-                    <!-- Overtime Settings -->
                     <div class="settings-subgroup">
                         <div class="settings-subgroup-header">
-                            <h4 data-i18n="overtimeSettings">الساعات الإضافية</h4>
+                            <h4 data-i18n="overtimeSettings">Heures supplémentaires</h4>
                         </div>
-                        <button class="settings-action-btn" onclick="openOvertimeSettings()" data-i18n="configureOvertime">⚙️ ضبط الساعات الإضافية</button>
+                        <button class="settings-action-btn" onclick="openOvertimeSettings()" data-i18n="configureOvertime">⚙️ Configurer les heures supp.</button>
                     </div>
 
-                    <!-- Salary -->
                     <div class="settings-subgroup">
                         <div class="settings-subgroup-header">
-                            <h4 data-i18n="salary">الراتب والأجر</h4>
+                            <h4 data-i18n="salary">Salaire et rémunération</h4>
                         </div>
                         <div class="setting-row">
-                            <div class="setting-label" data-i18n="currencyLabel">رمز العملة:</div>
+                            <div class="setting-label" data-i18n="currencyLabel">Symbole monétaire :</div>
                             <input type="text" class="setting-input" id="currencyInput" value="DT" maxlength="8" style="width: auto; text-align: center;">
                         </div>
                         <div class="setting-row">
-                            <div class="setting-label" data-i18n="hourlyRate">أجر الساعة الأساسي:</div>
+                            <div class="setting-label" data-i18n="hourlyRate">Taux horaire de base :</div>
                             <input type="number" class="setting-input" id="hourlyRate" value="5" step="0.1">
                         </div>
                         <div class="setting-row">
-                            <div class="setting-label" data-i18n="monthlySalary">الراتب الشهري:</div>
+                            <div class="setting-label" data-i18n="monthlySalary">Salaire mensuel :</div>
                             <input type="number" class="setting-input" id="monthlySalary" value="800" step="0.1">
                         </div>
                         <div class="setting-row">
-                            <div class="setting-label" data-i18n="hoursPerDay">ساعات العمل اليومية:</div>
+                            <div class="setting-label" data-i18n="hoursPerDay">Heures de travail par jour :</div>
                             <input type="number" class="setting-input" id="hoursPerDay" value="8" min="1" max="24">
                         </div>
                     </div>
 
-                    <!-- Vacations -->
                     <div class="settings-subgroup">
                         <div class="settings-subgroup-header">
-                            <h4 data-i18n="vacations">الإجازات</h4>
+                            <h4 data-i18n="vacations">Congés</h4>
                         </div>
                         <div class="setting-row">
-                            <div class="setting-label" data-i18n="annualVacation">رصيد سنوي (يوم):</div>
+                            <div class="setting-label" data-i18n="annualVacation">Solde annuel (jours) :</div>
                             <input type="number" class="setting-input" id="annualVacation" value="18">
                         </div>
                     </div>
 
-                    <!-- Holidays -->
                     <div class="settings-subgroup">
                         <div class="settings-subgroup-header">
-                            <h4 data-i18n="officialHolidays">العطل الرسمية</h4>
+                            <h4 data-i18n="officialHolidays">Jours fériés</h4>
                         </div>
                         <div class="holiday-list" id="holidaysList"></div>
-                        <button class="add-btn" data-i18n="addHoliday" onclick="showAddHolidayModal()">+ إضافة</button>
+                        <button class="add-btn" data-i18n="addHoliday" onclick="showAddHolidayModal()">+ Ajouter</button>
                         <div style="margin-top: 8px;">
                             <button class="add-btn" onclick="showReligiousHolidaysInfo()" style="background: #795548;">
-                                <span data-i18n="updateReligiousHolidays">📅 تحديث الأعياد الدينية</span>
+                                <span data-i18n="updateReligiousHolidays">📅 Mettre à jour les fêtes religieuses</span>
                             </button>
                         </div>
                     </div>
                 </div>
             </details>
 
-            <!-- ===== 3. Paramètres des jours et postes ===== -->
             <details class="settings-group">
                 <summary class="settings-group-header">
                     <span class="settings-icon">📅</span>
@@ -499,23 +478,20 @@ if ('serviceWorker' in navigator) {
                     <span class="settings-toggle-icon">▾</span>
                 </summary>
                 <div class="settings-group-body">
-                    <!-- Weekly Rest Days -->
                     <div class="settings-subgroup">
                         <div class="settings-subgroup-header">
-                            <h4 data-i18n="weeklyRestDays">أيام الراحة الأسبوعية</h4>
+                            <h4 data-i18n="weeklyRestDays">Jours de repos hebdomadaires</h4>
                         </div>
                         <div id="weeklyRestTableContainer"></div>
                     </div>
 
-                    <!-- Shifts Configuration -->
                     <div class="settings-subgroup">
                         <div class="settings-subgroup-header">
                             <span>⚙️</span>
-                            <h4 data-i18n="shiftsConfiguration">تكوين الحصص</h4>
+                            <h4 data-i18n="shiftsConfiguration">Configuration des postes</h4>
                         </div>
-                        <!-- عدد الحصص -->
                         <div class="setting-row">
-                            <div class="setting-label" data-i18n="numShiftsLabel">عدد الحصص اليومية:</div>
+                            <div class="setting-label" data-i18n="numShiftsLabel">Nombre de postes par jour :</div>
                             <select class="setting-input" id="numShiftsSelect" onchange="onNumShiftsChange()">
                                 <option value="1">1</option>
                                 <option value="2">2</option>
@@ -523,20 +499,17 @@ if ('serviceWorker' in navigator) {
                                 <option value="4">4</option>
                             </select>
                         </div>
-                        <!-- وقت بداية الحصة الأولى -->
                         <div class="setting-row">
-                            <div class="setting-label" data-i18n="shiftStartLabel">وقت بداية الحصة الأولى:</div>
+                            <div class="setting-label" data-i18n="shiftStartLabel">Heure de début du premier poste :</div>
                             <input type="number" class="setting-input" id="shiftStartHour" min="0" max="23" value="8" onchange="onShiftStartHourChange()">
                             <div style="font-size: 11px; color: var(--gray); margin-top: 4px;">(0-23)</div>
                         </div>
-                        <!-- مكافآت وأوقات الحصص (تظهر ديناميكياً) -->
                         <div id="shiftBonusesContainer"></div>
-                        <div class="setting-note" data-i18n="shiftsNote">💡 يتم حساب أوقات الحصص تلقائياً بتقسيم 24 ساعة على عدد الحصص، بدءاً من وقت بداية الحصة الأولى. عند اختيار حصة واحدة يُعتمد التوقيت الإداري الاعتيادي.</div>
+                        <div class="setting-note" data-i18n="shiftsNote">💡 Les horaires des postes sont calculés automatiquement en divisant 24h par le nombre de postes, à partir de l'heure de début du premier poste. En mode poste unique, l'horaire administratif normal est utilisé.</div>
                     </div>
                 </div>
             </details>
 
-            <!-- ===== 4. Sauvegarde ===== -->
             <details class="settings-group">
                 <summary class="settings-group-header">
                     <span class="settings-icon">💾</span>
@@ -545,39 +518,37 @@ if ('serviceWorker' in navigator) {
                 </summary>
                 <div class="settings-group-body">
                     <button class="add-btn" onclick="exportData()" style="background: linear-gradient(135deg, #4CAF50, #388E3C); margin-bottom: 8px;">
-                        📤 <span data-i18n="exportData">تصدير البيانات</span>
+                        📤 <span data-i18n="exportData">Exporter les données</span>
                     </button>
                     <button class="add-btn" onclick="importData()" style="background: linear-gradient(135deg, #2196F3, #1976D2); margin-bottom: 8px;">
-                        📥 <span data-i18n="importData">استيراد البيانات</span>
+                        📥 <span data-i18n="importData">Importer les données</span>
                     </button>
                     <input type="file" id="fileInput" style="display:none" accept=".json,application/json,text/plain" onchange="handleFileImport(event)">
                     <button class="add-btn" onclick="clearData()" style="background: linear-gradient(135deg, #F44336, #D32F2F);">
-                        🗑️ <span data-i18n="clearData">مسح جميع البيانات</span>
+                        🗑️ <span data-i18n="clearData">Effacer toutes les données</span>
                     </button>
                 </div>
             </details>
 
-            <!-- ===== 4bis. API والأتمتة ===== -->
             <details class="settings-group">
                 <summary class="settings-group-header">
                     <span class="settings-icon">🔌</span>
-                    <h3 data-i18n="apiSection">API والأتمتة</h3>
+                    <h3 data-i18n="apiSection">API et automatisation</h3>
                     <span class="settings-toggle-icon">▾</span>
                 </summary>
                 <div class="settings-group-body">
                     <div class="setting-row" style="align-items: center;">
-                        <div class="setting-label" data-i18n="apiEnableLabel">تفعيل PointageAPI (للاستخدام ضمن WebView/أتمتة خارجية):</div>
+                        <div class="setting-label" data-i18n="apiEnableLabel">Activer PointageAPI (pour utilisation dans WebView/automatisation externe) :</div>
                         <label class="switch">
                             <input type="checkbox" id="apiEnabledToggle" onchange="onApiEnabledChange()">
                             <span class="slider round"></span>
                         </label>
                     </div>
-                    <div class="setting-note" data-i18n="apiNote">💡 عند التفعيل، يمكن لتطبيق مضيف (يُحمّل هذا التطبيق داخل WebView) قراءة البيانات والإحصائيات والتحكم بها عبر window.PointageAPI أو عبر رسائل postMessage. الميزة معطّلة افتراضياً لحماية خصوصيتك.</div>
-                    <button class="settings-action-btn" onclick="showApiDocumentation()" style="margin-top: 10px;" data-i18n="apiDocsBtn">📖 عرض توثيق API</button>
+                    <div class="setting-note" data-i18n="apiNote">💡 Lorsqu'activée, une application hôte (chargeant cette app dans une WebView) peut lire les données, statistiques et les contrôler via window.PointageAPI ou via des messages postMessage. Cette fonction est désactivée par défaut pour protéger votre vie privée.</div>
+                    <button class="settings-action-btn" onclick="showApiDocumentation()" style="margin-top: 10px;" data-i18n="apiDocsBtn">📖 Voir la documentation de l'API</button>
                 </div>
             </details>
 
-            <!-- ===== 5. Pointage Premium ===== -->
             <details class="settings-group premium-group">
                 <summary class="settings-group-header">
                     <span class="settings-icon">⭐</span>
@@ -587,13 +558,12 @@ if ('serviceWorker' in navigator) {
                 <div class="settings-group-body">
                     <span class="free-uses-badge" style="margin: 0 auto 12px;"></span>
                     <button class="add-btn premium-upgrade-btn" onclick="openPremiumPurchaseFlow()" style="background: linear-gradient(135deg, #FFD700, #FFA000); color: #333;">
-                        <span data-i18n="upgradeNow">ترقية إلى النسخة الممتازة</span>
+                        <span data-i18n="upgradeNow">Passer à la version Premium</span>
                     </button>
                     <div id="premiumStatus" style="margin-top: 12px; font-size: 13px; color: var(--gray); text-align: center;"></div>
                 </div>
             </details>
 
-            <!-- ===== 6. Contact ===== -->
             <details class="settings-group">
                 <summary class="settings-group-header">
                     <span class="settings-icon">📞</span>
@@ -602,18 +572,17 @@ if ('serviceWorker' in navigator) {
                 </summary>
                 <div class="settings-group-body">
                     <button class="add-btn contact-btn" onclick="contactByEmail()" style="background: linear-gradient(135deg, #4285F4, #3367D6); margin-bottom: 8px;">
-                        <span data-i18n="contactEmail">البريد الإلكتروني</span>
+                        <span data-i18n="contactEmail">Email</span>
                     </button>
                     <button class="add-btn contact-btn" onclick="contactByWhatsApp()" style="background: linear-gradient(135deg, #25D366, #128C7E); margin-bottom: 8px;">
-                        <span data-i18n="contactWhatsApp">واتساب</span>
+                        <span data-i18n="contactWhatsApp">WhatsApp</span>
                     </button>
                     <button class="add-btn contact-btn" onclick="showContactInfo()" style="background: linear-gradient(135deg, #607D8B, #455A64);">
-                        <span data-i18n="contactInfo">معلومات الاتصال</span>
+                        <span data-i18n="contactInfo">Coordonnées</span>
                     </button>
                 </div>
             </details>
 
-            <!-- ===== 7. À propos ===== -->
             <details class="settings-group">
                 <summary class="settings-group-header">
                     <span class="settings-icon">ℹ️</span>
@@ -622,24 +591,23 @@ if ('serviceWorker' in navigator) {
                 </summary>
                 <div class="settings-group-body">
                     <div class="about-item">
-                        <span class="about-label" data-i18n="appVersion">الإصدار:</span>
+                        <span class="about-label" data-i18n="appVersion">Version :</span>
                         <span class="about-value" id="appVersionDisplay">1.0.0</span>
                     </div>
                     <div class="about-item">
-                        <span class="about-label" data-i18n="developer">المطور:</span>
+                        <span class="about-label" data-i18n="developer">Développeur :</span>
                         <span class="about-value" id="developerNameDisplay">-</span>
                     </div>
                     <div class="about-item">
-                        <span class="about-label" data-i18n="website">الموقع:</span>
+                        <span class="about-label" data-i18n="website">Site web :</span>
                         <span class="about-value"><a id="developerWebsiteLink" href="#">-</a></span>
                     </div>
                     <div class="about-item">
-                        <span class="about-label" data-i18n="address">العنوان:</span>
+                        <span class="about-label" data-i18n="address">Adresse :</span>
                         <span class="about-value" id="developerAddressDisplay">-</span>
                     </div>
                 </div>
             </details>
-
         </div>
     </div>
 
@@ -647,23 +615,23 @@ if ('serviceWorker' in navigator) {
     <div class="bottom-nav">
         <button class="nav-btn active" onclick="showSection('dashboard', event)">
             <span>🏠</span>
-            <span class="nav-label" data-i18n="navHome">الرئيسية</span>
+            <span class="nav-label" data-i18n="navHome">Accueil</span>
         </button>
         <button class="nav-btn" onclick="showSection('calendar', event)">
             <span>📅</span>
-            <span class="nav-label" data-i18n="navCalendar">التقويم</span>
+            <span class="nav-label" data-i18n="navCalendar">Calendrier</span>
         </button>
         <button class="nav-btn" onclick="showSection('reports', event)">
             <span>📊</span>
-            <span class="nav-label" data-i18n="navReports">التقارير</span>
+            <span class="nav-label" data-i18n="navReports">Rapports</span>
         </button>
         <button class="nav-btn" onclick="showSection('notes', event)">
             <span>📔</span>
-            <span class="nav-label" data-i18n="Notes">المذكرات</span>
+            <span class="nav-label" data-i18n="Notes">Notes</span>
         </button>
         <button class="nav-btn" onclick="showSection('settings', event)">
             <span>⚙️</span>
-            <span class="nav-label" data-i18n="navSettings">الإعدادات</span>
+            <span class="nav-label" data-i18n="navSettings">Paramètres</span>
         </button>
     </div>
 </div>
@@ -671,83 +639,81 @@ if ('serviceWorker' in navigator) {
 <!-- Modals -->
 <div class="modal" id="dayModal">
     <div class="modal-content">
-        <div class="modal-title" id="modalTitle" data-i18n="editDay">تعديل اليوم</div>
+        <div class="modal-title" id="modalTitle" data-i18n="editDay">Modifier le jour</div>
         <div class="modal-buttons">
-            <!-- سيتم توليد أزرار الحصص ديناميكياً بواسطة JavaScript -->
-            <!-- الأزرار الثابتة التالية سيتم استبدالها -->
-            <button class="modal-btn vacation" onclick="setDayType('vacation')" data-i18n="vacation">إجازة</button>
-            <button class="modal-btn absence" onclick="setDayType('absence')" data-i18n="absence">غياب</button>
-            <button class="modal-btn holiday" onclick="setDayType('holiday')" data-i18n="holiday">عطلة</button>
-            <button class="modal-btn rest" onclick="setDayType('rest')" data-i18n="rest">راحة</button>
+            <button class="modal-btn vacation" onclick="setDayType('vacation')" data-i18n="vacation">Congé</button>
+            <button class="modal-btn absence" onclick="setDayType('absence')" data-i18n="absence">Absence</button>
+            <button class="modal-btn holiday" onclick="setDayType('holiday')" data-i18n="holiday">Férié</button>
+            <button class="modal-btn rest" onclick="setDayType('rest')" data-i18n="rest">Repos</button>
         </div>
 
         <div class="hours-input">
-            <label data-i18n="overtimeHoursLabel">ساعات العمل الإضافية:</label>
+            <label data-i18n="overtimeHoursLabel">Heures supplémentaires :</label>
             <input type="number" id="overtimeHoursInput" min="0" max="24" step="0.5" placeholder="0">
-            <div class="hours-note" data-i18n="overtimeNote">تُحسب حسب نوع اليوم ووقت العمل</div>
+            <div class="hours-note" data-i18n="overtimeNote">Calculé selon le type de jour et l'heure de travail</div>
         </div>
 
         <div class="checkbox-option">
             <input type="checkbox" id="isNightOvertime">
-            <label for="isNightOvertime" data-i18n="isNightOvertimeLabel">ساعات إضافية ليلية (تطبيق المضاعف الليلي)</label>
+            <label for="isNightOvertime" data-i18n="isNightOvertimeLabel">Heures supplémentaires de nuit (application du multiplicateur de nuit)</label>
         </div>
 
         <div class="checkbox-option">
             <input type="checkbox" id="applyToWeek">
-            <label for="applyToWeek" data-i18n="applyToWeek">تطبيق على الأسبوع</label>
+            <label for="applyToWeek" data-i18n="applyToWeek">Appliquer à la semaine</label>
         </div>
-        <button class="modal-close" onclick="closeModal()" data-i18n="close">إغلاق</button>
+        <button class="modal-close" onclick="closeModal()" data-i18n="close">Fermer</button>
     </div>
 </div>
 
 <!-- Overtime Settings Modal -->
 <div class="modal" id="overtimeSettingsModal">
     <div class="modal-content">
-        <div class="modal-title" data-i18n="overtimeSettingsTitle">⚙️ ضبط الساعات الإضافية</div>
+        <div class="modal-title" data-i18n="overtimeSettingsTitle">⚙️ Configurer les heures supplémentaires</div>
 
         <div class="settings-group" style="border: none; padding: 0; margin: 0;">
-            <h4 data-i18n="overtimeMultipliers">معاملات الساعات الإضافية</h4>
+            <h4 data-i18n="overtimeMultipliers">Coefficients des heures supplémentaires</h4>
             <div class="setting-row">
-                <div class="setting-label" data-i18n="normalMultiplier">ساعات عادية (×):</div>
+                <div class="setting-label" data-i18n="normalMultiplier">Heures normales (×) :</div>
                 <input type="number" class="setting-input" id="normalMultiplier" value="1.25" step="0.01" min="1" max="3">
             </div>
             <div class="setting-row">
-                <div class="setting-label" data-i18n="nightMultiplier">ساعات ليلية (×):</div>
+                <div class="setting-label" data-i18n="nightMultiplier">Heures de nuit (×) :</div>
                 <input type="number" class="setting-input" id="nightMultiplier" value="1.50" step="0.01" min="1" max="3">
             </div>
             <div class="setting-row">
-                <div class="setting-label" data-i18n="restDayMultiplier">يوم راحة (×):</div>
+                <div class="setting-label" data-i18n="restDayMultiplier">Jour de repos (×) :</div>
                 <input type="number" class="setting-input" id="restDayMultiplier" value="1.75" step="0.01" min="1" max="3">
             </div>
             <div class="setting-row">
-                <div class="setting-label" data-i18n="holidayMultiplier">أعياد رسمية (×):</div>
+                <div class="setting-label" data-i18n="holidayMultiplier">Jours fériés (×) :</div>
                 <input type="number" class="setting-input" id="holidayMultiplier" value="2.00" step="0.01" min="1" max="3">
             </div>
         </div>
 
         <div class="settings-group" style="border: none; padding: 0; margin: 0; margin-top: 16px;">
-            <h4 data-i18n="workHoursSettings">إعدادات وقت العمل</h4>
+            <h4 data-i18n="workHoursSettings">Paramètres des horaires de travail</h4>
             <div class="setting-row">
-                <div class="setting-label" data-i18n="normalStartHour">بداية العمل العادي:</div>
+                <div class="setting-label" data-i18n="normalStartHour">Début du travail normal :</div>
                 <input type="number" class="setting-input" id="normalStartHour" value="8" min="0" max="23">
             </div>
             <div class="setting-row">
-                <div class="setting-label" data-i18n="normalEndHour">نهاية العمل العادي:</div>
+                <div class="setting-label" data-i18n="normalEndHour">Fin du travail normal :</div>
                 <input type="number" class="setting-input" id="normalEndHour" value="17" min="0" max="23">
             </div>
             <div class="setting-row">
-                <div class="setting-label" data-i18n="nightStartHour">بداية الليل:</div>
+                <div class="setting-label" data-i18n="nightStartHour">Début de la nuit :</div>
                 <input type="number" class="setting-input" id="nightStartHour" value="22" min="0" max="23">
             </div>
             <div class="setting-row">
-                <div class="setting-label" data-i18n="nightEndHour">نهاية الليل:</div>
+                <div class="setting-label" data-i18n="nightEndHour">Fin de la nuit :</div>
                 <input type="number" class="setting-input" id="nightEndHour" value="5" min="0" max="23">
             </div>
         </div>
 
         <div class="modal-actions">
-            <button class="modal-btn save-btn" onclick="saveSettings(); closeOvertimeSettings();" data-i18n="save">حفظ</button>
-            <button class="modal-close" onclick="closeOvertimeSettings()" data-i18n="cancel">إلغاء</button>
+            <button class="modal-btn save-btn" onclick="saveSettings(); closeOvertimeSettings();" data-i18n="save">Enregistrer</button>
+            <button class="modal-close" onclick="closeOvertimeSettings()" data-i18n="cancel">Annuler</button>
         </div>
     </div>
 </div>
@@ -755,55 +721,55 @@ if ('serviceWorker' in navigator) {
 <!-- Add Holiday Modal -->
 <div class="modal" id="addHolidayModal">
     <div class="modal-content">
-        <div class="modal-title" data-i18n="addHolidayTitle">إضافة عطلة</div>
+        <div class="modal-title" data-i18n="addHolidayTitle">Ajouter un jour férié</div>
         <div class="setting-row">
-            <div class="setting-label">الاسم بالعربية:</div>
+            <div class="setting-label">Nom en arabe :</div>
             <input type="text" class="setting-input" id="holidayNameAr" placeholder="عيد الاستقلال">
         </div>
         <div class="setting-row">
-            <div class="setting-label">Nom en français:</div>
+            <div class="setting-label">Nom en français :</div>
             <input type="text" class="setting-input" id="holidayNameFr" placeholder="Fête de l'Indépendance">
         </div>
         <div class="setting-row">
-            <div class="setting-label" data-i18n="holidayDate">التاريخ:</div>
+            <div class="setting-label" data-i18n="holidayDate">Date :</div>
             <input type="date" class="setting-input" id="holidayDate">
         </div>
         <div class="checkbox-option">
             <input type="checkbox" id="holidayRecurring">
-            <label for="holidayRecurring" data-i18n="recurring">متكررة سنوياً</label>
+            <label for="holidayRecurring" data-i18n="recurring">Récurrent annuellement</label>
         </div>
-        <button class="add-btn" onclick="addHoliday()" data-i18n="add">إضافة</button>
-        <button class="modal-close" onclick="closeAddHolidayModal()" data-i18n="cancel">إلغاء</button>
+        <button class="add-btn" onclick="addHoliday()" data-i18n="add">Ajouter</button>
+        <button class="modal-close" onclick="closeAddHolidayModal()" data-i18n="cancel">Annuler</button>
     </div>
 </div>
 
 <!-- Export Report Modal -->
 <div class="modal" id="exportReportModal">
     <div class="modal-content export-modal">
-        <div class="modal-title"><span data-i18n="exportReportTitle">📄 تصدير تقرير PDF</span></div>
+        <div class="modal-title"><span data-i18n="exportReportTitle">📄 Exporter un rapport PDF</span></div>
         <div class="quick-dates">
-            <button class="quick-date-btn" onclick="setQuickDateRange('currentMonth')" data-i18n="currentMonthBtn">الشهر الحالي</button>
-            <button class="quick-date-btn" onclick="setQuickDateRange('lastMonth')" data-i18n="lastMonthBtn">الشهر السابق</button>
-            <button class="quick-date-btn" onclick="setQuickDateRange('last3Months')" data-i18n="last3MonthsBtn">آخر 3 أشهر</button>
-            <button class="quick-date-btn" onclick="setQuickDateRange('currentYear')" data-i18n="currentYearBtn">السنة الحالية</button>
+            <button class="quick-date-btn" onclick="setQuickDateRange('currentMonth')" data-i18n="currentMonthBtn">Mois en cours</button>
+            <button class="quick-date-btn" onclick="setQuickDateRange('lastMonth')" data-i18n="lastMonthBtn">Mois précédent</button>
+            <button class="quick-date-btn" onclick="setQuickDateRange('last3Months')" data-i18n="last3MonthsBtn">3 derniers mois</button>
+            <button class="quick-date-btn" onclick="setQuickDateRange('currentYear')" data-i18n="currentYearBtn">Année en cours</button>
         </div>
         <div class="date-range-section">
             <div class="date-input-group">
-                <label data-i18n="startDateLabel">تاريخ البداية:</label>
+                <label data-i18n="startDateLabel">Date de début :</label>
                 <input type="date" class="date-input" id="exportStartDate">
             </div>
             <div class="date-input-group">
-                <label data-i18n="endDateLabel">تاريخ النهاية:</label>
+                <label data-i18n="endDateLabel">Date de fin :</label>
                 <input type="date" class="date-input" id="exportEndDate">
             </div>
         </div>
         <span class="free-uses-badge"></span>
         <div class="export-note">
-            <span data-i18n="exportNote">💡 سيتم إنشاء تقرير PDF يحتوي على جدول تفصيلي لجميع الأيام في الفترة المحددة مع الألوان والإحصائيات</span>
+            <span data-i18n="exportNote">💡 Un rapport PDF sera créé contenant un tableau détaillé de tous les jours de la période sélectionnée avec couleurs et statistiques</span>
         </div>
         <div class="modal-actions">
-            <button class="modal-btn export-btn" onclick="exportReportToPDF()"><span data-i18n="exportBtn">تصدير PDF</span></button>
-            <button class="modal-close" onclick="closeExportModal()" data-i18n="cancel">إلغاء</button>
+            <button class="modal-btn export-btn" onclick="exportReportToPDF()"><span data-i18n="exportBtn">Exporter PDF</span></button>
+            <button class="modal-close" onclick="closeExportModal()" data-i18n="cancel">Annuler</button>
         </div>
     </div>
 </div>
@@ -811,30 +777,30 @@ if ('serviceWorker' in navigator) {
 <!-- Export Vacation Modal -->
 <div class="modal" id="exportVacationModal">
     <div class="modal-content export-modal">
-        <div class="modal-title"><span data-i18n="exportVacationTitle">🏖️ تصدير أيام الإجازة</span></div>
+        <div class="modal-title"><span data-i18n="exportVacationTitle">🏖️ Exporter les congés</span></div>
         <div class="quick-dates">
-            <button class="quick-date-btn" onclick="setVacationQuickDateRange('currentMonth')" data-i18n="currentMonthBtn">الشهر الحالي</button>
-            <button class="quick-date-btn" onclick="setVacationQuickDateRange('lastMonth')" data-i18n="lastMonthBtn">الشهر السابق</button>
-            <button class="quick-date-btn" onclick="setVacationQuickDateRange('currentYear')" data-i18n="currentYearBtn">السنة الحالية</button>
-            <button class="quick-date-btn" onclick="setVacationQuickDateRange('allTime')" data-i18n="allTimeBtn">كل الوقت</button>
+            <button class="quick-date-btn" onclick="setVacationQuickDateRange('currentMonth')" data-i18n="currentMonthBtn">Mois en cours</button>
+            <button class="quick-date-btn" onclick="setVacationQuickDateRange('lastMonth')" data-i18n="lastMonthBtn">Mois précédent</button>
+            <button class="quick-date-btn" onclick="setVacationQuickDateRange('currentYear')" data-i18n="currentYearBtn">Année en cours</button>
+            <button class="quick-date-btn" onclick="setVacationQuickDateRange('allTime')" data-i18n="allTimeBtn">Tout</button>
         </div>
         <div class="date-range-section">
             <div class="date-input-group">
-                <label data-i18n="startDateLabel">تاريخ البداية:</label>
+                <label data-i18n="startDateLabel">Date de début :</label>
                 <input type="date" class="date-input" id="vacationStartDate">
             </div>
             <div class="date-input-group">
-                <label data-i18n="endDateLabel">تاريخ النهاية:</label>
+                <label data-i18n="endDateLabel">Date de fin :</label>
                 <input type="date" class="date-input" id="vacationEndDate">
             </div>
         </div>
         <span class="free-uses-badge"></span>
         <div class="export-note">
-            <span data-i18n="vacationExportNote">💡 سيتم إنشاء تقرير يحتوي على جميع أيام الإجازة المسجلة في الفترة المحددة.</span>
+            <span data-i18n="vacationExportNote">💡 Un rapport contenant tous les jours de congé enregistrés dans la période sélectionnée sera créé.</span>
         </div>
         <div class="modal-actions">
-            <button class="modal-btn export-btn" onclick="exportVacationReportToPDF()"><span data-i18n="exportVacationBtn">تصدير PDF</span></button>
-            <button class="modal-close" onclick="closeVacationExportModal()" data-i18n="cancel">إلغاء</button>
+            <button class="modal-btn export-btn" onclick="exportVacationReportToPDF()"><span data-i18n="exportVacationBtn">Exporter PDF</span></button>
+            <button class="modal-close" onclick="closeVacationExportModal()" data-i18n="cancel">Annuler</button>
         </div>
     </div>
 </div>
@@ -842,98 +808,98 @@ if ('serviceWorker' in navigator) {
 <!-- Export Notes Modal -->
 <div class="modal" id="exportNotesModal">
     <div class="modal-content export-modal">
-        <div class="modal-title"><span data-i18n="exportNotesTitle">📔 تصدير تقرير المذكرات</span></div>
+        <div class="modal-title"><span data-i18n="exportNotesTitle">📔 Exporter le rapport des notes</span></div>
         <div class="quick-dates">
-            <button class="quick-date-btn" onclick="setNotesQuickDateRange('currentMonth')" data-i18n="currentMonthBtn">الشهر الحالي</button>
-            <button class="quick-date-btn" onclick="setNotesQuickDateRange('lastMonth')" data-i18n="lastMonthBtn">الشهر السابق</button>
-            <button class="quick-date-btn" onclick="setNotesQuickDateRange('currentYear')" data-i18n="currentYearBtn">السنة الحالية</button>
-            <button class="quick-date-btn" onclick="setNotesQuickDateRange('allTime')" data-i18n="allTimeBtn">كل الوقت</button>
+            <button class="quick-date-btn" onclick="setNotesQuickDateRange('currentMonth')" data-i18n="currentMonthBtn">Mois en cours</button>
+            <button class="quick-date-btn" onclick="setNotesQuickDateRange('lastMonth')" data-i18n="lastMonthBtn">Mois précédent</button>
+            <button class="quick-date-btn" onclick="setNotesQuickDateRange('currentYear')" data-i18n="currentYearBtn">Année en cours</button>
+            <button class="quick-date-btn" onclick="setNotesQuickDateRange('allTime')" data-i18n="allTimeBtn">Tout</button>
         </div>
         <div class="date-range-section">
             <div class="date-input-group">
-                <label data-i18n="startDateLabel">تاريخ البداية:</label>
+                <label data-i18n="startDateLabel">Date de début :</label>
                 <input type="date" class="date-input" id="notesExportStartDate">
             </div>
             <div class="date-input-group">
-                <label data-i18n="endDateLabel">تاريخ النهاية:</label>
+                <label data-i18n="endDateLabel">Date de fin :</label>
                 <input type="date" class="date-input" id="notesExportEndDate">
             </div>
         </div>
         <span class="free-uses-badge"></span>
         <div class="export-note">
-            <span data-i18n="notesExportNote">💡 سيتم إنشاء تقرير يحتوي على جدول بجميع المذكرات المسجلة في الفترة المحددة (تاريخ كل مذكرة ونصها).</span>
+            <span data-i18n="notesExportNote">💡 Un rapport contenant un tableau de toutes les notes enregistrées dans la période sélectionnée (date et texte) sera créé.</span>
         </div>
         <div class="modal-actions">
-            <button class="modal-btn export-btn" onclick="exportNotesToPDF()"><span data-i18n="exportNotesBtn">تصدير PDF</span></button>
-            <button class="modal-close" onclick="closeNotesExportModal()" data-i18n="cancel">إلغاء</button>
+            <button class="modal-btn export-btn" onclick="exportNotesToPDF()"><span data-i18n="exportNotesBtn">Exporter PDF</span></button>
+            <button class="modal-close" onclick="closeNotesExportModal()" data-i18n="cancel">Annuler</button>
         </div>
     </div>
 </div>
 
-<!-- ===== شاشة الاشتراك (Paywall) — تظهر عند استنفاد المحاولات المجانية ===== -->
+<!-- Paywall -->
 <div class="modal" id="paywallModal">
     <div class="modal-content paywall-modal-content">
         <div class="paywall-icon">🔒</div>
-        <div class="paywall-title" id="paywallTitle">✨ لقد استخدمت تجربتك المجانية</div>
+        <div class="paywall-title" id="paywallTitle">✨ Vous avez utilisé votre essai gratuit</div>
         <div class="paywall-body" id="paywallBody">-</div>
 
         <div class="paywall-features">
             <div class="paywall-feature-item">
                 <span class="paywall-feature-icon">📄</span>
-                <span data-i18n="paywallFeatureUnlimited">تصدير PDF بلا حدود لكل التقارير</span>
+                <span data-i18n="paywallFeatureUnlimited">Export PDF illimité pour tous les rapports</span>
             </div>
             <div class="paywall-feature-item">
                 <span class="paywall-feature-icon">🎨</span>
-                <span data-i18n="paywallFeatureThemes">كل الميزات المتقدمة الحالية والمستقبلية</span>
+                <span data-i18n="paywallFeatureThemes">Toutes les fonctionnalités avancées actuelles et futures</span>
             </div>
             <div class="paywall-feature-item">
                 <span class="paywall-feature-icon">💎</span>
-                <span data-i18n="paywallFeatureSupport">دعم مباشر لتطوير التطبيق</span>
+                <span data-i18n="paywallFeatureSupport">Support direct pour le développement</span>
             </div>
         </div>
 
         <button class="paywall-cta-btn" onclick="startPremiumPurchaseFromPaywall()">
-            <span data-i18n="paywallUpgradeBtn">⭐ الترقية إلى النسخة المميزة</span>
+            <span data-i18n="paywallUpgradeBtn">⭐ Passer à la version Premium</span>
         </button>
-        <button class="modal-close" onclick="closePaywallModal()" data-i18n="notesClose">إغلاق</button>
+        <button class="modal-close" onclick="closePaywallModal()" data-i18n="notesClose">Fermer</button>
     </div>
 </div>
 
-<!-- ===== نافذة شراء النسخة المميزة عبر Flouci ===== -->
+<!-- Premium Purchase Modal -->
 <div class="modal" id="premiumPurchaseModal">
     <div class="modal-content paywall-modal-content">
         <div class="paywall-icon">⭐</div>
-        <div class="paywall-title" data-i18n="premiumModalTitle">النسخة المميزة من Pointage</div>
+        <div class="paywall-title" data-i18n="premiumModalTitle">Version Premium de Pointage</div>
         <div class="paywall-price">
             <span class="paywall-price-amount">9.900</span>
-            <span class="paywall-price-currency" data-i18n="premiumPriceCurrency">د.ت</span>
+            <span class="paywall-price-currency" data-i18n="premiumPriceCurrency">DT</span>
         </div>
-        <div class="paywall-price-note" data-i18n="premiumPriceNote">دفعة واحدة — بدون اشتراك شهري</div>
+        <div class="paywall-price-note" data-i18n="premiumPriceNote">Paiement unique — sans abonnement mensuel</div>
 
         <div class="paywall-features">
             <div class="paywall-feature-item">
                 <span class="paywall-feature-icon">♾️</span>
-                <span data-i18n="paywallFeatureUnlimited">تصدير PDF بلا حدود لكل التقارير</span>
+                <span data-i18n="paywallFeatureUnlimited">Export PDF illimité</span>
             </div>
             <div class="paywall-feature-item">
                 <span class="paywall-feature-icon">🚫</span>
-                <span data-i18n="premiumFeatureNoAds">بدون أي إعلانات</span>
+                <span data-i18n="premiumFeatureNoAds">Sans aucune publicité</span>
             </div>
             <div class="paywall-feature-item">
                 <span class="paywall-feature-icon">💎</span>
-                <span data-i18n="paywallFeatureSupport">دعم مباشر لتطوير التطبيق</span>
+                <span data-i18n="paywallFeatureSupport">Support direct pour le développement</span>
             </div>
         </div>
 
         <button class="paywall-cta-btn flouci-pay-btn" id="flouciPayBtn" onclick="initiateFlouciPayment()">
-            <span data-i18n="payWithFlouciBtn">💳 الدفع عبر Flouci</span>
+            <span data-i18n="payWithFlouciBtn">💳 Payer via Flouci</span>
         </button>
         <div class="payment-security-note">
-            🔒 <span data-i18n="paymentSecurityNote">عملية دفع آمنة ومشفّرة عبر Flouci — لا نطّلع أبداً على بيانات بطاقتك أو حسابك</span>
+            🔒 <span data-i18n="paymentSecurityNote">Paiement sécurisé et crypté via Flouci — nous n'avons jamais accès à vos données bancaires</span>
         </div>
         <div class="payment-status-text" id="paymentStatusText" style="display:none;"></div>
 
-        <button class="modal-close" onclick="closePremiumPurchaseModal()" data-i18n="notesClose">إغلاق</button>
+        <button class="modal-close" onclick="closePremiumPurchaseModal()" data-i18n="notesClose">Fermer</button>
     </div>
 </div>
 
@@ -942,33 +908,33 @@ if ('serviceWorker' in navigator) {
     <div class="modal-content note-modal-content">
         <div class="modal-title" id="noteModalTitle">-</div>
         <div class="note-editor">
-            <textarea id="noteTextarea" class="note-textarea" data-i18n="notesPlaceholder" placeholder="اكتب مذكرتك هنا..." oninput="updateNoteCharCount()"></textarea>
+            <textarea id="noteTextarea" class="note-textarea" data-i18n="notesPlaceholder" placeholder="Écrivez votre note ici..." oninput="updateNoteCharCount()"></textarea>
             <div class="note-editor-footer">
                 <span id="noteUpdatedInfo" class="note-updated-info" style="display:none;"></span>
-                <span class="note-char-count"><span id="noteCharCount">0</span> <span data-i18n="notesCharCount">حرف</span></span>
+                <span class="note-char-count"><span id="noteCharCount">0</span> <span data-i18n="notesCharCount">caractères</span></span>
             </div>
         </div>
         <div class="modal-actions">
-            <button class="modal-btn save-btn" onclick="saveNote()" data-i18n="notesSave">حفظ</button>
-            <button class="modal-btn note-delete-btn" id="noteDeleteBtn" onclick="deleteNote()" style="display:none;" data-i18n="notesDelete">حذف</button>
+            <button class="modal-btn save-btn" onclick="saveNote()" data-i18n="notesSave">Enregistrer</button>
+            <button class="modal-btn note-delete-btn" id="noteDeleteBtn" onclick="deleteNote()" style="display:none;" data-i18n="notesDelete">Supprimer</button>
         </div>
-        <button class="modal-close" onclick="closeNoteModal()" data-i18n="notesClose">إغلاق</button>
+        <button class="modal-close" onclick="closeNoteModal()" data-i18n="notesClose">Fermer</button>
     </div>
 </div>
 
-<!-- ===== نافذة إضافة/تعديل مهمة (جدول أعمالي) ===== -->
+<!-- Task Modal -->
 <div class="modal" id="taskModal">
     <div class="modal-content note-modal-content">
-        <div class="modal-title" id="taskModalTitle" data-i18n="taskModalTitle">مهمة جديدة</div>
+        <div class="modal-title" id="taskModalTitle" data-i18n="taskModalTitle">Nouvelle tâche</div>
 
-        <textarea id="taskTextarea" class="note-textarea hub-modal-textarea" data-i18n="taskPlaceholder" placeholder="ما هي المهمة؟"></textarea>
+        <textarea id="taskTextarea" class="note-textarea hub-modal-textarea" data-i18n="taskPlaceholder" placeholder="Quelle est la tâche ?"></textarea>
 
         <div class="hub-form-row">
-            <label data-i18n="taskDateLabel">التاريخ:</label>
+            <label data-i18n="taskDateLabel">Date :</label>
             <input type="date" class="date-input" id="taskDateInput">
         </div>
         <div class="hub-form-row">
-            <label data-i18n="taskTimeLabel">الوقت:</label>
+            <label data-i18n="taskTimeLabel">Heure :</label>
             <input type="time" class="date-input" id="taskTimeInput">
         </div>
 
@@ -977,42 +943,42 @@ if ('serviceWorker' in navigator) {
                 <input type="checkbox" id="taskNotifyToggle" checked onchange="onTaskNotifyToggleChange()">
                 <span class="slider round"></span>
             </label>
-            <span data-i18n="taskNotifyLabel">تفعيل التذكير بالإشعار</span>
+            <span data-i18n="taskNotifyLabel">Activer le rappel par notification</span>
         </div>
 
         <div class="hub-form-row" id="taskNotifyLeadRow">
-            <label data-i18n="taskNotifyLeadLabel">إظهار الإشعار قبل الموعد بـ:</label>
+            <label data-i18n="taskNotifyLeadLabel">Afficher la notification avant l'échéance :</label>
             <select class="setting-input" id="taskNotifyLeadSelect">
-                <option value="0" data-i18n="leadAtTime">عند الموعد بالضبط</option>
-                <option value="10" data-i18n="lead10min">10 دقائق</option>
-                <option value="30" data-i18n="lead30min">30 دقيقة</option>
-                <option value="60" selected data-i18n="lead1hour">ساعة واحدة</option>
-                <option value="180" data-i18n="lead3hours">3 ساعات</option>
-                <option value="1440" data-i18n="lead1day">يوم كامل</option>
+                <option value="0" data-i18n="leadAtTime">À l'heure exacte</option>
+                <option value="10" data-i18n="lead10min">10 minutes</option>
+                <option value="30" data-i18n="lead30min">30 minutes</option>
+                <option value="60" selected data-i18n="lead1hour">1 heure</option>
+                <option value="180" data-i18n="lead3hours">3 heures</option>
+                <option value="1440" data-i18n="lead1day">1 jour</option>
             </select>
         </div>
 
         <div class="modal-actions">
-            <button class="modal-btn save-btn" onclick="saveTask()" data-i18n="notesSave">حفظ</button>
-            <button class="modal-btn note-delete-btn" id="taskDeleteBtn" onclick="deleteTask()" style="display:none;" data-i18n="notesDelete">حذف</button>
+            <button class="modal-btn save-btn" onclick="saveTask()" data-i18n="notesSave">Enregistrer</button>
+            <button class="modal-btn note-delete-btn" id="taskDeleteBtn" onclick="deleteTask()" style="display:none;" data-i18n="notesDelete">Supprimer</button>
         </div>
-        <button class="modal-close" onclick="closeTaskModal()" data-i18n="notesClose">إغلاق</button>
+        <button class="modal-close" onclick="closeTaskModal()" data-i18n="notesClose">Fermer</button>
     </div>
 </div>
 
-<!-- ===== نافذة إضافة/تعديل تذكير (Reminders) ===== -->
+<!-- Reminder Modal -->
 <div class="modal" id="reminderModal">
     <div class="modal-content note-modal-content">
-        <div class="modal-title" id="reminderModalTitle" data-i18n="reminderModalTitle">تذكير جديد</div>
+        <div class="modal-title" id="reminderModalTitle" data-i18n="reminderModalTitle">Nouveau rappel</div>
 
-        <textarea id="reminderTextarea" class="note-textarea hub-modal-textarea" data-i18n="reminderPlaceholder" placeholder="بماذا تريد أن أذكّرك؟"></textarea>
+        <textarea id="reminderTextarea" class="note-textarea hub-modal-textarea" data-i18n="reminderPlaceholder" placeholder="De quoi voulez-vous que je vous rappelle ?"></textarea>
 
         <div class="hub-form-row">
-            <label data-i18n="taskDateLabel">التاريخ:</label>
+            <label data-i18n="taskDateLabel">Date :</label>
             <input type="date" class="date-input" id="reminderDateInput">
         </div>
         <div class="hub-form-row">
-            <label data-i18n="taskTimeLabel">الوقت:</label>
+            <label data-i18n="taskTimeLabel">Heure :</label>
             <input type="time" class="date-input" id="reminderTimeInput">
         </div>
 
@@ -1021,54 +987,50 @@ if ('serviceWorker' in navigator) {
                 <input type="checkbox" id="reminderVibrateToggle" checked>
                 <span class="slider round"></span>
             </label>
-            <span data-i18n="reminderVibrateLabel">اهتزاز عند التذكير</span>
+            <span data-i18n="reminderVibrateLabel">Vibrer lors du rappel</span>
         </div>
 
         <div class="hub-form-row">
-            <label data-i18n="reminderSoundLabel">نغمة التذكير:</label>
+            <label data-i18n="reminderSoundLabel">Son du rappel :</label>
             <select class="setting-input" id="reminderSoundSelect" onchange="onReminderSoundSelectChange()">
-                <option value="tone1" data-i18n="soundTone1">نغمة 1 (كلاسيكية)</option>
-                <option value="tone2" data-i18n="soundTone2">نغمة 2 (جرس)</option>
-                <option value="tone3" data-i18n="soundTone3">نغمة 3 (نبضة)</option>
-                <option value="device" data-i18n="soundDevice">نغمة من الهاتف...</option>
-                <option value="custom" data-i18n="soundCustomFile">ملف صوتي مخصص...</option>
+                <option value="tone1" data-i18n="soundTone1">Son 1 (Classique)</option>
+                <option value="tone2" data-i18n="soundTone2">Son 2 (Cloche)</option>
+                <option value="tone3" data-i18n="soundTone3">Son 3 (Impulsion)</option>
+                <option value="device" data-i18n="soundDevice">Son du téléphone...</option>
+                <option value="custom" data-i18n="soundCustomFile">Fichier audio personnalisé...</option>
             </select>
         </div>
         <div class="hub-form-row" id="reminderCustomFileRow" style="display:none;">
             <input type="file" id="reminderCustomFileInput" accept="audio/*" onchange="onReminderCustomFileChange(event)">
         </div>
         <div class="hub-form-row">
-            <button class="settings-action-btn" type="button" onclick="testReminderSound()" data-i18n="soundTestBtn">🔊 تجربة النغمة</button>
+            <button class="settings-action-btn" type="button" onclick="testReminderSound()" data-i18n="soundTestBtn">🔊 Tester le son</button>
         </div>
 
         <div class="modal-actions">
-            <button class="modal-btn save-btn" onclick="saveReminder()" data-i18n="notesSave">حفظ</button>
-            <button class="modal-btn note-delete-btn" id="reminderDeleteBtn" onclick="deleteReminder()" style="display:none;" data-i18n="notesDelete">حذف</button>
+            <button class="modal-btn save-btn" onclick="saveReminder()" data-i18n="notesSave">Enregistrer</button>
+            <button class="modal-btn note-delete-btn" id="reminderDeleteBtn" onclick="deleteReminder()" style="display:none;" data-i18n="notesDelete">Supprimer</button>
         </div>
-        <button class="modal-close" onclick="closeReminderModal()" data-i18n="notesClose">إغلاق</button>
+        <button class="modal-close" onclick="closeReminderModal()" data-i18n="notesClose">Fermer</button>
     </div>
 </div>
 
 <!-- Toast -->
 <div id="toast"></div>
 
-<!-- ===== نافذة تسجيل الدخول / إنشاء حساب ===== -->
+<!-- Auth Modal -->
 <div id="auth-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; align-items:center; justify-content:center; backdrop-filter:blur(4px);">
     <div id="authModalContainer" style="background:var(--card-bg, #ffffff); padding:25px 20px 15px; border-radius:16px; width:92%; max-width:380px; text-align:center; box-shadow:0 20px 50px rgba(0,0,0,0.3); position:relative; max-height:90vh; overflow-y:auto; transition:all 0.3s ease;">
-
-        <!-- ===== المحتوى الديناميكي ===== -->
         <div id="authContent"></div>
-
     </div>
 </div>
 
+<!-- ===== Invisible reCAPTCHA Container ===== -->
+<div id="recaptcha-container"></div>
 
-
-
-<!-- المكتبات الخارجية -->
+<!-- Scripts -->
 <script src="jspdf.umd.min.js"></script>
 <script src="html2canvas.min.js"></script>
-<!-- 1. إضافة مكتبة Supabase JS SDK الرسمية -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script src="appConfig.js"></script>
@@ -1076,8 +1038,6 @@ if ('serviceWorker' in navigator) {
 <script src="data.js"></script>
 <script src="developerInfo.js"></script>
 
-
-<!-- 2. إضافة ملف إدارة الحسابات التسجيل/الدخول هنا -->
 <script src="authService.js"></script>
 <script src="supabaseSync.js"></script>
 <script src="authUI.js"></script>
@@ -1098,7 +1058,6 @@ if ('serviceWorker' in navigator) {
 <script src="rating.js"></script>
 <script src="contact.js"></script>
 
-<!-- منطق التطبيق الأساسي -->
 <script src="app-core.js"></script>
 <script src="dashboard.js"></script>
 <script src="calendar-module.js"></script>
@@ -1106,7 +1065,16 @@ if ('serviceWorker' in navigator) {
 <script src="settings-module.js"></script>
 <script src="holidays-module.js"></script>
 
-<!-- واجهة API للأتمتة -->
 <script src="api.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (window.initOtaCheck && typeof window.initOtaCheck === 'function') {
+            setTimeout(function() {
+                window.initOtaCheck();
+            }, 3000);
+        }
+    });
+</script>
 </body>
 </html>
