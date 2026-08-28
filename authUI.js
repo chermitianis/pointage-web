@@ -1,10 +1,12 @@
 /**
  * AuthUI.js - إدارة واجهة التوثيق مع دعم Google, Facebook, Téléphone (Firebase OTP)
+ * Version avec écran de connexion simplifié et options d'inscription avancées
+ * + Formulaire de définition de mot de passe pour les utilisateurs OAuth
+ * + Firebase Phone Authentication (OTP)
  */
 
 (function () {
-    'use strict';
-
+    // ===== الحالة =====
     let isSignUpMode = false;
     let isPhoneSignUp = false;
     let currentPhoneNumber = '';
@@ -167,34 +169,40 @@
         renderLoginForm() {
             const container = document.getElementById('authContent');
             if (!container) return;
+
             const isAr = getLanguage() === 'ar';
             const dir = isAr ? 'rtl' : 'ltr';
 
             container.innerHTML = `
                 <div style="text-align:center; direction:${dir};">
                     <div style="font-size:48px; margin-bottom:8px;">🔐</div>
-                    <h3 style="margin-bottom:6px; color:var(--text-color, #333); font-size:20px; font-weight:700;">${t('signInTitle')}</h3>
-                    <p style="margin-bottom:20px; color:var(--gray, #888); font-size:13px;">${t('signInSub')}</p>
+                    <h3 id="authTitle" style="margin-bottom:6px; color:var(--text-color, #333); font-size:20px; font-weight:700;">${t('signInTitle')}</h3>
+                    <p id="authSubtitle" style="margin-bottom:20px; color:var(--gray, #888); font-size:13px;">${t('signInSub')}</p>
 
                     <div style="margin-bottom:12px;">
                         <label for="authEmail" style="display:block; text-align:left; font-size:13px; color:var(--gray); margin-bottom:4px;">${t('emailOrPhone')}</label>
                         <input type="text" id="authEmail" placeholder="exemple@domaine.com"
-                               style="width:100%; padding:12px 14px; border:2px solid var(--border-color, #e0e0e0); border-radius:10px; box-sizing:border-box; font-size:15px; background:var(--input-bg, #f8f9fa); color:var(--text-color, #333);">
+                               style="width:100%; padding:12px 14px; border:2px solid var(--border-color, #e0e0e0); border-radius:10px; box-sizing:border-box; font-size:15px; background:var(--input-bg, #f8f9fa); color:var(--text-color, #333); transition:border-color 0.2s;"
+                               onfocus="this.style.borderColor='#2563eb'" onblur="this.style.borderColor='var(--border-color, #e0e0e0)'">
                     </div>
 
                     <div style="margin-bottom:12px;">
                         <label for="authPassword" style="display:block; text-align:left; font-size:13px; color:var(--gray); margin-bottom:4px;">${t('password')}</label>
                         <input type="password" id="authPassword" placeholder="••••••"
-                               style="width:100%; padding:12px 14px; border:2px solid var(--border-color, #e0e0e0); border-radius:10px; box-sizing:border-box; font-size:15px; background:var(--input-bg, #f8f9fa); color:var(--text-color, #333);"
+                               style="width:100%; padding:12px 14px; border:2px solid var(--border-color, #e0e0e0); border-radius:10px; box-sizing:border-box; font-size:15px; background:var(--input-bg, #f8f9fa); color:var(--text-color, #333); transition:border-color 0.2s;"
+                               onfocus="this.style.borderColor='#2563eb'" onblur="this.style.borderColor='var(--border-color, #e0e0e0)'"
                                onkeydown="if(event.key==='Enter') handleAuthSubmit()">
                     </div>
 
                     <button id="authPrimaryBtn" onclick="handleAuthSubmit()"
-                            style="width:100%; padding:12px; background:linear-gradient(135deg, #2563eb, #1d4ed8); color:#fff; border:none; border-radius:10px; font-weight:700; font-size:16px; cursor:pointer; margin-bottom:8px;">
+                            style="width:100%; padding:12px; background:linear-gradient(135deg, #2563eb, #1d4ed8); color:#fff; border:none; border-radius:10px; font-weight:700; font-size:16px; cursor:pointer; transition:transform 0.15s, box-shadow 0.2s; box-shadow:0 4px 14px rgba(37,99,235,0.35); margin-bottom:8px;">
                         ${t('signInBtn')}
                     </button>
 
-                    <button onclick="handleGoogleLogin()" style="width:100%; padding:10px; margin-bottom:10px; background:#fff; color:#333; border:1px solid #ddd; border-radius:8px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px;">
+                    <!-- Google Button -->
+                    <button onclick="handleGoogleLogin()" style="width:100%; padding:10px; margin-bottom:10px; background:#fff; color:#333; border:1px solid #ddd; border-radius:8px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; transition:background 0.2s, box-shadow 0.2s;"
+                            onmouseover="this.style.background='#f1f1f1'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'"
+                            onmouseout="this.style.background='#fff'; this.style.boxShadow='none'">
                         <svg width="20" height="20" viewBox="0 0 48 48">
                             <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
                             <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
@@ -221,7 +229,8 @@
                     <div id="authError" style="display:none; margin-top:6px; font-size:13px; color:#dc2626; background:#fee2e2; padding:8px 12px; border-radius:8px;"></div>
 
                     <button onclick="closeAuthModal()"
-                            style="margin-top:14px; background:transparent; border:none; color:var(--gray, #aaa); cursor:pointer; font-size:14px; padding:6px 16px; border-radius:20px;">
+                            style="margin-top:14px; background:transparent; border:none; color:var(--gray, #aaa); cursor:pointer; font-size:14px; padding:6px 16px; border-radius:20px; transition:background 0.2s;"
+                            onmouseenter="this.style.background='var(--hover-bg, #f0f0f0)'" onmouseleave="this.style.background='transparent'">
                         ✕ ${t('close')}
                     </button>
                 </div>
@@ -231,6 +240,7 @@
         renderSignUpOptions() {
             const container = document.getElementById('authContent');
             if (!container) return;
+
             const isAr = getLanguage() === 'ar';
             const dir = isAr ? 'rtl' : 'ltr';
 
@@ -240,7 +250,10 @@
                     <h3 style="margin-bottom:6px; color:var(--text-color, #333); font-size:20px; font-weight:700;">${t('signUpTitle')}</h3>
                     <p style="margin-bottom:20px; color:var(--gray, #888); font-size:13px;">${t('signUpSub')}</p>
 
-                    <button onclick="handleGoogleLogin()" style="width:100%; padding:10px; margin-bottom:10px; background:#fff; color:#333; border:1px solid #ddd; border-radius:8px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px;">
+                    <!-- Google -->
+                    <button onclick="handleGoogleLogin()" style="width:100%; padding:10px; margin-bottom:10px; background:#fff; color:#333; border:1px solid #ddd; border-radius:8px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; transition:background 0.2s, box-shadow 0.2s;"
+                            onmouseover="this.style.background='#f1f1f1'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'"
+                            onmouseout="this.style.background='#fff'; this.style.boxShadow='none'">
                         <svg width="20" height="20" viewBox="0 0 48 48">
                             <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
                             <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
@@ -250,14 +263,18 @@
                         <span>${t('google')}</span>
                     </button>
 
-                    <button onclick="handleFacebookLogin()" style="width:100%; padding:10px; margin-bottom:10px; background:#1877f2; color:#fff; border:none; border-radius:8px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px;">
+                    <!-- Facebook -->
+                    <button onclick="handleFacebookLogin()" style="width:100%; padding:10px; margin-bottom:10px; background:#1877f2; color:#fff; border:none; border-radius:8px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; transition:background 0.2s;"
+                            onmouseover="this.style.background='#166fe5'" onmouseout="this.style.background='#1877f2'">
                         <svg width="20" height="20" viewBox="0 0 48 48">
                             <path fill="#fff" d="M24 2.5c-11.9 0-21.5 9.6-21.5 21.5 0 10.7 7.8 19.6 17.9 21.3V30.8h-5.4V24h5.4v-4.7c0-5.3 3.2-8.2 8-8.2 2.3 0 4.7.4 4.7.4v5.1h-2.6c-2.6 0-3.4 1.6-3.4 3.3V24h5.8l-.9 6.8h-4.9V45.3c10.1-1.7 17.9-10.6 17.9-21.3 0-11.9-9.6-21.5-21.5-21.5z"/>
                         </svg>
                         <span>${t('facebook')}</span>
                     </button>
 
-                    <button onclick="startPhoneSignUp()" style="width:100%; padding:10px; margin-bottom:10px; background:#34b7f1; color:#fff; border:none; border-radius:8px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px;">
+                    <!-- Téléphone -->
+                    <button onclick="startPhoneSignUp()" style="width:100%; padding:10px; margin-bottom:10px; background:#34b7f1; color:#fff; border:none; border-radius:8px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; transition:background 0.2s;"
+                            onmouseover="this.style.background='#2aa3d9'" onmouseout="this.style.background='#34b7f1'">
                         <span style="font-size:18px;">📱</span>
                         <span>${t('phone')}</span>
                     </button>
@@ -269,7 +286,8 @@
                     <div id="authError" style="display:none; margin-top:6px; font-size:13px; color:#dc2626; background:#fee2e2; padding:8px 12px; border-radius:8px;"></div>
 
                     <button onclick="closeAuthModal()"
-                            style="margin-top:14px; background:transparent; border:none; color:var(--gray, #aaa); cursor:pointer; font-size:14px; padding:6px 16px; border-radius:20px;">
+                            style="margin-top:14px; background:transparent; border:none; color:var(--gray, #aaa); cursor:pointer; font-size:14px; padding:6px 16px; border-radius:20px; transition:background 0.2s;"
+                            onmouseenter="this.style.background='var(--hover-bg, #f0f0f0)'" onmouseleave="this.style.background='transparent'">
                         ✕ ${t('close')}
                     </button>
                 </div>
@@ -279,6 +297,7 @@
         renderPhoneSignUp() {
             const container = document.getElementById('authContent');
             if (!container) return;
+
             const isAr = getLanguage() === 'ar';
             const dir = isAr ? 'rtl' : 'ltr';
 
@@ -301,7 +320,7 @@
                     </div>
 
                     <button id="send-sms-btn" onclick="handleSendSMS()"
-                            style="width:100%; padding:12px; background:linear-gradient(135deg, #34b7f1, #1d8fc7); color:#fff; border:none; border-radius:10px; font-weight:700; font-size:16px; cursor:pointer; margin-bottom:8px;">
+                            style="width:100%; padding:12px; background:linear-gradient(135deg, #34b7f1, #1d8fc7); color:#fff; border:none; border-radius:10px; font-weight:700; font-size:16px; cursor:pointer; transition:transform 0.15s; margin-bottom:8px;">
                         ${isOtpSent ? t('verifyCode') : t('sendCode')}
                     </button>
 
@@ -320,7 +339,8 @@
                     </div>
 
                     <button onclick="closeAuthModal()"
-                            style="margin-top:14px; background:transparent; border:none; color:var(--gray, #aaa); cursor:pointer; font-size:14px; padding:6px 16px; border-radius:20px;">
+                            style="margin-top:14px; background:transparent; border:none; color:var(--gray, #aaa); cursor:pointer; font-size:14px; padding:6px 16px; border-radius:20px; transition:background 0.2s;"
+                            onmouseenter="this.style.background='var(--hover-bg, #f0f0f0)'" onmouseleave="this.style.background='transparent'">
                         ✕ ${t('close')}
                     </button>
                 </div>
@@ -333,8 +353,10 @@
                 console.warn('⚠️ authContent not found');
                 return;
             }
+
             const modal = this.getModalElement();
             if (modal) modal.style.display = 'flex';
+
             const isAr = getLanguage() === 'ar';
             const dir = isAr ? 'rtl' : 'ltr';
 
@@ -371,7 +393,7 @@
                     </div>
 
                     <button onclick="handleFinalizeSignUp()"
-                            style="width:100%; padding:12px; background:linear-gradient(135deg, #4CAF50, #388E3C); color:#fff; border:none; border-radius:10px; font-weight:700; font-size:16px; cursor:pointer; margin-bottom:8px;">
+                            style="width:100%; padding:12px; background:linear-gradient(135deg, #4CAF50, #388E3C); color:#fff; border:none; border-radius:10px; font-weight:700; font-size:16px; cursor:pointer; transition:transform 0.15s; margin-bottom:8px;">
                         ${t('createAccountBtn')}
                     </button>
 
@@ -431,6 +453,7 @@
 
                 this.closeModal();
                 setTimeout(() => location.reload(), 1500);
+
             } catch (err) {
                 this.showError(err.message || t('errorGeneric'));
             } finally {
@@ -456,6 +479,7 @@
             }
         },
 
+        // ===== تسجيل الدخول بالبريد =====
         handleLogin: async function () {
             const emailInput = document.getElementById('authEmail');
             const passInput = document.getElementById('authPassword');
@@ -504,6 +528,7 @@
             }
         },
 
+        // ===== Google =====
         handleGoogleLogin: async function () {
             try {
                 const result = await window.signInWithGoogle();
@@ -514,6 +539,7 @@
             }
         },
 
+        // ===== Facebook =====
         handleFacebookLogin: async function () {
             try {
                 const result = await window.signInWithFacebook();
@@ -524,6 +550,7 @@
             }
         },
 
+        // ===== Firebase Phone OTP =====
         startPhoneSignUp: function () {
             isPhoneSignUp = true;
             isOtpSent = false;
@@ -541,6 +568,7 @@
             const loading = document.getElementById('authPhoneLoading');
             const btn = document.getElementById('send-sms-btn');
             const otpGroup = document.getElementById('authOtpGroup');
+            const errorDiv = document.getElementById('authError');
 
             this.clearErrors();
 
@@ -561,13 +589,24 @@
                 if (result.success) {
                     isOtpSent = true;
                     if (otpGroup) otpGroup.style.display = 'block';
-                    if (btn) {
-                        btn.textContent = t('verifyCode');
-                        btn.onclick = handleVerifyOTP;
-                        btn.style.background = 'linear-gradient(135deg, #4CAF50, #388E3C)';
-                    }
+                    if (btn) btn.textContent = t('verifyCode');
                     currentPhoneNumber = phone;
                     this.showError(t('otpSent'));
+                    // تحديث الواجهة لإظهار حقل OTP وزر التحقق
+                    this.renderPhoneSignUp();
+                    // إعادة تعيين الأزرار
+                    const newBtn = document.getElementById('send-sms-btn');
+                    if (newBtn) {
+                        newBtn.textContent = t('verifyCode');
+                        newBtn.onclick = handleVerifyOTP;
+                        newBtn.style.background = 'linear-gradient(135deg, #4CAF50, #388E3C)';
+                    }
+                    // إظهار حقل OTP
+                    const otpGroupNew = document.getElementById('authOtpGroup');
+                    if (otpGroupNew) otpGroupNew.style.display = 'block';
+                    // إظهار زر إعادة الإرسال
+                    const resendBtn = document.getElementById('resend-sms-btn');
+                    if (resendBtn) resendBtn.style.display = 'block';
                 }
             } catch (err) {
                 this.showError(err.message || t('otpError'));
@@ -577,7 +616,9 @@
                 }
             } finally {
                 if (loading) loading.style.display = 'none';
-                if (btn) btn.disabled = false;
+                if (btn) {
+                    btn.disabled = false;
+                }
             }
         },
 
@@ -618,10 +659,13 @@
                 }
             } finally {
                 if (loading) loading.style.display = 'none';
-                if (btn) btn.disabled = false;
+                if (btn) {
+                    btn.disabled = false;
+                }
             }
         },
 
+        // ===== استرجاع كلمة المرور =====
         handleForgotPassword: function () {
             const email = prompt(t('resetInstruction'));
             if (!email) return;
@@ -640,6 +684,7 @@
                 .catch(err => alert(err.message));
         },
 
+        // ===== تسجيل الخروج =====
         handleSignOut: async function () {
             try {
                 if (window.AuthService && typeof window.AuthService.signOut === 'function') {
@@ -653,6 +698,7 @@
             }
         },
 
+        // ===== تحديث حالة المستخدم في الواجهة =====
         updateAuthStatusUI: async function () {
             const statusDiv = document.getElementById('authStatus');
             const loginBtn = document.querySelector('button[onclick="openAuthModal()"]');
@@ -682,7 +728,7 @@
         }
     };
 
-    // ===== تصدير الدوال العالمية (WINDOW) =====
+    // ===== تصدير الدوال العالمية =====
     window.openAuthModal = function () { AuthUI.openModal(); };
     window.closeAuthModal = function () { AuthUI.closeModal(); };
     window.toggleAuthMode = function () {
@@ -706,8 +752,9 @@
 
     window.AuthUI = AuthUI;
 
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', () => {
         AuthUI.updateAuthStatusUI();
+        // تهيئة reCAPTCHA عند تحميل الصفحة (اختياري)
         if (window.initRecaptcha) {
             window.initRecaptcha('send-sms-btn');
         }
