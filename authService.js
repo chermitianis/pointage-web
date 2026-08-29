@@ -63,15 +63,32 @@
     // ===== Firebase OTP (Phone Authentication) =====
     window.initRecaptcha = function(buttonId = 'send-sms-btn') {
         try {
+            const btnElement = document.getElementById(buttonId);
+            if (!btnElement) {
+                console.error(`❌ Element with ID '${buttonId}' not found in DOM`);
+                return null;
+            }
+
             if (!window.recaptchaVerifier) {
                 if (typeof firebase === 'undefined' || !firebase.auth) {
                     console.error('❌ Firebase Auth not available');
                     return null;
                 }
-                window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(buttonId, {
+                
+                // تمرير زر الـ DOM المباشر وتفادي argument-error
+                window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(btnElement, {
                     'size': 'invisible',
                     'callback': function() {
                         console.log('✅ reCAPTCHA resolved');
+                    },
+                    'expired-callback': function() {
+                        console.warn('⚠️ reCAPTCHA expired, resetting...');
+                        if (window.recaptchaVerifier) {
+                            try {
+                                window.recaptchaVerifier.clear();
+                            } catch (e) {}
+                            window.recaptchaVerifier = null;
+                        }
                     }
                 });
                 console.log('✅ reCAPTCHA initialized');
@@ -79,6 +96,7 @@
             return window.recaptchaVerifier;
         } catch (e) {
             console.error('❌ initRecaptcha error:', e);
+            window.recaptchaVerifier = null;
             return null;
         }
     };
@@ -86,26 +104,28 @@
     // Send OTP SMS
     window.sendFirebaseOTP = async function(phoneNumber) {
         try {
-            if (!phoneNumber || phoneNumber.length < 8) {
+            // التحقق الأساسي من الصيغة الدولية المبدئية
+            if (!phoneNumber || phoneNumber.trim().length < 8) {
                 throw new Error(getMessage('invalidPhone'));
             }
+
             const appVerifier = window.initRecaptcha('send-sms-btn');
             if (!appVerifier) {
                 throw new Error(getMessage('recaptchaError'));
             }
+
             const confirmationResult = await firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier);
             window.confirmationResult = confirmationResult;
             return { success: true, message: getMessage('otpSent') };
         } catch (error) {
             console.error('❌ sendFirebaseOTP error:', error);
+            
+            // إعادة التعيين الكاملة لمنع تجمد reCAPTCHA أو حدوث Timeout في المحاولة القادمة
             if (window.recaptchaVerifier) {
                 try {
-                    window.recaptchaVerifier.render().then(widgetId => {
-                        if (typeof grecaptcha !== 'undefined') {
-                            grecaptcha.reset(widgetId);
-                        }
-                    });
+                    window.recaptchaVerifier.clear();
                 } catch (e) {}
+                window.recaptchaVerifier = null;
             }
             throw error;
         }
@@ -301,8 +321,6 @@
         },
 
         async signInWithPhone(phoneNumber) {
-            // This is a wrapper for Firebase OTP, we'll use sendFirebaseOTP instead
-            // Keeping for compatibility, but not used directly
             console.warn('signInWithPhone is deprecated, use sendFirebaseOTP + verifyOTPAndLogin');
             return { data: null };
         },
