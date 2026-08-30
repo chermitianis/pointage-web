@@ -10,6 +10,14 @@
     <meta name="apple-mobile-web-app-title" content="Pointage">
     <title>Pointage</title>
 
+    <!-- ===== منع Cache ===== -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <!-- ===== إصدار التطبيق ===== -->
+    <meta name="app-version" content="1.0.0">
+
     <!-- ===== PWA Manifest ===== -->
     <link rel="manifest" href="manifest.json">
 
@@ -29,16 +37,18 @@
     <!-- ===== CSS ===== -->
     <link rel="stylesheet" href="styles.css">
 
-    <!-- ===== Firebase Compat SDKs ===== -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-
     <!-- ===== Service Worker Registration ===== -->
     <script>
         if ('serviceWorker' in navigator) {
           window.addEventListener('load', () => {
             navigator.serviceWorker.register('./sw.js', { scope: './' })
-              .then(reg => console.log('✅ Service Worker registered scope:', reg.scope))
+              .then(reg => {
+                console.log('✅ Service Worker registered scope:', reg.scope);
+                // التحقق من وجود تحديث بعد التسجيل
+                setTimeout(() => {
+                  reg.update();
+                }, 5000);
+              })
               .catch(err => console.warn('⚠️ Service Worker registration failed:', err));
           });
         }
@@ -51,7 +61,6 @@
         <div class="app-title" data-i18n="appTitle">📊 Pointage</div>
         <div class="period-badge" id="currentPeriod">Chargement...</div>
 
-        <!-- Bonus Alert -->
         <div class="bonus-alert" id="bonusAlert" style="display: none;">
             <div class="bonus-alert-content">
                 <div class="bonus-alert-title" data-i18n="previousBonus">Prime du mois précédent</div>
@@ -1018,20 +1027,17 @@
 <!-- Toast -->
 <div id="toast"></div>
 
-<!-- ===== Auth Modal ===== -->
+<!-- Auth Modal -->
 <div id="auth-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; align-items:center; justify-content:center; backdrop-filter:blur(4px);">
     <div id="authModalContainer" style="background:var(--card-bg, #ffffff); padding:25px 20px 15px; border-radius:16px; width:92%; max-width:380px; text-align:center; box-shadow:0 20px 50px rgba(0,0,0,0.3); position:relative; max-height:90vh; overflow-y:auto; transition:all 0.3s ease;">
         <div id="authContent"></div>
     </div>
 </div>
 
-
-
 <!-- Scripts -->
 <script src="jspdf.umd.min.js"></script>
 <script src="html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 
 <script src="appConfig.js"></script>
 <script src="translations.js"></script>
@@ -1067,14 +1073,46 @@
 
 <script src="api.js"></script>
 
+<!-- ===== Vérification des mises à jour au chargement ===== -->
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        if (window.initOtaCheck && typeof window.initOtaCheck === 'function') {
-            setTimeout(function() {
-                window.initOtaCheck();
-            }, 3000);
-        }
-    });
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialisation OTA
+    if (window.initOtaCheck && typeof window.initOtaCheck === 'function') {
+        setTimeout(function() {
+            window.initOtaCheck();
+        }, 3000);
+    }
+
+    // Vérification des mises à jour via Service Worker
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.ready.then(registration => {
+            // Vérifier les mises à jour toutes les 30 secondes
+            setInterval(() => {
+                registration.update();
+            }, 30000);
+        });
+
+        // Écouter les messages du Service Worker
+        navigator.serviceWorker.addEventListener('message', event => {
+            if (event.data && event.data.type === 'UPDATE_AVAILABLE') {
+                console.log('🔄 Nouvelle version détectée par SW!');
+                if (typeof showToast === 'function') {
+                    showToast('🔄 Mise à jour disponible. Rafraîchissement...', 3000);
+                }
+                setTimeout(() => {
+                    window.location.reload(true);
+                }, 2000);
+            }
+        });
+    }
+
+    // Vérification périodique du contenu
+    if (window.checkForContentUpdate) {
+        setInterval(() => {
+            window.checkForContentUpdate();
+        }, 60000);
+    }
+});
 </script>
 </body>
 </html>
