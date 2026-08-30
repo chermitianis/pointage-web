@@ -3,6 +3,26 @@
 // Fait partie de l'application Pointage — Dépend de data.js et supabaseSync.js
 // ===================================================================
 
+// ===== تطبيق اللغة فوراً — قبل أي شيء آخر =====
+(function applyLanguageImmediately() {
+    let lang = 'fr';
+    try {
+        const savedSettings = localStorage.getItem('pointageSettings');
+        if (savedSettings) {
+            const settings = JSON.parse(savedSettings);
+            if (settings.language) {
+                lang = settings.language;
+            }
+        }
+    } catch (e) {
+        // استخدام الفرنسية افتراضياً
+    }
+    
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    console.log(`🌐 Langue appliquée immédiatement: ${lang}`);
+})();
+
 // ===== معالجة OAuth callback (للاستخدام من الناتيف) =====
 window.handleOAuthCallback = async function(accessToken) {
     console.log('🔄 handleOAuthCallback appelé avec token:', accessToken ? accessToken.substring(0, 20) + '...' : 'null');
@@ -53,13 +73,11 @@ window.onload = async () => {
                     console.log('✅ Authentification OAuth réussie pour:', user.email || user.phone || user.id);
                     window.history.replaceState({}, document.title, window.location.pathname);
 
-                    // ===== Vérifier si l'utilisateur a un mot de passe =====
                     const hasPassword = user.user_metadata?.has_password === true;
                     const isOAuthUser = user.app_metadata?.provider === 'google' || user.app_metadata?.provider === 'facebook';
 
                     if (isOAuthUser && !hasPassword) {
                         console.log('🔄 Utilisateur OAuth sans mot de passe, demande de création');
-                        // Attendre un peu que tout soit chargé
                         setTimeout(() => {
                             if (typeof window.showSetPasswordModal === 'function') {
                                 const fullName = user.user_metadata?.full_name || user.user_metadata?.name || '';
@@ -71,7 +89,6 @@ window.onload = async () => {
                         if (typeof showToast === 'function') {
                             showToast('✅ Connexion réussie', 2000);
                         }
-                        // Synchronisation des données
                         if (window.SupabaseSyncEngine && typeof window.SupabaseSyncEngine.pullAll === 'function') {
                             await window.SupabaseSyncEngine.pullAll();
                             loadData();
@@ -112,7 +129,6 @@ window.onload = async () => {
             if (user) {
                 console.log('👤 Utilisateur connecté:', user.email || user.phone || user.id);
 
-                // Vérifier si l'utilisateur OAuth a besoin de définir un mot de passe
                 const hasPassword = user.user_metadata?.has_password === true;
                 const isOAuthUser = user.app_metadata?.provider === 'google' || user.app_metadata?.provider === 'facebook';
 
@@ -144,6 +160,32 @@ window.onload = async () => {
     if (typeof loadRemindersData === 'function') loadRemindersData();
 
     initializeApp();
+
+    // ===== Initialisation OTA =====
+    if (typeof initOtaCheck === 'function') {
+        setTimeout(() => {
+            console.log('🔍 Initialisation OTA depuis app-core');
+            initOtaCheck();
+        }, 5000);
+    }
+
+    // ===== مراقبة العودة إلى التطبيق =====
+    document.addEventListener('visibilitychange', function() {
+        if (!document.hidden) {
+            console.log('👁️ Application revenue au premier plan');
+            // تحديث البيانات
+            if (typeof loadData === 'function') loadData();
+            if (typeof updateHeader === 'function') updateHeader();
+            if (typeof renderCurrentWeek === 'function') renderCurrentWeek();
+            
+            // التحقق من التحديثات
+            if (typeof checkForContentUpdate === 'function') {
+                setTimeout(() => {
+                    checkForContentUpdate();
+                }, 1000);
+            }
+        }
+    });
 };
 
 function initializeApp() {
@@ -174,7 +216,6 @@ function initializeApp() {
         };
     }
 
-    // === الإعدادات الخاصة بنظام الحصص ===
     if (!settings.numShifts) settings.numShifts = 3;
     if (settings.shiftStartHour === undefined) settings.shiftStartHour = 8;
     if (!settings.shiftBonuses) settings.shiftBonuses = { 2: 75, 3: 100, 4: 125 };
@@ -188,12 +229,10 @@ function initializeApp() {
     if (typeof initializeReports === 'function') initializeReports();
     if (typeof initializeSettings === 'function') initializeSettings();
 
-    // تحميل بيانات جدول الأعمال والتذكيرات وتشغيل محرك التنبيهات
     if (typeof loadTasksData === 'function') loadTasksData();
     if (typeof loadRemindersData === 'function') loadRemindersData();
     if (typeof initNotifyEngine === 'function') initNotifyEngine();
 
-    // تحقق دوري من حالة الاشتراك المميز (Flouci/Supabase)
     if (typeof initPaymentModule === 'function') initPaymentModule();
 
     setTimeout(() => {
@@ -246,14 +285,20 @@ document.addEventListener('DOMContentLoaded', function() {
     const versionElement = document.getElementById('appVersionDisplay');
     if (versionElement) {
         const otaVersion = localStorage.getItem('otaDisplayVersion');
-        versionElement.textContent = otaVersion || window.APP_CONFIG?.versionName || '1.0.0';
+        const appVersion = window.APP_CONFIG?.versionName || '1.0.0';
+        versionElement.textContent = otaVersion || appVersion;
+        
+        // تحديث meta tag app-version
+        const metaVersion = document.querySelector('meta[name="app-version"]');
+        if (metaVersion) {
+            metaVersion.content = otaVersion || appVersion;
+        }
     }
 
     updateDeveloperInfo();
 });
 
 // ===== دالة تنسيق الأرقام =====
-
 function formatNumber(number) {
     if (number === undefined || number === null || isNaN(number)) return '0';
 
@@ -356,7 +401,6 @@ function resetTheme() {
 }
 
 // ===== تحديث رأس الصفحة — Mise à jour de l'en-tête =====
-
 function updateHeader() {
     const now = new Date();
     if (typeof getMonthPeriod !== 'function') return;
@@ -460,7 +504,6 @@ function clearPreviousBonus() {
 }
 
 // ===== التنقل بين أقسام التطبيق =====
-
 function showSection(section, event = null) {
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -510,7 +553,6 @@ function showSection(section, event = null) {
 }
 
 // ===== حالة النسخة المميزة (Premium) وتزامن Supabase =====
-
 function updatePremiumStatus() {
     const statusEl = document.getElementById('premiumStatus');
     if (!statusEl) return;
