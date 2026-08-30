@@ -25,7 +25,6 @@ function showPrivacyModal() {
     const existingModal = document.getElementById('privacyModal');
     if (existingModal) existingModal.remove();
 
-    // اللغة: افتراضياً الفرنسية (false) ما لم يتم تحديد العربية في الإعدادات
     const isAr = (typeof settings !== 'undefined' && settings?.language === 'ar') ? true : false;
 
     const modal = document.createElement('div');
@@ -101,13 +100,15 @@ async function syncUserDataToCloud() {
             if (user) {
                 const userData = getUserData();
                 if (userData && window.SupabaseSyncEngine && typeof window.SupabaseSyncEngine.push === 'function') {
-                    await window.SupabaseSyncEngine.push('user_privacy_data', {
+                    // ===== استخدم جدول 'user_settings' بدلاً من 'user_privacy_data' =====
+                    await window.SupabaseSyncEngine.push('user_settings', {
                         privacy_consent: true,
                         user_data: userData,
                         user_id: user.id,
-                        updated_at: new Date().toISOString()
+                        updated_at: new Date().toISOString(),
+                        language: window.settings?.language || 'fr'
                     });
-                    console.log('✅ Privacy data synced to cloud');
+                    console.log('✅ Privacy data synced to cloud (via user_settings)');
                 }
             }
         }
@@ -132,7 +133,7 @@ function collectUserData() {
                 openCount: 1,
                 deviceInfo: {
                     platform: navigator.platform || 'android',
-                    language: navigator.language || 'fr', // الفرنسية افتراضياً
+                    language: navigator.language || 'fr',
                     userAgent: navigator.userAgent || '',
                     screenWidth: screen.width || 0,
                     screenHeight: screen.height || 0,
