@@ -74,7 +74,6 @@ function acceptPrivacy() {
 
     const userData = collectUserData();
     
-    // مزامنة البيانات مع السحابة إذا كان المستخدم مسجلاً
     syncUserDataToCloud();
 
     if (typeof showToast === 'function') {
@@ -92,26 +91,44 @@ function declinePrivacy() {
     document.body.style.overflow = '';
 }
 
-// ===== مزامنة بيانات المستخدم مع السحابة =====
+// ===== مزامنة بيانات المستخدم مع السحابة (باستخدام user_settings) =====
 async function syncUserDataToCloud() {
     try {
+        const consent = localStorage.getItem(PRIVACY_KEY) === 'true';
+        if (!consent) return;
+
         if (window.AuthService && typeof window.AuthService.getCurrentUser === 'function') {
             const user = await window.AuthService.getCurrentUser();
             if (user) {
                 const userData = getUserData();
                 if (userData && window.SupabaseSyncEngine && typeof window.SupabaseSyncEngine.push === 'function') {
-                    // ===== استخدم جدول 'user_settings' بدلاً من 'user_privacy_data' =====
-                    await window.SupabaseSyncEngine.push('user_settings', {
+                    // ===== استخدام user_settings بدلاً من user_privacy_data =====
+                    // نضيف privacy_data داخل settings بدلاً من جدول منفصل
+                    const currentSettings = window.settings || {};
+                    const updatedSettings = {
+                        ...currentSettings,
                         privacy_consent: true,
-                        user_data: userData,
-                        user_id: user.id,
-                        updated_at: new Date().toISOString(),
-                        language: window.settings?.language || 'fr'
-                    });
+                        privacy_data: {
+                            firstInstallDate: userData.firstInstallDate,
+                            lastOpenDate: userData.lastOpenDate,
+                            openCount: userData.openCount,
+                            deviceInfo: userData.deviceInfo,
+                            appVersion: userData.appVersion,
+                            featuresUsed: userData.featuresUsed || [],
+                            consentGiven: true
+                        }
+                    };
+                    
+                    await window.SupabaseSyncEngine.push('user_settings', updatedSettings);
                     console.log('✅ Privacy data synced to cloud (via user_settings)');
+                    return;
                 }
             }
         }
+        
+        // إذا لم يكن المستخدم مسجلاً، نحفظ البيانات محلياً فقط
+        console.log('📁 Privacy data saved locally only (user not logged in)');
+        
     } catch (e) {
         console.warn('⚠️ Failed to sync privacy data to cloud:', e);
     }
@@ -154,8 +171,11 @@ function collectUserData() {
 
         localStorage.setItem(USER_DATA_KEY, JSON.stringify(userData));
 
-        // مزامنة مع السحابة
-        syncUserDataToCloud();
+        // مزامنة مع السحابة (فقط إذا كان المستخدم مسجلاً والموافقة موجودة)
+        const consent = localStorage.getItem(PRIVACY_KEY) === 'true';
+        if (consent) {
+            syncUserDataToCloud();
+        }
 
         return userData;
     } catch (e) {
@@ -184,10 +204,11 @@ function trackFeature(featureName) {
             userData.lastUpdate = new Date().toISOString();
             localStorage.setItem(USER_DATA_KEY, JSON.stringify(userData));
 
-            // مزامنة مع السحابة
-            syncUserDataToCloud();
+            const consent = localStorage.getItem(PRIVACY_KEY) === 'true';
+            if (consent) {
+                syncUserDataToCloud();
+            }
 
-            // إرسال إلى Google Analytics (اختياري)
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'feature_used', {
                     'feature_name': featureName,
