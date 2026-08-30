@@ -60,115 +60,6 @@
         }
     }
 
-    // ===== Firebase OTP (Phone Authentication) =====
-    window.initRecaptcha = function(buttonId = 'send-sms-btn') {
-        try {
-            const btnElement = document.getElementById(buttonId);
-            if (!btnElement) {
-                console.error(`❌ Element with ID '${buttonId}' not found in DOM`);
-                return null;
-            }
-
-            if (!window.recaptchaVerifier) {
-                if (typeof firebase === 'undefined' || !firebase.auth) {
-                    console.error('❌ Firebase Auth not available');
-                    return null;
-                }
-                
-                // تمرير زر الـ DOM المباشر وتفادي argument-error
-                window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(btnElement, {
-                    'size': 'invisible',
-                    'callback': function() {
-                        console.log('✅ reCAPTCHA resolved');
-                    },
-                    'expired-callback': function() {
-                        console.warn('⚠️ reCAPTCHA expired, resetting...');
-                        if (window.recaptchaVerifier) {
-                            try {
-                                window.recaptchaVerifier.clear();
-                            } catch (e) {}
-                            window.recaptchaVerifier = null;
-                        }
-                    }
-                });
-                console.log('✅ reCAPTCHA initialized');
-            }
-            return window.recaptchaVerifier;
-        } catch (e) {
-            console.error('❌ initRecaptcha error:', e);
-            window.recaptchaVerifier = null;
-            return null;
-        }
-    };
-
-    // Send OTP SMS
-    window.sendFirebaseOTP = async function(phoneNumber) {
-        try {
-            // التحقق الأساسي من الصيغة الدولية المبدئية
-            if (!phoneNumber || phoneNumber.trim().length < 8) {
-                throw new Error(getMessage('invalidPhone'));
-            }
-
-            const appVerifier = window.initRecaptcha('send-sms-btn');
-            if (!appVerifier) {
-                throw new Error(getMessage('recaptchaError'));
-            }
-
-            const confirmationResult = await firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier);
-            window.confirmationResult = confirmationResult;
-            return { success: true, message: getMessage('otpSent') };
-        } catch (error) {
-            console.error('❌ sendFirebaseOTP error:', error);
-            
-            // إعادة التعيين الكاملة لمنع تجمد reCAPTCHA أو حدوث Timeout في المحاولة القادمة
-            if (window.recaptchaVerifier) {
-                try {
-                    window.recaptchaVerifier.clear();
-                } catch (e) {}
-                window.recaptchaVerifier = null;
-            }
-            throw error;
-        }
-    };
-
-    // Verify OTP & Sign In to Supabase using Firebase token
-    window.verifyOTPAndLogin = async function(otpCode) {
-        try {
-            if (!otpCode || otpCode.length < 4) {
-                throw new Error(getMessage('invalidOtp'));
-            }
-            if (!window.confirmationResult) {
-                throw new Error(getMessage('noConfirmation'));
-            }
-            const result = await window.confirmationResult.confirm(otpCode);
-            const firebaseUser = result.user;
-            if (!firebaseUser) {
-                throw new Error(getMessage('authFailed'));
-            }
-            const idToken = await firebaseUser.getIdToken();
-
-            const client = getClient();
-            if (!client) {
-                throw new Error(getMessage('connectionError'));
-            }
-            const { data, error } = await client.auth.signInWithIdToken({
-                provider: 'firebase',
-                token: idToken,
-            });
-
-            if (error) throw error;
-            if (data?.user) {
-                currentUser = data.user;
-                await AuthService.onAuthSuccess(data.user);
-                return { success: true, user: data.user };
-            }
-            throw new Error(getMessage('authFailed'));
-        } catch (error) {
-            console.error('❌ verifyOTPAndLogin error:', error);
-            throw error;
-        }
-    };
-
     // ===== OAuth Callback Handler =====
     window.handleOAuthCallback = async function(accessToken) {
         console.log('🔄 handleOAuthCallback appelé avec token:', accessToken ? accessToken.substring(0, 20) + '...' : 'null');
@@ -232,6 +123,7 @@
             return null;
         },
 
+        // ===== تسجيل الدخول بالبريد وكلمة المرور =====
         async signIn(email, password) {
             const client = getClient();
             if (!client) throw new Error(getMessage('connectionError'));
@@ -244,6 +136,7 @@
             return data;
         },
 
+        // ===== إنشاء حساب بالبريد وكلمة المرور =====
         async signUp(email, password, fullName) {
             const client = getClient();
             if (!client) throw new Error(getMessage('connectionError'));
@@ -252,7 +145,7 @@
                 password,
                 options: {
                     data: {
-                        full_name: fullName,
+                        full_name: fullName || '',
                         has_password: true,
                         app_id: window.APP_CONFIG?.appId || 'pointage',
                         device_id: getDeviceId()
@@ -267,6 +160,7 @@
             return data;
         },
 
+        // ===== تسجيل الدخول عبر Google =====
         async signInWithGoogle() {
             const client = getClient();
             if (!client) throw new Error(getMessage('connectionError'));
@@ -294,40 +188,6 @@
             }
 
             return data;
-        },
-
-        async signInWithFacebook() {
-            const client = getClient();
-            if (!client) throw new Error(getMessage('connectionError'));
-            const redirectUrl = getAppUrl();
-            console.log('🔄 Facebook OAuth redirectTo:', redirectUrl);
-
-            const isAndroid = !!(window.AndroidApp && typeof window.AndroidApp.getDeviceId === 'function');
-            const finalRedirectUrl = isAndroid ? redirectUrl + '?signup=facebook' : redirectUrl;
-
-            const { data, error } = await client.auth.signInWithOAuth({
-                provider: 'facebook',
-                options: {
-                    redirectTo: finalRedirectUrl
-                }
-            });
-            if (error) throw error;
-
-            if (data?.url && isAndroid) {
-                window.location.href = data.url;
-            }
-
-            return data;
-        },
-
-        async signInWithPhone(phoneNumber) {
-            console.warn('signInWithPhone is deprecated, use sendFirebaseOTP + verifyOTPAndLogin');
-            return { data: null };
-        },
-
-        async verifyPhoneOtp(phoneNumber, token) {
-            console.warn('verifyPhoneOtp is deprecated, use verifyOTPAndLogin');
-            return { user: null };
         },
 
         async setPasswordForOAuthUser(password) {
@@ -485,13 +345,7 @@
         const isAr = (window.settings?.language === 'ar');
         const messages = {
             'connectionError': isAr ? 'تعذر الاتصال بـ Supabase' : 'Impossible de se connecter à Supabase',
-            'signedOut': isAr ? '✅ تم تسجيل الخروج بنجاح' : '✅ Déconnexion réussie',
-            'invalidPhone': isAr ? 'رقم هاتف غير صحيح' : 'Numéro de téléphone invalide',
-            'recaptchaError': isAr ? 'خطأ في reCAPTCHA' : 'Erreur reCAPTCHA',
-            'otpSent': isAr ? 'تم إرسال رمز التحقق' : 'Code de vérification envoyé',
-            'invalidOtp': isAr ? 'رمز التحقق غير صحيح' : 'Code de vérification invalide',
-            'noConfirmation': isAr ? 'لا توجد جلسة تحقق' : 'Aucune session de vérification',
-            'authFailed': isAr ? 'فشل المصادقة' : 'Échec de l\'authentification'
+            'signedOut': isAr ? '✅ تم تسجيل الخروج بنجاح' : '✅ Déconnexion réussie'
         };
         return messages[key] || key;
     }
@@ -508,18 +362,6 @@
     window.signInWithGoogle = async function() {
         try { const data = await AuthService.signInWithGoogle(); return { data, error: null }; }
         catch (error) { return { data: null, error: error }; }
-    };
-    window.signInWithFacebook = async function() {
-        try { const data = await AuthService.signInWithFacebook(); return { data, error: null }; }
-        catch (error) { return { data: null, error: error }; }
-    };
-    window.signInWithPhone = async function(phone) {
-        console.warn('signInWithPhone is deprecated, use sendFirebaseOTP');
-        return { data: null };
-    };
-    window.verifyPhoneOtp = async function(phone, token) {
-        console.warn('verifyPhoneOtp is deprecated, use verifyOTPAndLogin');
-        return { user: null };
     };
     window.setPasswordForOAuthUser = async function(password) {
         try { const data = await AuthService.setPasswordForOAuthUser(password); return { data, error: null }; }
@@ -546,11 +388,6 @@
         catch (error) { return { success: false, error: error }; }
     };
 
-    // Export Firebase OTP functions
-    window.sendFirebaseOTP = window.sendFirebaseOTP;
-    window.verifyOTPAndLogin = window.verifyOTPAndLogin;
-    window.initRecaptcha = window.initRecaptcha;
-
     window.AuthService = AuthService;
 
     document.addEventListener('DOMContentLoaded', async function() {
@@ -570,5 +407,5 @@
         } catch (e) { /* ignore */ }
     });
 
-    console.log('✅ authService.js chargé avec succès (Firebase OTP support)');
+    console.log('✅ authService.js chargé avec succès (Google + Email/Password)');
 })();
