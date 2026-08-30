@@ -3,12 +3,13 @@
 const OTA_SKIPPED_VERSION_KEY = 'pointageSkippedContentVersion';
 const OTA_LAST_CHECK_KEY = 'pointageLastUpdateCheck';
 const OTA_DISPLAY_VERSION_KEY = 'otaDisplayVersion';
+const OTA_APK_SKIPPED_KEY = 'pointageSkippedApkVersion';
 const OTA_CHECK_INTERVAL_MS = 5 * 60 * 1000; // 5 دقائق بين الفحوصات
 
 // ===== التحقق من وجود تحديث جديد =====
 async function checkForContentUpdate() {
     try {
-        // 1. التحقق عبر Supabase Storage (للـ APK)
+        // 1. التحقق عبر Supabase Storage (لـ APK)
         if (window.APP_CONFIG && typeof isSupabaseConfigured === 'function' && isSupabaseConfigured()) {
             await checkSupabaseUpdate();
         }
@@ -27,7 +28,17 @@ async function checkForContentUpdate() {
             }
         }
 
-        // 4. تحديث الـ Cache إذا كان هناك ملفات جديدة
+        // 4. التحقق من تحديث APK (عبر AndroidApp Bridge)
+        if (window.AndroidApp && typeof window.AndroidApp.checkForApkUpdate === 'function') {
+            try {
+                console.log('📱 Vérification APK depuis otaUpdate...');
+                window.AndroidApp.checkForApkUpdate();
+            } catch (e) {
+                console.warn('⚠️ Erreur checkForApkUpdate:', e);
+            }
+        }
+
+        // 5. تحديث الـ Cache إذا كان هناك ملفات جديدة
         await refreshCacheIfNeeded();
 
     } catch (error) {
