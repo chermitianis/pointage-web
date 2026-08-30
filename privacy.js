@@ -91,33 +91,36 @@ function declinePrivacy() {
     document.body.style.overflow = '';
 }
 
-// ===== مزامنة بيانات المستخدم مع السحابة =====
 // ===== مزامنة بيانات المستخدم مع السحابة (باستخدام user_settings) =====
 async function syncUserDataToCloud() {
     try {
         const consent = localStorage.getItem(PRIVACY_KEY) === 'true';
-        if (!consent) return;
+        if (!consent) {
+            console.log('📁 Privacy: utilisateur n\'a pas consenti, sync ignorée.');
+            return;
+        }
 
         if (window.AuthService && typeof window.AuthService.getCurrentUser === 'function') {
             const user = await window.AuthService.getCurrentUser();
             if (user) {
                 const userData = getUserData();
                 if (userData && window.SupabaseSyncEngine && typeof window.SupabaseSyncEngine.push === 'function') {
-                    // ===== استخدام user_settings بدلاً من user_privacy_data =====
-                    // نضيف privacy_data داخل settings بدلاً من جدول منفصل
+                    // ===== استخدم user_settings بدلاً من user_privacy_data =====
                     const currentSettings = window.settings || {};
                     const updatedSettings = {
                         ...currentSettings,
                         privacy_consent: true,
                         privacy_data: {
-                            firstInstallDate: userData.firstInstallDate,
-                            lastOpenDate: userData.lastOpenDate,
-                            openCount: userData.openCount,
-                            deviceInfo: userData.deviceInfo,
-                            appVersion: userData.appVersion,
+                            firstInstallDate: userData.firstInstallDate || null,
+                            lastOpenDate: userData.lastOpenDate || null,
+                            openCount: userData.openCount || 0,
+                            deviceInfo: userData.deviceInfo || {},
+                            appVersion: userData.appVersion || '1.0.0',
                             featuresUsed: userData.featuresUsed || [],
-                            consentGiven: true
-                        }
+                            consentGiven: true,
+                            lastUpdate: new Date().toISOString()
+                        },
+                        language: window.settings?.language || 'fr'
                     };
                     
                     await window.SupabaseSyncEngine.push('user_settings', updatedSettings);
@@ -127,11 +130,10 @@ async function syncUserDataToCloud() {
             }
         }
         
-        // إذا لم يكن المستخدم مسجلاً، نحفظ البيانات محلياً فقط
         console.log('📁 Privacy data saved locally only (user not logged in)');
         
     } catch (e) {
-        console.warn('⚠️ Failed to sync privacy data to cloud:', e);
+        console.warn('⚠️ Failed to sync privacy data to cloud:', e.message || e);
     }
 }
 
@@ -172,7 +174,6 @@ function collectUserData() {
 
         localStorage.setItem(USER_DATA_KEY, JSON.stringify(userData));
 
-        // مزامنة مع السحابة (فقط إذا كان المستخدم مسجلاً والموافقة موجودة)
         const consent = localStorage.getItem(PRIVACY_KEY) === 'true';
         if (consent) {
             syncUserDataToCloud();
@@ -245,4 +246,4 @@ window.trackFeature = trackFeature;
 window.exportUserData = exportUserData;
 window.syncUserDataToCloud = syncUserDataToCloud;
 
-console.log('privacy.js loaded successfully with cloud sync support (default language: French)');
+console.log('✅ privacy.js loaded successfully with cloud sync support (default language: French)');
