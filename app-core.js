@@ -169,6 +169,16 @@ window.onload = async () => {
         }, 5000);
     }
 
+    // ===== Vérification APK Update =====
+    setTimeout(() => {
+        if (window.AndroidApp && typeof window.AndroidApp.checkForApkUpdate === 'function') {
+            console.log('📱 Vérification mise à jour APK depuis app-core...');
+            window.AndroidApp.checkForApkUpdate();
+        } else {
+            console.log('ℹ️ checkForApkUpdate non disponible (environnement PWA/Web)');
+        }
+    }, 8000);
+
     // ===== مراقبة العودة إلى التطبيق =====
     document.addEventListener('visibilitychange', function() {
         if (!document.hidden) {
@@ -183,6 +193,14 @@ window.onload = async () => {
                 setTimeout(() => {
                     checkForContentUpdate();
                 }, 1000);
+            }
+
+            // التحقق من APK Update
+            if (window.AndroidApp && typeof window.AndroidApp.checkForApkUpdate === 'function') {
+                setTimeout(() => {
+                    console.log('📱 Vérification APK (retour au premier plan)');
+                    window.AndroidApp.checkForApkUpdate();
+                }, 2000);
             }
         }
     });
