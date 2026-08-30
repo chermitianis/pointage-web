@@ -91,6 +91,7 @@ function declinePrivacy() {
     document.body.style.overflow = '';
 }
 
+// ===== مزامنة بيانات المستخدم مع السحابة =====
 // ===== مزامنة بيانات المستخدم مع السحابة (باستخدام user_settings) =====
 async function syncUserDataToCloud() {
     try {
