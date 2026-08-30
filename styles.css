@@ -1,4 +1,4 @@
-﻿/* ===== مت ==== */
+/* ===== مت ==== */
 * {
     margin: 0;
     padding: 0;
@@ -23,6 +23,9 @@
     --text-color: #333333;
     --shadow: 0 2px 10px rgba(0,0,0,0.08);
     --radius: 12px;
+    /* ===== Safe Area Insets للهواتف الحديثة ===== */
+    --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-area-top: env(safe-area-inset-top, 0px);
 }
 
 /* ===== Dark Theme ===== */
@@ -270,24 +273,36 @@ body.dark-theme .settings-subgroup {
     border-color: var(--border-color);
 }
 
-/* ===== Base Styles ===== */
+/* ===== Base Styles - إصلاح جذري للارتفاع والتمرير ===== */
+html,
 body {
+    height: 100%;
+    height: 100dvh; /* دعم للهواتف الحديثة */
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    height: 100vh;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
     color: var(--text-color);
     transition: background 0.3s ease, color 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-overflow-scrolling: touch;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    width: 100dvw;
 }
 
 /* ===== Container ===== */
 .app-container {
     max-width: 600px;
     width: 100%;
+    height: 100%;
+    height: 100dvh;
     margin: 0 auto;
-    height: 100vh;
     display: flex;
     flex-direction: column;
     padding: 10px;
@@ -296,6 +311,10 @@ body {
     border-radius: 20px;
     overflow: hidden;
     transition: background 0.3s ease;
+    position: relative;
+    /* ===== دعم safe area للهواتف ===== */
+    padding-top: var(--safe-area-top);
+    padding-bottom: var(--safe-area-bottom);
 }
 
 /* ===== Header ===== */
@@ -307,6 +326,9 @@ body {
     flex-shrink: 0;
     border: 1px solid var(--border-color);
     transition: background 0.3s ease, border-color 0.3s ease, opacity 0.2s ease;
+    /* ===== ضمان عدم التمدد ===== */
+    max-height: 180px;
+    overflow: visible;
 }
 
 /* الشريط العلوي (المعلومات الحصرية) يظهر فقط في تبويب "الرئيسية"،
@@ -409,21 +431,22 @@ body {
 /* ===== Content Area ===== */
 .content-area {
     flex: 1;
+    min-height: 0; /* مهم جداً لمنع التمدد */
     background: var(--card-bg);
     border-radius: 20px;
     padding: 16px;
+    padding-bottom: 20px;
     box-shadow: var(--shadow);
     overflow-y: auto;
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
     border: 1px solid var(--border-color);
-    margin-bottom: 0;
     -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
-    min-height: 0;
-    padding-bottom: 20px;
     transition: background 0.3s ease, border-color 0.3s ease;
+    /* ===== مسافة أمان سفلية إضافية للمحتوى ===== */
+    padding-bottom: calc(20px + var(--safe-area-bottom));
 }
 
 .content-area::-webkit-scrollbar { width: 6px; }
@@ -437,6 +460,8 @@ body {
     animation: fadeIn 0.3s ease;
     padding-bottom: 10px;
     gap: 12px;
+    flex: 1;
+    min-height: 0;
 }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 .section.active { display: flex; }
@@ -450,6 +475,7 @@ body {
     gap: 8px;
     padding-bottom: 12px;
     border-bottom: 2px solid #F0F0F0;
+    flex-shrink: 0;
 }
 body.dark-theme .section-title { border-bottom-color: var(--border-color); }
 
@@ -1582,9 +1608,9 @@ body.dark-theme .weekly-rest-table tr:nth-child(even) { background: rgba(255,255
     accent-color: var(--primary);
 }
 
-/* ===== Bottom Nav ===== */
+/* ===== Bottom Nav - إصلاح جذري مع safe area ===== */
 .bottom-nav {
-    position: relative;
+    position: sticky;
     bottom: 0;
     left: 0;
     right: 0;
@@ -1592,15 +1618,29 @@ body.dark-theme .weekly-rest-table tr:nth-child(even) { background: rgba(255,255
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 5px;
-    padding: 10px 5px 20px;
+    padding: 10px 5px 10px;
     box-shadow: 0 -2px 12px rgba(0,0,0,0.1);
     z-index: 100;
     border-top: 1px solid var(--border-color);
     backdrop-filter: blur(10px);
     min-height: 70px;
-    padding-bottom: max(20px, env(safe-area-inset-bottom));
     flex-shrink: 0;
     margin-top: auto;
+    /* ===== مسافة أمان سفلية لأزرار النظام ===== */
+    padding-bottom: max(10px, env(safe-area-inset-bottom, 10px));
+    padding-bottom: max(10px, constant(safe-area-inset-bottom, 10px));
+    /* ===== ضمان بقاء الشريط طافياً ===== */
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    /* ===== تجنب أي تداخل ===== */
+    z-index: 1000;
+    will-change: transform;
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
 }
 
 .nav-btn {
@@ -2035,7 +2075,7 @@ body.dark-theme .export-note {
 /* ===== Toast ===== */
 #toast {
     position: fixed;
-    bottom: 90px;
+    bottom: calc(90px + var(--safe-area-bottom));
     left: 50%;
     transform: translateX(-50%);
     background: rgba(0,0,0,0.9);
@@ -2113,7 +2153,12 @@ body.dark-theme .premium-features ul li:hover { background: #3a3a5a !important; 
     .overtime-badge { font-size: 7px; padding: 2px 4px; min-width: 20px; }
     .calendar-overtime-badge { font-size: 7px; bottom: -4px; min-width: 16px; }
     .modal-content { padding: 18px; margin: 10px; }
-    .bottom-nav { padding: 6px 3px 16px; gap: 3px; }
+    .bottom-nav { 
+        padding: 6px 3px 6px; 
+        gap: 3px; 
+        min-height: 60px;
+        padding-bottom: max(6px, env(safe-area-inset-bottom, 6px));
+    }
     .nav-btn { font-size: 18px; padding: 4px 2px; }
     .nav-label { font-size: 8px; }
     .weekly-rest-table { font-size: 9px; }
@@ -2141,10 +2186,126 @@ body.dark-theme .premium-features ul li:hover { background: #3a3a5a !important; 
     .shift-btn { padding: 14px; font-size: 14px; }
     .day-cell { font-size: 13px; }
     .day-number { font-size: 18px; }
-    .bottom-nav { padding: 12px 10px 24px; gap: 8px; }
+    .bottom-nav { 
+        padding: 12px 10px 12px; 
+        gap: 8px; 
+        min-height: 80px;
+        padding-bottom: max(12px, env(safe-area-inset-bottom, 12px));
+    }
     .nav-btn { font-size: 24px; padding: 8px; }
     .nav-label { font-size: 11px; }
     .weekly-rest-table { font-size: 12px; }
     .weekly-rest-table th { font-size: 10px; padding: 8px 4px; }
     .weekly-rest-table td { padding: 6px 3px; }
+}
+
+/* ===== دعم إضافي للهواتف ذات notch ===== */
+@supports (padding: max(0px)) {
+    .app-container {
+        padding-left: max(10px, env(safe-area-inset-left));
+        padding-right: max(10px, env(safe-area-inset-right));
+        padding-top: max(10px, env(safe-area-inset-top));
+        padding-bottom: max(10px, env(safe-area-inset-bottom));
+    }
+    
+    .bottom-nav {
+        padding-bottom: max(10px, env(safe-area-inset-bottom));
+    }
+    
+    .content-area {
+        padding-bottom: calc(20px + env(safe-area-inset-bottom));
+    }
+}
+
+/* ===== إصلاح لمشكلة شريط التبويبات في بعض الهواتف ===== */
+@media screen and (max-width: 480px) and (orientation: portrait) {
+    .bottom-nav {
+        position: sticky;
+        bottom: 0;
+        padding-bottom: max(8px, env(safe-area-inset-bottom, 8px));
+        min-height: 65px;
+    }
+    
+    .nav-btn {
+        padding: 6px 3px;
+        font-size: 20px;
+    }
+    
+    .nav-label {
+        font-size: 9px;
+    }
+}
+
+/* ===== منع تمدد الشاشة عند ظهور لوحة المفاتيح ===== */
+@media screen and (max-height: 600px) {
+    .app-header {
+        padding: 6px 10px;
+        max-height: 120px;
+    }
+    
+    .app-title {
+        font-size: 15px;
+        margin-bottom: 3px;
+    }
+    
+    .period-badge {
+        font-size: 10px;
+        padding: 4px 8px;
+        margin-bottom: 4px;
+    }
+    
+    .quick-stats .stat-card {
+        padding: 5px 3px;
+    }
+    
+    .stat-value {
+        font-size: 14px;
+    }
+    
+    .stat-label {
+        font-size: 8px;
+    }
+    
+    .content-area {
+        padding: 10px;
+    }
+    
+    .section-title {
+        font-size: 14px;
+        margin-bottom: 8px;
+        padding-bottom: 6px;
+    }
+    
+    .shift-btn {
+        padding: 6px 4px;
+        font-size: 10px;
+    }
+    
+    .day-cell {
+        font-size: 9px;
+        border-radius: 6px;
+    }
+    
+    .day-number {
+        font-size: 12px;
+    }
+    
+    .day-name {
+        font-size: 8px;
+    }
+    
+    .bottom-nav {
+        min-height: 50px;
+        padding: 4px 3px 4px;
+        padding-bottom: max(4px, env(safe-area-inset-bottom, 4px));
+    }
+    
+    .nav-btn {
+        font-size: 16px;
+        padding: 2px 2px;
+    }
+    
+    .nav-label {
+        font-size: 7px;
+    }
 }
