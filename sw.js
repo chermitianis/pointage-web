@@ -1,5 +1,8 @@
 // ===== Service Worker Pointage =====
 const CACHE_NAME = 'pointage-v5';
+const APP_VERSION = '1.0.0';
+
+// ===== قائمة الملفات الأساسية فقط (الموجودة فعلاً) =====
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
@@ -35,21 +38,8 @@ const ASSETS_TO_CACHE = [
     './api.js',
     './jspdf.umd.min.js',
     './html2canvas.min.js',
-    './manifest.json',
-    './assets/icon-72.png',
-    './assets/icon-96.png',
-    './assets/icon-128.png',
-    './assets/icon-144.png',
-    './assets/icon-152.png',
-    './assets/icon-192.png',
-    './assets/icon-384.png',
-    './assets/icon-512.png',
-    './assets/favicon.ico',
-    './assets/apple-touch-icon.png'
+    './manifest.json'
 ];
-
-// ===== الإصدار الحالي من التطبيق =====
-const APP_VERSION = '1.0.0';
 
 // ===== تثبيت الـ Service Worker =====
 self.addEventListener('install', event => {
@@ -58,10 +48,18 @@ self.addEventListener('install', event => {
         caches.open(CACHE_NAME)
             .then(cache => {
                 console.log('📦 Mise en cache des fichiers...');
-                return cache.addAll(ASSETS_TO_CACHE);
+                // إضافة كل ملف مع محاولة فردية لتجنب فشل الملف الواحد
+                return Promise.allSettled(
+                    ASSETS_TO_CACHE.map(url => {
+                        return cache.add(url).catch(err => {
+                            console.warn('⚠️ Échec de mise en cache:', url, err);
+                            // لا نرمي الخطأ، نستمر
+                        });
+                    })
+                );
             })
             .then(() => {
-                // تفعيل الـ Service Worker فوراً دون انتظار
+                console.log('✅ Cache terminé (avec succès ou échecs partiels)');
                 return self.skipWaiting();
             })
     );
@@ -81,7 +79,6 @@ self.addEventListener('activate', event => {
                 })
             );
         }).then(() => {
-            // السيطرة على جميع الصفحات المفتوحة فوراً
             return self.clients.claim();
         })
     );
@@ -92,37 +89,37 @@ self.addEventListener('fetch', event => {
     const request = event.request;
     const url = new URL(request.url);
 
-    // تجاهل طلبات تحليلات وغيرها
+    // تجاهل طلبات تحليلات و Supabase
     if (url.pathname.includes('/analytics') || 
         url.pathname.includes('/api/') ||
-        url.pathname.includes('supabase.co')) {
+        url.hostname.includes('supabase.co') ||
+        url.hostname.includes('firebase')) {
         return;
     }
 
-    // استراتيجية Network First (الإنترنت أولاً)
     event.respondWith(
         fetch(request)
             .then(response => {
-                // إذا كان الطلب ناجحاً، قم بتحديث الـ Cache
                 if (response && response.status === 200) {
                     const responseClone = response.clone();
                     caches.open(CACHE_NAME)
                         .then(cache => {
-                            cache.put(request, responseClone);
+                            try {
+                                cache.put(request, responseClone);
+                            } catch (e) {
+                                // تجاهل أخطاء التخزين
+                            }
                         })
-                        .catch(err => console.warn('Cache update error:', err));
+                        .catch(() => {});
                 }
                 return response;
             })
             .catch(() => {
-                // إذا فشل الطلب (لا يوجد إنترنت)، استخدم الـ Cache
                 return caches.match(request)
                     .then(cachedResponse => {
                         if (cachedResponse) {
-                            console.log('📂 Réponse depuis le cache:', request.url);
                             return cachedResponse;
                         }
-                        // إذا لم يوجد في Cache، حاول إرجاع index.html
                         if (request.mode === 'navigate') {
                             return caches.match('./index.html');
                         }
@@ -135,11 +132,11 @@ self.addEventListener('fetch', event => {
     );
 });
 
-// ===== التحقق من وجود تحديثات (فحص دوري) =====
+// ===== التحقق من وجود تحديثات =====
 self.addEventListener('message', event => {
     if (event.data && event.data.type === 'CHECK_UPDATE') {
         console.log('🔍 Vérification des mises à jour...');
-        // إرسال رسالة إلى جميع العملاء لإعادة التحميل
+        self.skipWaiting();
         self.clients.matchAll().then(clients => {
             clients.forEach(client => {
                 client.postMessage({
@@ -148,8 +145,6 @@ self.addEventListener('message', event => {
                 });
             });
         });
-        // إلغاء تثبيت الـ Service Worker القديم لتحديثه
-        self.skipWaiting();
     }
 });
 
